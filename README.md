@@ -3163,35 +3163,4187 @@ Link del video about the product: [https://1drv.ms/v/c/21f348d94fc5db3f/IQC7_Ni9
 
 ## 6.1. Testing Suites & Validation
 
-### 6.1.1. Core Entities Unit Tests.
+Esta seccion documenta las pruebas unitarias e integrales implementadas para FoodFlow. No incluye las pruebas funcionales Selenium, porque se documentaran por separado.
 
-### 6.1.2. Core Integration Tests.
+| Tipo de prueba | Cantidad | Alcance |
+| :--- | ---: | :--- |
+| Unitarias | 54 | Entidades, servicios, utilidades, reglas de dominio y mapeos en aislamiento. |
+| Integrales | 44 | Contratos HTTP, rutas protegidas, hooks y componentes interactuando con dependencias simuladas. |
+| Total documentado | 98 | Pruebas unitarias e integrales. |
+
+Se muestra el resultado de las pruebas en conjunto:
+
+<p align="center">
+  <img src="assets/resultadospruebas.png" alt="">
+</p>
+
+## 6.1.1. Core Entities Unit Tests
+
+#### frontend\src\utils\foodflowUtils.test.ts
+
+Cantidad de pruebas: **12**
+
+Codigo de la suite:
+
+````ts
+import { describe, expect, it } from 'vitest';
+import {
+  calculateAverageOrderValue,
+  calculateInventoryValue,
+  calculatePercentageChange,
+  calculateProfitMargin,
+  calculateSubtotal,
+  isLowStock,
+} from './calculations';
+import { formatCurrency, formatPercentage, truncate } from './format';
+import {
+  doValuesMatch,
+  isNonNegative,
+  isNotEmpty,
+  isPositive,
+  isValidEmail,
+  isValidPassword,
+  validatePasswordStrength,
+} from './validation';
+
+describe('FoodFlow utility calculations', () => {
+  // Prueba unitaria: calcula subtotal de orden con varios platos (FE-UT-001)
+  it('calculates the subtotal for multiple order line items', () => {
+    expect(
+      calculateSubtotal([
+        { quantity: 2, unitPrice: 12.5 },
+        { quantity: 3, unitPrice: 8 },
+      ])
+    ).toBe(49);
+  });
+  // fin prueba
+
+  // Prueba unitaria: calcula valor de inventario por stock y costo (FE-UT-002)
+  it('calculates inventory value from stock level and unit cost', () => {
+    expect(calculateInventoryValue(18, 4.25)).toBe(76.5);
+  });
+  // fin prueba
+
+  // Prueba unitaria: calcula margen de ganancia y evita division por cero (FE-UT-003)
+  it('calculates profit margin and returns zero when revenue is zero', () => {
+    expect(calculateProfitMargin(200, 120)).toBe(0.4);
+    expect(calculateProfitMargin(0, 120)).toBe(0);
+  });
+  // fin prueba
+
+  // Prueba unitaria: calcula cambio porcentual para periodos financieros (FE-UT-004)
+  it('calculates percentage change including a zero baseline', () => {
+    expect(calculatePercentageChange(100, 125)).toBe(0.25);
+    expect(calculatePercentageChange(0, 50)).toBe(1);
+    expect(calculatePercentageChange(0, 0)).toBe(0);
+  });
+  // fin prueba
+
+  // Prueba unitaria: calcula ticket promedio y maneja cero ordenes (FE-UT-005)
+  it('calculates average order value and returns zero without orders', () => {
+    expect(calculateAverageOrderValue(300, 6)).toBe(50);
+    expect(calculateAverageOrderValue(300, 0)).toBe(0);
+  });
+  // fin prueba
+
+  // Prueba unitaria: detecta stock bajo al llegar al umbral (FE-UT-006)
+  it('marks inventory as low stock when it reaches the threshold', () => {
+    expect(isLowStock(5, 5)).toBe(true);
+    expect(isLowStock(6, 5)).toBe(false);
+  });
+  // fin prueba
+});
+
+describe('FoodFlow utility formatting', () => {
+  // Prueba unitaria: formatea importes monetarios para reportes (FE-UT-007)
+  it('formats currency values with fixed decimals', () => {
+    expect(formatCurrency(1234.5, 'USD', 'en-US')).toBe('$1,234.50');
+  });
+  // fin prueba
+
+  // Prueba unitaria: formatea porcentajes de variacion financiera (FE-UT-008)
+  it('formats decimal ratios as percentages', () => {
+    expect(formatPercentage(0.256, 1)).toBe('25.6%');
+  });
+  // fin prueba
+
+  // Prueba unitaria: trunca textos largos de tarjetas y tablas (FE-UT-009)
+  it('truncates long text with a configurable suffix', () => {
+    expect(truncate('Inventario de insumos perecibles', 13)).toBe('Inventario...');
+    expect(truncate('Corto', 13)).toBe('Corto');
+  });
+  // fin prueba
+});
+
+describe('FoodFlow utility validation', () => {
+  // Prueba unitaria: valida correos de inicio de sesion (FE-UT-010)
+  it('validates email format for authentication forms', () => {
+    expect(isValidEmail('owner@foodflow.test')).toBe(true);
+    expect(isValidEmail('owner-foodflow.test')).toBe(false);
+  });
+  // fin prueba
+
+  // Prueba unitaria: valida requisitos minimos de password (FE-UT-011)
+  it('validates basic password length and strong password requirements', () => {
+    expect(isValidPassword('secret')).toBe(true);
+    expect(isValidPassword('12345')).toBe(false);
+
+    expect(validatePasswordStrength('Strong123')).toEqual({
+      isValid: true,
+      errors: [],
+    });
+    expect(validatePasswordStrength('weak')).toEqual({
+      isValid: false,
+      errors: [
+        'Password must be at least 8 characters long',
+        'Password must contain at least one uppercase letter',
+        'Password must contain at least one number',
+      ],
+    });
+  });
+  // fin prueba
+
+  // Prueba unitaria: valida campos requeridos y numeros de inventario (FE-UT-012)
+  it('validates required text, matching values, and positive numbers', () => {
+    expect(isNotEmpty('  Mesa 4  ')).toBe(true);
+    expect(isNotEmpty('   ')).toBe(false);
+    expect(doValuesMatch('Premium', 'Premium')).toBe(true);
+    expect(isPositive(1)).toBe(true);
+    expect(isPositive(0)).toBe(false);
+    expect(isNonNegative(0)).toBe(true);
+    expect(isNonNegative(-1)).toBe(false);
+  });
+  // fin prueba
+});
+
+````
+
+Explicacion de las pruebas:
+
+- **FE-UT-001: calcula subtotal de orden con varios platos.** Sirve para validar en aislamiento calcula subtotal de orden con varios platos. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-002: calcula valor de inventario por stock y costo.** Sirve para validar en aislamiento calcula valor de inventario por stock y costo. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-003: calcula margen de ganancia y evita division por cero.** Sirve para validar en aislamiento calcula margen de ganancia y evita division por cero. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-004: calcula cambio porcentual para periodos financieros.** Sirve para validar en aislamiento calcula cambio porcentual para periodos financieros. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-005: calcula ticket promedio y maneja cero ordenes.** Sirve para validar en aislamiento calcula ticket promedio y maneja cero ordenes. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-006: detecta stock bajo al llegar al umbral.** Sirve para validar en aislamiento detecta stock bajo al llegar al umbral. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-007: formatea importes monetarios para reportes.** Sirve para validar en aislamiento formatea importes monetarios para reportes. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-008: formatea porcentajes de variacion financiera.** Sirve para validar en aislamiento formatea porcentajes de variacion financiera. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-009: trunca textos largos de tarjetas y tablas.** Sirve para validar en aislamiento trunca textos largos de tarjetas y tablas. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-010: valida correos de inicio de sesion.** Sirve para validar en aislamiento valida correos de inicio de sesion. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-011: valida requisitos minimos de password.** Sirve para validar en aislamiento valida requisitos minimos de password. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-012: valida campos requeridos y numeros de inventario.** Sirve para validar en aislamiento valida campos requeridos y numeros de inventario. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### frontend\src\services\productService.test.ts
+
+Cantidad de pruebas: **2**
+
+Codigo de la suite:
+
+````ts
+import type { Mock } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import api from './api';
+import { productService } from './productService';
+
+vi.mock('./api', () => ({
+  default: {
+    delete: vi.fn(),
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+  },
+}));
+
+const mockedApi = api as unknown as {
+  delete: Mock;
+  get: Mock;
+  post: Mock;
+  put: Mock;
+};
+
+describe('productService', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  // Prueba unitaria: normaliza productos de inventario recibidos (FE-UT-016)
+  it('maps backend products and applies the default low stock threshold', async () => {
+    mockedApi.get.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: [
+          {
+            id: 5,
+            name: 'Tomate',
+            description: 'Tomate fresco',
+            category: 'Vegetales',
+            supplier: 'Mercado Central',
+            stockLevel: 20,
+            unitOfMeasure: 'kg',
+            unitCost: 3.5,
+            createdAt: '2026-05-08T09:00:00',
+          },
+        ],
+      },
+    });
+
+    const products = await productService.getAll();
+
+    expect(mockedApi.get).toHaveBeenCalledWith('/api/products');
+    expect(products).toEqual([
+      {
+        id: 5,
+        name: 'Tomate',
+        description: 'Tomate fresco',
+        category: 'Vegetales',
+        supplier: 'Mercado Central',
+        stockLevel: 20,
+        unitOfMeasure: 'kg',
+        unitCost: 3.5,
+        lowStockThreshold: 10,
+        createdAt: '2026-05-08T09:00:00',
+        updatedAt: '2026-05-08T09:00:00',
+      },
+    ]);
+  });
+  // fin prueba
+
+  // Prueba unitaria: crea producto sin enviar categoria legacy (FE-UT-017)
+  it('posts the create-product payload expected by the backend', async () => {
+    mockedApi.post.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: {
+          id: 6,
+          name: 'Harina',
+          category: 'Panaderia',
+          stockLevel: 12,
+          unitOfMeasure: 'kg',
+          unitCost: 2,
+          lowStockThreshold: 4,
+          createdAt: '2026-05-08T10:00:00',
+        },
+      },
+    });
+
+    const product = await productService.create({
+      name: 'Harina',
+      category: 'Panaderia',
+      stockLevel: 12,
+      unitOfMeasure: 'kg',
+      unitCost: 2,
+      lowStockThreshold: 4,
+    });
+
+    const requestBody = mockedApi.post.mock.calls[0][1] as Record<string, unknown>;
+    expect(mockedApi.post).toHaveBeenCalledWith('/api/products', expect.any(Object));
+    expect(requestBody).toMatchObject({
+      name: 'Harina',
+      stockLevel: 12,
+      unitOfMeasure: 'kg',
+      unitCost: 2,
+      lowStockThreshold: 4,
+    });
+    expect(requestBody.category).toBeUndefined();
+    expect(product).toMatchObject({
+      id: 6,
+      name: 'Harina',
+      category: 'Panaderia',
+      lowStockThreshold: 4,
+    });
+  });
+  // fin prueba
+});
+
+````
+
+Explicacion de las pruebas:
+
+- **FE-UT-016: normaliza productos de inventario recibidos.** Sirve para validar en aislamiento normaliza productos de inventario recibidos. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-017: crea producto sin enviar categoria legacy.** Sirve para validar en aislamiento crea producto sin enviar categoria legacy. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### frontend\src\services\orderService.test.ts
+
+Cantidad de pruebas: **3**
+
+Codigo de la suite:
+
+````ts
+import type { Mock } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import api from './api';
+import { orderService } from './orderService';
+
+vi.mock('./api', () => ({
+  default: {
+    delete: vi.fn(),
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+  },
+}));
+
+const mockedApi = api as unknown as {
+  delete: Mock;
+  get: Mock;
+  post: Mock;
+  put: Mock;
+};
+
+describe('orderService', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  // Prueba unitaria: normaliza ordenes recibidas del backend (FE-UT-013)
+  it('maps backend orders into frontend order models', async () => {
+    mockedApi.get.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: [
+          {
+            id: 7,
+            orderNumber: '42-001',
+            tableIdentifier: 'Mesa 4',
+            orderDate: '2026-05-08T12:00:00',
+            totalAmount: 35,
+            status: 'DELIVERED',
+            lineItems: [
+              {
+                dishId: 3,
+                dishName: 'Menu ejecutivo',
+                quantity: 2,
+                unitPrice: 12.5,
+                lineTotal: 25,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const orders = await orderService.getAll();
+
+    expect(mockedApi.get).toHaveBeenCalledWith('/api/orders');
+    expect(orders).toEqual([
+      {
+        id: 7,
+        orderNumber: '42-001',
+        customerName: 'Mesa 4',
+        orderType: 'DINE_IN',
+        status: 'ENTREGADA',
+        totalAmount: 35,
+        lineItems: [
+          {
+            id: 0,
+            dishId: 3,
+            dishName: 'Menu ejecutivo',
+            quantity: 2,
+            unitPrice: 12.5,
+            subtotal: 25,
+          },
+        ],
+        createdAt: '2026-05-08T12:00:00',
+        updatedAt: '2026-05-08T12:00:00',
+      },
+    ]);
+  });
+  // fin prueba
+
+  // Prueba unitaria: envia payload de creacion compatible con API (FE-UT-014)
+  it('posts the backend create-order payload and maps the response', async () => {
+    mockedApi.post.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: {
+          id: 8,
+          orderNumber: '42-002',
+          tableIdentifier: 'Barra',
+          orderDate: '2026-05-08T13:00:00',
+          totalAmount: 16,
+          status: 'PENDING',
+          lineItems: [
+            {
+              dishId: 4,
+              dishName: 'Cafe',
+              quantity: 2,
+              unitPrice: 8,
+              lineTotal: 16,
+            },
+          ],
+        },
+      },
+    });
+
+    const order = await orderService.create({
+      tableIdentifier: 'Barra',
+      lineItems: [
+        {
+          dishId: 4,
+          dishName: 'Cafe',
+          quantity: 2,
+          unitPrice: 8,
+        },
+      ],
+    });
+
+    expect(mockedApi.post).toHaveBeenCalledWith('/api/orders', {
+      tableIdentifier: 'Barra',
+      lineItems: [
+        {
+          dishId: 4,
+          dishName: 'Cafe',
+          quantity: 2,
+          unitPrice: 8,
+        },
+      ],
+    });
+    expect(order.status).toBe('PENDIENTE');
+    expect(order.totalAmount).toBe(16);
+  });
+  // fin prueba
+
+  // Prueba unitaria: actualiza estado de orden via endpoint esperado (FE-UT-015)
+  it('calls the status endpoint when updating an order status', async () => {
+    mockedApi.put.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: {
+          id: 8,
+          orderNumber: '42-002',
+          tableIdentifier: 'Barra',
+          orderDate: '2026-05-08T13:00:00',
+          totalAmount: 16,
+          status: 'CANCELLED',
+          lineItems: [],
+        },
+      },
+    });
+
+    const order = await orderService.updateStatus(8, 'CANCELADA');
+
+    expect(mockedApi.put).toHaveBeenCalledWith('/api/orders/8/status?status=CANCELADA');
+    expect(order.status).toBe('CANCELADA');
+  });
+  // fin prueba
+});
+
+````
+
+Explicacion de las pruebas:
+
+- **FE-UT-013: normaliza ordenes recibidas del backend.** Sirve para validar en aislamiento normaliza ordenes recibidas del backend. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-014: envia payload de creacion compatible con API.** Sirve para validar en aislamiento envia payload de creacion compatible con API. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-015: actualiza estado de orden via endpoint esperado.** Sirve para validar en aislamiento actualiza estado de orden via endpoint esperado. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### frontend\src\services\dishService.test.ts
+
+Cantidad de pruebas: **3**
+
+Codigo de la suite:
+
+````ts
+import type { Mock } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import api from './api';
+import { dishService } from './dishService';
+
+vi.mock('./api', () => ({
+  default: {
+    delete: vi.fn(),
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+  },
+}));
+
+const mockedApi = api as unknown as {
+  delete: Mock;
+  get: Mock;
+  post: Mock;
+  put: Mock;
+};
+
+describe('dishService', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  // Prueba unitaria: normaliza platos sin campos opcionales (FE-UT-018)
+  it('maps backend dishes and defaults missing optional fields', async () => {
+    mockedApi.get.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: [
+          {
+            id: 11,
+            name: 'Sopa del dia',
+            createdAt: '2026-05-09T09:00:00',
+          },
+        ],
+      },
+    });
+
+    const dishes = await dishService.getAll();
+
+    expect(mockedApi.get).toHaveBeenCalledWith('/api/dishes');
+    expect(dishes).toEqual([
+      {
+        id: 11,
+        name: 'Sopa del dia',
+        description: undefined,
+        price: 0,
+        ingredients: '',
+        userId: 0,
+        createdAt: '2026-05-09T09:00:00',
+        updatedAt: '2026-05-09T09:00:00',
+      },
+    ]);
+  });
+  // fin prueba
+
+  // Prueba unitaria: envia payload de creacion de plato (FE-UT-019)
+  it('posts create-dish data to the dishes endpoint', async () => {
+    mockedApi.post.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: {
+          id: 12,
+          name: 'Tacu tacu',
+          description: 'Con seco',
+          price: 24,
+          ingredients: 'frejol, arroz, culantro',
+          createdAt: '2026-05-09T10:00:00',
+        },
+      },
+    });
+
+    const payload = {
+      name: 'Tacu tacu',
+      description: 'Con seco',
+      price: 24,
+      ingredients: 'frejol, arroz, culantro',
+    };
+    const dish = await dishService.create(payload);
+
+    expect(mockedApi.post).toHaveBeenCalledWith('/api/dishes', payload);
+    expect(dish).toMatchObject({
+      id: 12,
+      name: 'Tacu tacu',
+      price: 24,
+      ingredients: 'frejol, arroz, culantro',
+    });
+  });
+  // fin prueba
+
+  // Prueba unitaria: elimina plato por endpoint esperado (FE-UT-020)
+  it('deletes a dish by id', async () => {
+    mockedApi.delete.mockResolvedValueOnce({});
+
+    await dishService.delete(12);
+
+    expect(mockedApi.delete).toHaveBeenCalledWith('/api/dishes/12');
+  });
+  // fin prueba
+});
+
+````
+
+Explicacion de las pruebas:
+
+- **FE-UT-018: normaliza platos sin campos opcionales.** Sirve para validar en aislamiento normaliza platos sin campos opcionales. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-019: envia payload de creacion de plato.** Sirve para validar en aislamiento envia payload de creacion de plato. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-020: elimina plato por endpoint esperado.** Sirve para validar en aislamiento elimina plato por endpoint esperado. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### frontend\src\services\financeSubscriptionService.test.ts
+
+Cantidad de pruebas: **5**
+
+Codigo de la suite:
+
+````ts
+import type { Mock } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import api from './api';
+import { financeService } from './financeService';
+import { subscriptionService } from './subscriptionService';
+
+vi.mock('./api', () => ({
+  default: {
+    get: vi.fn(),
+    post: vi.fn(),
+  },
+}));
+
+const mockedApi = api as unknown as {
+  get: Mock;
+  post: Mock;
+};
+
+describe('financeService', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  // Prueba unitaria: mapea metricas del dashboard financiero (FE-UT-021)
+  it('maps dashboard metrics from the backend shape', async () => {
+    mockedApi.get.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: {
+          period: 'WEEKLY',
+          totalIncome: 480,
+          totalExpenses: 155,
+          netProfit: 325,
+          orderCount: 9,
+          top5Dishes: [
+            {
+              dishId: 1,
+              dishName: 'Arroz con pollo',
+              totalRevenue: 180,
+              quantitySold: 6,
+            },
+          ],
+        },
+      },
+    });
+
+    const metrics = await financeService.getDashboardMetrics('WEEKLY');
+
+    expect(mockedApi.get).toHaveBeenCalledWith('/api/finance/dashboard', {
+      params: { period: 'WEEKLY' },
+    });
+    expect(metrics).toEqual({
+      totalIncome: 480,
+      totalExpenses: 155,
+      profit: 325,
+      period: 'WEEKLY',
+      orderCount: 9,
+      topDishes: [
+        {
+          dishId: 1,
+          dishName: 'Arroz con pollo',
+          totalRevenue: 180,
+          quantitySold: 6,
+        },
+      ],
+    });
+  });
+  // fin prueba
+
+  // Prueba unitaria: mapea reporte financiero con gastos por categoria (FE-UT-022)
+  it('maps financial reports including expense breakdown and comparisons', async () => {
+    mockedApi.get.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: {
+          period: 'MONTHLY',
+          startDate: '2026-05-01',
+          endDate: '2026-06-01',
+          metrics: {
+            totalIncome: 900,
+            totalExpenses: 350,
+            netProfit: 550,
+            incomeVariation: 12,
+            expensesVariation: 4,
+          },
+          orderCount: 20,
+          topDishes: [],
+          expenseBreakdown: [
+            {
+              name: 'Vegetales',
+              amount: 120,
+              percentage: 34.28,
+            },
+          ],
+        },
+      },
+    });
+
+    const report = await financeService.getReport('MONTHLY');
+
+    expect(mockedApi.get).toHaveBeenCalledWith('/api/finance/reports', {
+      params: { period: 'MONTHLY' },
+    });
+    expect(report).toMatchObject({
+      period: 'MONTHLY',
+      totalIncome: 900,
+      totalExpenses: 350,
+      profit: 550,
+      orderCount: 20,
+      expensesByCategory: [
+        {
+          category: 'Vegetales',
+          amount: 120,
+          percentage: 34.28,
+        },
+      ],
+      previousPeriodComparison: {
+        incomeChange: 12,
+        expenseChange: 4,
+        profitChange: 0,
+      },
+    });
+  });
+  // fin prueba
+});
+
+describe('subscriptionService', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  // Prueba unitaria: ordena y completa limites de planes (FE-UT-023)
+  it('maps subscription plans with frontend limits and pricing', async () => {
+    mockedApi.get.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: [
+          {
+            name: 'PREMIUM',
+            monthlyPrice: 29,
+            benefits: ['Reportes avanzados'],
+          },
+          {
+            name: 'FREE',
+            monthlyPrice: 0,
+            benefits: ['Panel basico'],
+          },
+        ],
+      },
+    });
+
+    const plans = await subscriptionService.getPlans();
+
+    expect(mockedApi.get).toHaveBeenCalledWith('/api/subscriptions/plans');
+    expect(plans).toEqual([
+      expect.objectContaining({
+        id: 3,
+        type: 'PREMIUM',
+        price: 29,
+        hasAdvancedReports: true,
+      }),
+      expect.objectContaining({
+        id: 1,
+        type: 'FREE',
+        price: 0,
+        maxOrdersPerMonth: 200,
+      }),
+    ]);
+  });
+  // fin prueba
+
+  // Prueba unitaria: devuelve null cuando no hay suscripcion activa (FE-UT-024)
+  it('returns null when the current subscription does not exist', async () => {
+    mockedApi.get.mockRejectedValueOnce(new Error('Subscription not found'));
+
+    const subscription = await subscriptionService.getCurrentSubscription();
+
+    expect(subscription).toBeNull();
+  });
+  // fin prueba
+
+  // Prueba unitaria: suscribe usuario a plan seleccionado (FE-UT-025)
+  it('posts a subscription request and maps the resulting subscription', async () => {
+    mockedApi.post.mockResolvedValueOnce({
+      data: {
+        success: true,
+        data: {
+          id: 'sub-123',
+          plan: 'STANDARD',
+          status: 'ACTIVE',
+          startDate: '2026-05-09',
+        },
+      },
+    });
+
+    const subscription = await subscriptionService.subscribe({ plan: 'STANDARD' });
+
+    expect(mockedApi.post).toHaveBeenCalledWith('/api/subscriptions/subscribe', {
+      plan: 'STANDARD',
+    });
+    expect(subscription).toMatchObject({
+      id: 'sub-123',
+      type: 'STANDARD',
+      status: 'ACTIVE',
+      plan: {
+        id: 2,
+        type: 'STANDARD',
+        maxProducts: 500,
+      },
+    });
+  });
+  // fin prueba
+});
+
+````
+
+Explicacion de las pruebas:
+
+- **FE-UT-021: mapea metricas del dashboard financiero.** Sirve para validar en aislamiento mapea metricas del dashboard financiero. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-022: mapea reporte financiero con gastos por categoria.** Sirve para validar en aislamiento mapea reporte financiero con gastos por categoria. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-023: ordena y completa limites de planes.** Sirve para validar en aislamiento ordena y completa limites de planes. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-024: devuelve null cuando no hay suscripcion activa.** Sirve para validar en aislamiento devuelve null cuando no hay suscripcion activa. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **FE-UT-025: suscribe usuario a plan seleccionado.** Sirve para validar en aislamiento suscribe usuario a plan seleccionado. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### backend\src\test\java\com\foodflow\identity\domain\EmailPasswordTest.java
+
+Cantidad de pruebas: **4**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.identity.domain;
+
+import com.foodflow.common.domain.ValidationException;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+class EmailPasswordTest {
+
+    // Prueba unitaria: acepta correo valido de propietario (BE-UT-001)
+    @Test
+    void acceptsValidOwnerEmail() {
+        Email email = Email.of("owner@foodflow.test");
+
+        assertThat(email.value()).isEqualTo("owner@foodflow.test");
+    }
+    // fin prueba
+
+    // Prueba unitaria: rechaza correo invalido de login (BE-UT-002)
+    @Test
+    void rejectsInvalidEmailFormat() {
+        assertThatThrownBy(() -> Email.of("owner-foodflow.test"))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("email: Invalid email format");
+    }
+    // fin prueba
+
+    // Prueba unitaria: acepta password con largo minimo (BE-UT-003)
+    @Test
+    void acceptsPasswordWithMinimumLength() {
+        Password password = Password.of("secret");
+
+        assertThat(password.value()).isEqualTo("secret");
+    }
+    // fin prueba
+
+    // Prueba unitaria: rechaza password demasiado corto (BE-UT-004)
+    @Test
+    void rejectsShortPassword() {
+        assertThatThrownBy(() -> Password.of("12345"))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("password: Password must be at least 6 characters");
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-UT-001: acepta correo valido de propietario.** Sirve para validar en aislamiento acepta correo valido de propietario. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-002: rechaza correo invalido de login.** Sirve para validar en aislamiento rechaza correo invalido de login. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-003: acepta password con largo minimo.** Sirve para validar en aislamiento acepta password con largo minimo. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-004: rechaza password demasiado corto.** Sirve para validar en aislamiento rechaza password demasiado corto. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### backend\src\test\java\com\foodflow\sales\domain\OrderDomainTest.java
+
+Cantidad de pruebas: **6**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.sales.domain;
+
+import com.foodflow.common.domain.ValidationException;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+class OrderDomainTest {
+
+    // Prueba unitaria: calcula total sumando lineas de pedido (BE-UT-005)
+    @Test
+    void calculatesTotalFromLineItems() {
+        Order order = Order.builder()
+                .lineItems(List.of(
+                        lineItem(1L, "Lomo saltado", "18.50", 2),
+                        lineItem(2L, "Chicha", "5.00", 3)
+                ))
+                .build();
+
+        order.calculateTotal();
+
+        assertThat(order.getTotalAmount()).isEqualByComparingTo("52.00");
+    }
+    // fin prueba
+
+    // Prueba unitaria: acumula cantidad cuando se repite el plato (BE-UT-006)
+    @Test
+    void mergesLineItemsForTheSameDish() {
+        Order order = Order.builder()
+                .lineItems(new ArrayList<>(List.of(lineItem(1L, "Menu", "10.00", 1))))
+                .build();
+
+        order.addLineItem(lineItem(1L, "Menu", "10.00", 2));
+
+        assertThat(order.getLineItems()).hasSize(1);
+        assertThat(order.getLineItems().get(0).getQuantity()).isEqualTo(3);
+        assertThat(order.getTotalAmount()).isEqualByComparingTo("30.00");
+    }
+    // fin prueba
+
+    // Prueba unitaria: avanza pedido pendiente a entregado (BE-UT-007)
+    @Test
+    void advancesPendingOrderToDelivered() {
+        Order order = Order.builder()
+                .status(Order.OrderStatus.PENDIENTE)
+                .build();
+
+        order.advanceStatus();
+
+        assertThat(order.getStatus()).isEqualTo(Order.OrderStatus.ENTREGADA);
+        assertThat(order.isFinalState()).isTrue();
+    }
+    // fin prueba
+
+    // Prueba unitaria: impide avanzar estados finales (BE-UT-008)
+    @Test
+    void rejectsAdvancingFinalStates() {
+        Order order = Order.builder()
+                .status(Order.OrderStatus.CANCELADA)
+                .build();
+
+        assertThatThrownBy(order::advanceStatus)
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("Cannot advance status from CANCELADA");
+    }
+    // fin prueba
+
+    // Prueba unitaria: normaliza estados externos de orden (BE-UT-009)
+    @Test
+    void normalizesExternalOrderStatuses() {
+        assertThat(Order.OrderStatus.fromStorage("DELIVERED")).isEqualTo(Order.OrderStatus.ENTREGADA);
+        assertThat(Order.OrderStatus.fromStorage("cancelled")).isEqualTo(Order.OrderStatus.CANCELADA);
+        assertThat(Order.OrderStatus.fromStorage("preparing")).isEqualTo(Order.OrderStatus.PENDIENTE);
+        assertThat(Order.OrderStatus.fromStorage("unknown")).isEqualTo(Order.OrderStatus.PENDIENTE);
+    }
+    // fin prueba
+
+    // Prueba unitaria: genera numero de orden por usuario y secuencia (BE-UT-010)
+    @Test
+    void generatesOrderNumberWithUserAndSequence() {
+        assertThat(Order.generateOrderNumber(1001L, 2L)).isEqualTo("1001-002");
+    }
+    // fin prueba
+
+    private OrderLineItem lineItem(Long dishId, String dishName, String unitPrice, int quantity) {
+        return OrderLineItem.builder()
+                .dishId(dishId)
+                .dishName(dishName)
+                .unitPrice(new BigDecimal(unitPrice))
+                .quantity(quantity)
+                .build();
+    }
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-UT-005: calcula total sumando lineas de pedido.** Sirve para validar en aislamiento calcula total sumando lineas de pedido. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-006: acumula cantidad cuando se repite el plato.** Sirve para validar en aislamiento acumula cantidad cuando se repite el plato. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-007: avanza pedido pendiente a entregado.** Sirve para validar en aislamiento avanza pedido pendiente a entregado. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-008: impide avanzar estados finales.** Sirve para validar en aislamiento impide avanzar estados finales. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-009: normaliza estados externos de orden.** Sirve para validar en aislamiento normaliza estados externos de orden. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-010: genera numero de orden por usuario y secuencia.** Sirve para validar en aislamiento genera numero de orden por usuario y secuencia. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### backend\src\test\java\com\foodflow\catalog\domain\DishDomainTest.java
+
+Cantidad de pruebas: **2**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.catalog.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class DishDomainTest {
+
+    // Prueba unitaria: actualiza datos validos de plato (BE-UT-011)
+    @Test
+    void updatesDishDetailsWithValidValues() {
+        LocalDateTime createdAt = LocalDateTime.of(2026, 5, 8, 10, 0);
+        Dish dish = Dish.builder()
+                .name("Menu del dia")
+                .description("Entrada y fondo")
+                .price(new BigDecimal("18.00"))
+                .ingredients("arroz, pollo")
+                .createdAt(createdAt)
+                .updatedAt(createdAt)
+                .build();
+
+        dish.updateDetails("Menu ejecutivo", "Incluye bebida", new BigDecimal("22.00"), "arroz, pollo, refresco");
+
+        assertThat(dish.getName()).isEqualTo("Menu ejecutivo");
+        assertThat(dish.getDescription()).isEqualTo("Incluye bebida");
+        assertThat(dish.getPrice()).isEqualByComparingTo("22.00");
+        assertThat(dish.getIngredients()).isEqualTo("arroz, pollo, refresco");
+        assertThat(dish.getUpdatedAt()).isAfter(createdAt);
+    }
+    // fin prueba
+
+    // Prueba unitaria: conserva nombre y precio ante valores invalidos (BE-UT-012)
+    @Test
+    void ignoresBlankNameAndNonPositivePrice() {
+        Dish dish = Dish.builder()
+                .name("Causa")
+                .price(new BigDecimal("12.00"))
+                .build();
+
+        dish.updateDetails("   ", null, BigDecimal.ZERO, null);
+
+        assertThat(dish.getName()).isEqualTo("Causa");
+        assertThat(dish.getPrice()).isEqualByComparingTo("12.00");
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-UT-011: actualiza datos validos de plato.** Sirve para validar en aislamiento actualiza datos validos de plato. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-012: conserva nombre y precio ante valores invalidos.** Sirve para validar en aislamiento conserva nombre y precio ante valores invalidos. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### backend\src\test\java\com\foodflow\inventory\domain\ProductDomainTest.java
+
+Cantidad de pruebas: **2**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.inventory.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ProductDomainTest {
+
+    // Prueba unitaria: actualiza producto con valores validos de inventario (BE-UT-013)
+    @Test
+    void updatesProductDetailsWithValidInventoryValues() {
+        LocalDateTime createdAt = LocalDateTime.of(2026, 5, 8, 9, 0);
+        Product product = Product.builder()
+                .name("Tomate")
+                .description("Fresco")
+                .category("Vegetales")
+                .supplier("Mercado")
+                .stockLevel(new BigDecimal("10.00"))
+                .unitCost(new BigDecimal("3.00"))
+                .lowStockThreshold(new BigDecimal("4.00"))
+                .unitOfMeasure("kg")
+                .createdAt(createdAt)
+                .updatedAt(createdAt)
+                .build();
+
+        product.updateDetails(
+                "Tomate italiano",
+                "Seleccionado",
+                "Verduras",
+                "Proveedor A",
+                new BigDecimal("16.00"),
+                new BigDecimal("3.50"),
+                new BigDecimal("5.00"),
+                "kg"
+        );
+
+        assertThat(product.getName()).isEqualTo("Tomate italiano");
+        assertThat(product.getCategory()).isEqualTo("Verduras");
+        assertThat(product.getStockLevel()).isEqualByComparingTo("16.00");
+        assertThat(product.getUnitCost()).isEqualByComparingTo("3.50");
+        assertThat(product.getLowStockThreshold()).isEqualByComparingTo("5.00");
+        assertThat(product.getUpdatedAt()).isAfter(createdAt);
+    }
+    // fin prueba
+
+    // Prueba unitaria: ignora valores negativos al actualizar inventario (BE-UT-014)
+    @Test
+    void ignoresNegativeInventoryValues() {
+        Product product = Product.builder()
+                .name("Arroz")
+                .stockLevel(new BigDecimal("20.00"))
+                .unitCost(new BigDecimal("2.50"))
+                .lowStockThreshold(new BigDecimal("6.00"))
+                .unitOfMeasure("kg")
+                .build();
+
+        product.updateDetails(
+                " ",
+                null,
+                null,
+                null,
+                new BigDecimal("-1.00"),
+                new BigDecimal("-2.00"),
+                new BigDecimal("-3.00"),
+                " "
+        );
+
+        assertThat(product.getName()).isEqualTo("Arroz");
+        assertThat(product.getStockLevel()).isEqualByComparingTo("20.00");
+        assertThat(product.getUnitCost()).isEqualByComparingTo("2.50");
+        assertThat(product.getLowStockThreshold()).isEqualByComparingTo("6.00");
+        assertThat(product.getUnitOfMeasure()).isEqualTo("kg");
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-UT-013: actualiza producto con valores validos de inventario.** Sirve para validar en aislamiento actualiza producto con valores validos de inventario. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-014: ignora valores negativos al actualizar inventario.** Sirve para validar en aislamiento ignora valores negativos al actualizar inventario. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### backend\src\test\java\com\foodflow\billing\domain\SubscriptionDomainTest.java
+
+Cantidad de pruebas: **4**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.billing.domain;
+
+import com.foodflow.common.domain.ValidationException;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+class SubscriptionDomainTest {
+
+    // Prueba unitaria: considera activa suscripcion vigente (BE-UT-015)
+    @Test
+    void activeSubscriptionWithFutureEndDateIsActive() {
+        Subscription subscription = Subscription.builder()
+                .status(Subscription.SubscriptionStatus.ACTIVE)
+                .plan(SubscriptionPlan.STANDARD)
+                .endDate(LocalDateTime.now().plusDays(5))
+                .build();
+
+        assertThat(subscription.isActive()).isTrue();
+    }
+    // fin prueba
+
+    // Prueba unitaria: cancela suscripcion activa y registra fecha (BE-UT-016)
+    @Test
+    void cancelsActiveSubscription() {
+        Subscription subscription = Subscription.builder()
+                .status(Subscription.SubscriptionStatus.ACTIVE)
+                .plan(SubscriptionPlan.PREMIUM)
+                .build();
+
+        subscription.cancel();
+
+        assertThat(subscription.getStatus()).isEqualTo(Subscription.SubscriptionStatus.CANCELLED);
+        assertThat(subscription.getCancellationDate()).isNotNull();
+        assertThat(subscription.isActive()).isFalse();
+    }
+    // fin prueba
+
+    // Prueba unitaria: impide cancelar dos veces la suscripcion (BE-UT-017)
+    @Test
+    void rejectsCancellingAlreadyCancelledSubscription() {
+        Subscription subscription = Subscription.builder()
+                .status(Subscription.SubscriptionStatus.CANCELLED)
+                .plan(SubscriptionPlan.PREMIUM)
+                .build();
+
+        assertThatThrownBy(subscription::cancel)
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("Subscription is already cancelled");
+    }
+    // fin prueba
+
+    // Prueba unitaria: cambia plan de suscripcion existente (BE-UT-018)
+    @Test
+    void changesPlan() {
+        Subscription subscription = Subscription.builder()
+                .status(Subscription.SubscriptionStatus.ACTIVE)
+                .plan(SubscriptionPlan.FREE)
+                .build();
+
+        subscription.changePlan(SubscriptionPlan.PREMIUM);
+
+        assertThat(subscription.getPlan()).isEqualTo(SubscriptionPlan.PREMIUM);
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-UT-015: considera activa suscripcion vigente.** Sirve para validar en aislamiento considera activa suscripcion vigente. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-016: cancela suscripcion activa y registra fecha.** Sirve para validar en aislamiento cancela suscripcion activa y registra fecha. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-017: impide cancelar dos veces la suscripcion.** Sirve para validar en aislamiento impide cancelar dos veces la suscripcion. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-018: cambia plan de suscripcion existente.** Sirve para validar en aislamiento cambia plan de suscripcion existente. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### backend\src\test\java\com\foodflow\finance\domain\ReportPeriodTest.java
+
+Cantidad de pruebas: **3**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.finance.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ReportPeriodTest {
+
+    // Prueba unitaria: calcula ventana diaria de reportes (BE-UT-019)
+    @Test
+    void calculatesDailyWindow() {
+        LocalDateTime reference = LocalDateTime.of(2026, 5, 9, 15, 30);
+
+        assertThat(ReportPeriod.DAILY.getPeriodStart(reference))
+                .isEqualTo(LocalDateTime.of(2026, 5, 9, 0, 0));
+        assertThat(ReportPeriod.DAILY.getPeriodEnd(reference))
+                .isEqualTo(LocalDateTime.of(2026, 5, 10, 0, 0));
+    }
+    // fin prueba
+
+    // Prueba unitaria: calcula semana desde lunes hasta lunes siguiente (BE-UT-020)
+    @Test
+    void calculatesWeeklyWindowStartingOnMonday() {
+        LocalDateTime reference = LocalDateTime.of(2026, 5, 9, 15, 30);
+
+        assertThat(ReportPeriod.WEEKLY.getPeriodStart(reference))
+                .isEqualTo(LocalDateTime.of(2026, 5, 4, 0, 0));
+        assertThat(ReportPeriod.WEEKLY.getPeriodEnd(reference))
+                .isEqualTo(LocalDateTime.of(2026, 5, 11, 0, 0));
+    }
+    // fin prueba
+
+    // Prueba unitaria: calcula mes calendario completo (BE-UT-021)
+    @Test
+    void calculatesMonthlyWindow() {
+        LocalDateTime reference = LocalDateTime.of(2026, 5, 9, 15, 30);
+
+        assertThat(ReportPeriod.MONTHLY.getPeriodStart(reference))
+                .isEqualTo(LocalDateTime.of(2026, 5, 1, 0, 0));
+        assertThat(ReportPeriod.MONTHLY.getPeriodEnd(reference))
+                .isEqualTo(LocalDateTime.of(2026, 6, 1, 0, 0));
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-UT-019: calcula ventana diaria de reportes.** Sirve para validar en aislamiento calcula ventana diaria de reportes. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-020: calcula semana desde lunes hasta lunes siguiente.** Sirve para validar en aislamiento calcula semana desde lunes hasta lunes siguiente. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-021: calcula mes calendario completo.** Sirve para validar en aislamiento calcula mes calendario completo. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### backend\src\test\java\com\foodflow\catalog\application\CatalogApplicationServiceTest.java
+
+Cantidad de pruebas: **5**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.catalog.application;
+
+import com.foodflow.catalog.domain.Dish;
+import com.foodflow.catalog.domain.DishRepository;
+import com.foodflow.common.domain.DuplicateResourceException;
+import com.foodflow.common.domain.ValidationException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class CatalogApplicationServiceTest {
+
+    @Mock
+    private DishRepository dishRepository;
+
+    // Prueba unitaria: crea plato y persiste usuario propietario (BE-UT-022)
+    @Test
+    void addsDishForUser() {
+        CatalogApplicationService service = new CatalogApplicationService(dishRepository);
+        when(dishRepository.existsByUserIdAndName(77L, "Ceviche")).thenReturn(false);
+        when(dishRepository.save(any(Dish.class))).thenAnswer(invocation -> {
+            Dish dish = invocation.getArgument(0);
+            dish.setId(Dish.DishId.of(10L));
+            dish.setCreatedAt(LocalDateTime.of(2026, 5, 9, 10, 0));
+            return dish;
+        });
+
+        DishResponse response = service.addDish(77L, DishRequest.builder()
+                .name("Ceviche")
+                .description("Clasico")
+                .price(new BigDecimal("32.00"))
+                .ingredients("pescado, limon")
+                .build());
+
+        ArgumentCaptor<Dish> dishCaptor = ArgumentCaptor.forClass(Dish.class);
+        verify(dishRepository).save(dishCaptor.capture());
+        assertThat(dishCaptor.getValue().getUserId()).isEqualTo(77L);
+        assertThat(response.getId()).isEqualTo(10L);
+        assertThat(response.getName()).isEqualTo("Ceviche");
+    }
+    // fin prueba
+
+    // Prueba unitaria: rechaza plato duplicado para el usuario (BE-UT-023)
+    @Test
+    void rejectsDuplicateDishName() {
+        CatalogApplicationService service = new CatalogApplicationService(dishRepository);
+        when(dishRepository.existsByUserIdAndName(77L, "Ceviche")).thenReturn(true);
+
+        assertThatThrownBy(() -> service.addDish(77L, DishRequest.builder()
+                .name("Ceviche")
+                .price(new BigDecimal("32.00"))
+                .build()))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessageContaining("Dish already exists: name Ceviche");
+    }
+    // fin prueba
+
+    // Prueba unitaria: rechaza precio nulo o no positivo (BE-UT-024)
+    @Test
+    void rejectsInvalidPrice() {
+        CatalogApplicationService service = new CatalogApplicationService(dishRepository);
+
+        assertThatThrownBy(() -> service.addDish(77L, DishRequest.builder()
+                .name("Ceviche")
+                .price(BigDecimal.ZERO)
+                .build()))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("price: Price must be greater than 0");
+    }
+    // fin prueba
+
+    // Prueba unitaria: busca platos por nombre cuando hay termino (BE-UT-025)
+    @Test
+    void searchesDishesByName() {
+        CatalogApplicationService service = new CatalogApplicationService(dishRepository);
+        Dish dish = Dish.builder()
+                .id(Dish.DishId.of(11L))
+                .name("Tallarines verdes")
+                .price(new BigDecimal("24.00"))
+                .userId(77L)
+                .createdAt(LocalDateTime.of(2026, 5, 9, 11, 0))
+                .build();
+        when(dishRepository.findByUserIdAndNameContaining(77L, "verde"))
+                .thenReturn(List.of(dish));
+
+        List<DishResponse> results = service.searchDishes(77L, "verde");
+
+        assertThat(results).extracting(DishResponse::getName).containsExactly("Tallarines verdes");
+        verify(dishRepository).findByUserIdAndNameContaining(77L, "verde");
+    }
+    // fin prueba
+
+    // Prueba unitaria: impide leer plato de otro usuario (BE-UT-026)
+    @Test
+    void rejectsAccessToAnotherUsersDish() {
+        CatalogApplicationService service = new CatalogApplicationService(dishRepository);
+        Dish dish = Dish.builder()
+                .id(Dish.DishId.of(11L))
+                .name("AjÃ­ de gallina")
+                .price(new BigDecimal("22.00"))
+                .userId(88L)
+                .build();
+        when(dishRepository.findById(Dish.DishId.of(11L))).thenReturn(Optional.of(dish));
+
+        assertThatThrownBy(() -> service.getDishById(77L, 11L))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("You do not have access to this dish");
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-UT-022: crea plato y persiste usuario propietario.** Sirve para validar en aislamiento crea plato y persiste usuario propietario. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-023: rechaza plato duplicado para el usuario.** Sirve para validar en aislamiento rechaza plato duplicado para el usuario. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-024: rechaza precio nulo o no positivo.** Sirve para validar en aislamiento rechaza precio nulo o no positivo. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-025: busca platos por nombre cuando hay termino.** Sirve para validar en aislamiento busca platos por nombre cuando hay termino. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-026: impide leer plato de otro usuario.** Sirve para validar en aislamiento impide leer plato de otro usuario. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+#### backend\src\test\java\com\foodflow\finance\application\FinanceApplicationServiceTest.java
+
+Cantidad de pruebas: **3**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.finance.application;
+
+import com.foodflow.common.domain.ValidationException;
+import com.foodflow.inventory.domain.InventoryPurchase;
+import com.foodflow.inventory.domain.InventoryPurchaseRepository;
+import com.foodflow.sales.domain.Order;
+import com.foodflow.sales.domain.OrderLineItem;
+import com.foodflow.sales.domain.OrderRepository;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class FinanceApplicationServiceTest {
+
+    @Mock
+    private OrderRepository orderRepository;
+
+    @Mock
+    private InventoryPurchaseRepository inventoryPurchaseRepository;
+
+    // Prueba unitaria: calcula dashboard con ingresos entregados y gastos (BE-UT-027)
+    @Test
+    void calculatesDashboardFromDeliveredOrdersAndPurchases() {
+        FinanceApplicationService service = new FinanceApplicationService(orderRepository, inventoryPurchaseRepository);
+        when(orderRepository.findByUserIdAndDateBetween(eq(77L), any(LocalDateTime.class), any(LocalDateTime.class)))
+                .thenReturn(List.of(
+                        order(Order.OrderStatus.ENTREGADA, "120.00", lineItem(1L, "Ceviche", "40.00", 3)),
+                        order(Order.OrderStatus.PENDIENTE, "90.00", lineItem(2L, "Lomo", "45.00", 2))
+                ));
+        when(inventoryPurchaseRepository.findByUserIdAndPurchasedAtBetween(eq(77L), any(LocalDateTime.class), any(LocalDateTime.class)))
+                .thenReturn(List.of(purchase("Pescados", "50.00")));
+
+        DashboardResponse response = service.getDashboard(77L, "DAILY");
+
+        assertThat(response.getPeriod()).isEqualTo("DAILY");
+        assertThat(response.getTotalIncome()).isEqualByComparingTo("120.00");
+        assertThat(response.getTotalExpenses()).isEqualByComparingTo("50.00");
+        assertThat(response.getNetProfit()).isEqualByComparingTo("70.00");
+        assertThat(response.getTop5Dishes()).hasSize(1);
+        assertThat(response.getTop5Dishes().get(0).getDishName()).isEqualTo("Ceviche");
+    }
+    // fin prueba
+
+    // Prueba unitaria: calcula desglose de gastos por categoria (BE-UT-028)
+    @Test
+    void calculatesExpenseBreakdownForFinancialReport() {
+        FinanceApplicationService service = new FinanceApplicationService(orderRepository, inventoryPurchaseRepository);
+        when(orderRepository.findByUserIdAndDateBetween(eq(77L), any(LocalDateTime.class), any(LocalDateTime.class)))
+                .thenReturn(List.of(order(Order.OrderStatus.ENTREGADA, "80.00", lineItem(1L, "Menu", "40.00", 2))));
+        when(inventoryPurchaseRepository.findByUserIdAndPurchasedAtBetween(eq(77L), any(LocalDateTime.class), any(LocalDateTime.class)))
+                .thenReturn(List.of(
+                        purchase("VEGETABLES", "30.00"),
+                        purchase("", "10.00")
+                ));
+
+        FinancialReportResponse report = service.getFinancialReport(77L, "WEEKLY");
+
+        assertThat(report.getPeriod()).isEqualTo("WEEKLY");
+        assertThat(report.getMetrics().getTotalIncome()).isEqualByComparingTo("80.00");
+        assertThat(report.getMetrics().getTotalExpenses()).isEqualByComparingTo("40.00");
+        assertThat(report.getExpenseBreakdown())
+                .extracting(ExpenseCategoryResponse::getName)
+                .contains("Vegetales", "Sin categoria");
+    }
+    // fin prueba
+
+    // Prueba unitaria: rechaza periodo financiero invalido (BE-UT-029)
+    @Test
+    void rejectsInvalidPeriod() {
+        FinanceApplicationService service = new FinanceApplicationService(orderRepository, inventoryPurchaseRepository);
+
+        assertThatThrownBy(() -> service.getDashboard(77L, "YEARLY"))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("period: Period must be DAILY, WEEKLY, or MONTHLY");
+    }
+    // fin prueba
+
+    private Order order(Order.OrderStatus status, String total, OrderLineItem item) {
+        return Order.builder()
+                .status(status)
+                .totalAmount(new BigDecimal(total))
+                .lineItems(List.of(item))
+                .orderDate(LocalDateTime.now())
+                .build();
+    }
+
+    private OrderLineItem lineItem(Long dishId, String dishName, String unitPrice, int quantity) {
+        return OrderLineItem.builder()
+                .dishId(dishId)
+                .dishName(dishName)
+                .unitPrice(new BigDecimal(unitPrice))
+                .quantity(quantity)
+                .build();
+    }
+
+    private InventoryPurchase purchase(String category, String totalCost) {
+        return InventoryPurchase.builder()
+                .category(category)
+                .totalCost(new BigDecimal(totalCost))
+                .purchasedAt(LocalDateTime.now())
+                .build();
+    }
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-UT-027: calcula dashboard con ingresos entregados y gastos.** Sirve para validar en aislamiento calcula dashboard con ingresos entregados y gastos. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-028: calcula desglose de gastos por categoria.** Sirve para validar en aislamiento calcula desglose de gastos por categoria. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+- **BE-UT-029: rechaza periodo financiero invalido.** Sirve para validar en aislamiento rechaza periodo financiero invalido. Es util porque protege la logica interna del componente o servicio y permite detectar regresiones sin depender de otros modulos.
+
+## 6.1.2. Core Integration Tests
+
+#### frontend\src\components\common\ProtectedRoute.test.tsx
+
+Cantidad de pruebas: **2**
+
+Codigo de la suite:
+
+````tsx
+import { render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { useAuthStore } from '@/store/authStore';
+import { ProtectedRoute } from './ProtectedRoute';
+
+const renderProtectedRoute = () =>
+  render(
+    <MemoryRouter initialEntries={['/dashboard']}>
+      <Routes>
+        <Route path="/login" element={<div>Login FoodFlow</div>} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <div>Panel privado FoodFlow</div>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </MemoryRouter>
+  );
+
+describe('ProtectedRoute', () => {
+  afterEach(() => {
+    useAuthStore.setState({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      isLoading: false,
+      error: null,
+    });
+  });
+
+  // Prueba integral: redirige al login sin sesion activa (FE-INT-001)
+  it('redirects unauthenticated users to the login route', () => {
+    useAuthStore.setState({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+    });
+
+    renderProtectedRoute();
+
+    expect(screen.getByText('Login FoodFlow')).toBeInTheDocument();
+    expect(screen.queryByText('Panel privado FoodFlow')).not.toBeInTheDocument();
+  });
+  // fin prueba
+
+  // Prueba integral: permite entrar con token persistido (FE-INT-002)
+  it('renders children when a persisted token exists', () => {
+    localStorage.setItem('token', 'foodflow-token');
+
+    renderProtectedRoute();
+
+    expect(screen.getByText('Panel privado FoodFlow')).toBeInTheDocument();
+    expect(screen.queryByText('Login FoodFlow')).not.toBeInTheDocument();
+  });
+  // fin prueba
+});
+
+````
+
+Explicacion de las pruebas:
+
+- **FE-INT-001: redirige al login sin sesion activa.** Sirve para validar que redirige al login sin sesion activa funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **FE-INT-002: permite entrar con token persistido.** Sirve para validar que permite entrar con token persistido funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### frontend\src\hooks\useApi.test.tsx
+
+Cantidad de pruebas: **3**
+
+Codigo de la suite:
+
+````tsx
+import type { ReactNode } from 'react';
+import { act, renderHook, waitFor } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { I18nProvider } from '@/i18n';
+import { useApi } from './useApi';
+
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <I18nProvider>{children}</I18nProvider>
+);
+
+describe('useApi', () => {
+  // Prueba integral: ejecuta llamada exitosa y guarda datos (FE-INT-003)
+  it('stores data after a successful API call', async () => {
+    const apiCall = vi.fn().mockResolvedValue({ totalIncome: 120 });
+    const { result } = renderHook(() => useApi(apiCall), { wrapper });
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    expect(apiCall).toHaveBeenCalledOnce();
+    expect(result.current.data).toEqual({ totalIncome: 120 });
+    expect(result.current.error).toBeNull();
+    expect(result.current.loading).toBe(false);
+  });
+  // fin prueba
+
+  // Prueba integral: captura error de llamada fallida (FE-INT-004)
+  it('stores error messages when the API call fails', async () => {
+    const apiCall = vi.fn().mockRejectedValue(new Error('No se pudo cargar'));
+    const { result } = renderHook(() => useApi(apiCall), { wrapper });
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    await waitFor(() => {
+      expect(result.current.error).toBe('No se pudo cargar');
+    });
+    expect(result.current.data).toBeNull();
+    expect(result.current.loading).toBe(false);
+  });
+  // fin prueba
+
+  // Prueba integral: reinicia datos, error y carga (FE-INT-005)
+  it('resets data, error, and loading state', async () => {
+    const apiCall = vi.fn().mockResolvedValue(['orden']);
+    const { result } = renderHook(() => useApi(apiCall), { wrapper });
+
+    await act(async () => {
+      await result.current.execute();
+      result.current.reset();
+    });
+
+    expect(result.current.data).toBeNull();
+    expect(result.current.error).toBeNull();
+    expect(result.current.loading).toBe(false);
+  });
+  // fin prueba
+});
+
+````
+
+Explicacion de las pruebas:
+
+- **FE-INT-003: ejecuta llamada exitosa y guarda datos.** Sirve para validar que ejecuta llamada exitosa y guarda datos funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **FE-INT-004: captura error de llamada fallida.** Sirve para validar que captura error de llamada fallida funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **FE-INT-005: reinicia datos, error y carga.** Sirve para validar que reinicia datos, error y carga funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### frontend\src\components\modules\LineItemEditor.test.tsx
+
+Cantidad de pruebas: **3**
+
+Codigo de la suite:
+
+````tsx
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { I18nProvider } from '@/i18n';
+import type { Dish } from '@/types';
+import { LineItemEditor } from './LineItemEditor';
+
+const dishes: Dish[] = [
+  {
+    id: 1,
+    name: 'Menu ejecutivo',
+    description: 'Entrada y fondo',
+    price: 12.5,
+    ingredients: 'arroz, pollo',
+    userId: 1,
+    createdAt: '2026-05-09T10:00:00',
+    updatedAt: '2026-05-09T10:00:00',
+  },
+];
+
+const renderEditor = (onChange = vi.fn(), availableDishes = dishes) =>
+  render(
+    <I18nProvider>
+      <LineItemEditor
+        items={[
+          {
+            dishId: 1,
+            dishName: 'Menu ejecutivo',
+            quantity: 2,
+            unitPrice: 12.5,
+          },
+        ]}
+        availableDishes={availableDishes}
+        onChange={onChange}
+      />
+    </I18nProvider>
+  );
+
+describe('LineItemEditor', () => {
+  // Prueba integral: calcula total visible de items de orden (FE-INT-006)
+  it('renders the current order total from line items', () => {
+    renderEditor();
+
+    expect(screen.getByText('Total: $25.00')).toBeInTheDocument();
+  });
+  // fin prueba
+
+  // Prueba integral: agrega item vacio al editar orden (FE-INT-007)
+  it('adds a blank line item when the add button is clicked', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    renderEditor(onChange);
+
+    await user.click(screen.getByRole('button', { name: /Agregar/i }));
+
+    expect(onChange).toHaveBeenCalledWith([
+      {
+        dishId: 1,
+        dishName: 'Menu ejecutivo',
+        quantity: 2,
+        unitPrice: 12.5,
+      },
+      {
+        dishId: 0,
+        dishName: '',
+        quantity: 1,
+        unitPrice: 0,
+      },
+    ]);
+  });
+  // fin prueba
+
+  // Prueba integral: bloquea agregar items sin platos disponibles (FE-INT-008)
+  it('disables adding line items when no dishes are available', () => {
+    renderEditor(vi.fn(), []);
+
+    expect(screen.getByRole('button', { name: /Agregar/i })).toBeDisabled();
+  });
+  // fin prueba
+});
+
+````
+
+Explicacion de las pruebas:
+
+- **FE-INT-006: calcula total visible de items de orden.** Sirve para validar que calcula total visible de items de orden funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **FE-INT-007: agrega item vacio al editar orden.** Sirve para validar que agrega item vacio al editar orden funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **FE-INT-008: bloquea agregar items sin platos disponibles.** Sirve para validar que bloquea agregar items sin platos disponibles funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### backend\src\test\java\com\foodflow\sales\presentation\OrderControllerTest.java
+
+Cantidad de pruebas: **8**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.sales.presentation;
+
+import com.foodflow.common.presentation.GlobalExceptionHandler;
+import com.foodflow.sales.application.OrderResponse;
+import com.foodflow.sales.application.SalesApplicationService;
+import com.foodflow.sales.domain.Order;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import static com.foodflow.ControllerTestSupport.AUTHENTICATED_USER_ID;
+import static com.foodflow.ControllerTestSupport.authenticatedUserArgumentResolver;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(MockitoExtension.class)
+class OrderControllerTest {
+
+    private MockMvc mockMvc;
+
+    @Mock
+    private SalesApplicationService salesApplicationService;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new OrderController(salesApplicationService))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setCustomArgumentResolvers(authenticatedUserArgumentResolver())
+                .build();
+    }
+
+    // Prueba integral: crea orden desde contrato HTTP y usuario autenticado (BE-INT-001)
+    @Test
+    void createsOrderForAuthenticatedUser() throws Exception {
+        OrderResponse response = OrderResponse.builder()
+                .id(9L)
+                .orderNumber("77-001")
+                .tableIdentifier("Mesa 4")
+                .lineItems(List.of())
+                .totalAmount(new BigDecimal("45.50"))
+                .status(Order.OrderStatus.PENDIENTE)
+                .build();
+        when(salesApplicationService.createOrder(eq(AUTHENTICATED_USER_ID), any()))
+                .thenReturn(response);
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "tableIdentifier": "Mesa 4",
+                                  "lineItems": [
+                                    {
+                                      "dishId": 1,
+                                      "dishName": "Menu",
+                                      "unitPrice": 22.75,
+                                      "quantity": 2
+                                    }
+                                  ]
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Order created successfully"))
+                .andExpect(jsonPath("$.data.orderNumber").value("77-001"))
+                .andExpect(jsonPath("$.data.totalAmount").value(45.50));
+
+        ArgumentCaptor<com.foodflow.sales.application.OrderRequest> requestCaptor =
+                ArgumentCaptor.forClass(com.foodflow.sales.application.OrderRequest.class);
+        verify(salesApplicationService).createOrder(eq(AUTHENTICATED_USER_ID), requestCaptor.capture());
+        assertThat(requestCaptor.getValue().getTableIdentifier()).isEqualTo("Mesa 4");
+        assertThat(requestCaptor.getValue().getLineItems()).hasSize(1);
+    }
+    // fin prueba
+
+    // Prueba integral: rechaza orden sin mesa ni items (BE-INT-002)
+    @Test
+    void rejectsInvalidOrderPayload() throws Exception {
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "tableIdentifier": "",
+                                  "lineItems": []
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors").isArray());
+    }
+    // fin prueba
+
+    // Prueba integral: normaliza estado entregado al actualizar orden (BE-INT-003)
+    @Test
+    void updatesOrderStatusUsingExternalStatusAlias() throws Exception {
+        OrderResponse response = OrderResponse.builder()
+                .id(9L)
+                .orderNumber("77-001")
+                .tableIdentifier("Mesa 4")
+                .lineItems(List.of())
+                .totalAmount(new BigDecimal("45.50"))
+                .status(Order.OrderStatus.ENTREGADA)
+                .build();
+        when(salesApplicationService.updateOrderStatus(
+                AUTHENTICATED_USER_ID,
+                9L,
+                Order.OrderStatus.ENTREGADA
+        )).thenReturn(response);
+
+        mockMvc.perform(put("/api/orders/9/status")
+                        .param("status", "DELIVERED"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.status").value("ENTREGADA"));
+
+        verify(salesApplicationService).updateOrderStatus(
+                AUTHENTICATED_USER_ID,
+                9L,
+                Order.OrderStatus.ENTREGADA
+        );
+    }
+    // fin prueba
+
+    // Prueba integral: lista ordenes del usuario autenticado (BE-INT-030)
+    @Test
+    void listsOrdersForAuthenticatedUser() throws Exception {
+        when(salesApplicationService.getAllOrders(AUTHENTICATED_USER_ID))
+                .thenReturn(List.of(OrderResponse.builder()
+                        .id(9L)
+                        .orderNumber("77-001")
+                        .tableIdentifier("Mesa 4")
+                        .lineItems(List.of())
+                        .totalAmount(new BigDecimal("45.50"))
+                        .status(Order.OrderStatus.PENDIENTE)
+                        .build()));
+
+        mockMvc.perform(get("/api/orders"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data[0].orderNumber").value("77-001"))
+                .andExpect(jsonPath("$.data[0].status").value("PENDIENTE"));
+
+        verify(salesApplicationService).getAllOrders(AUTHENTICATED_USER_ID);
+    }
+    // fin prueba
+
+    // Prueba integral: obtiene orden por identificador (BE-INT-031)
+    @Test
+    void getsOrderById() throws Exception {
+        when(salesApplicationService.getOrderById(AUTHENTICATED_USER_ID, 9L))
+                .thenReturn(OrderResponse.builder()
+                        .id(9L)
+                        .orderNumber("77-001")
+                        .tableIdentifier("Mesa 4")
+                        .lineItems(List.of())
+                        .totalAmount(new BigDecimal("45.50"))
+                        .status(Order.OrderStatus.PENDIENTE)
+                        .build());
+
+        mockMvc.perform(get("/api/orders/9"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id").value(9))
+                .andExpect(jsonPath("$.data.tableIdentifier").value("Mesa 4"));
+
+        verify(salesApplicationService).getOrderById(AUTHENTICATED_USER_ID, 9L);
+    }
+    // fin prueba
+
+    // Prueba integral: avanza orden pendiente a entregada (BE-INT-032)
+    @Test
+    void advancesOrderStatus() throws Exception {
+        when(salesApplicationService.advanceOrderStatus(AUTHENTICATED_USER_ID, 9L))
+                .thenReturn(OrderResponse.builder()
+                        .id(9L)
+                        .orderNumber("77-001")
+                        .tableIdentifier("Mesa 4")
+                        .lineItems(List.of())
+                        .totalAmount(new BigDecimal("45.50"))
+                        .status(Order.OrderStatus.ENTREGADA)
+                        .build());
+
+        mockMvc.perform(put("/api/orders/9/advance"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Order status advanced successfully"))
+                .andExpect(jsonPath("$.data.status").value("ENTREGADA"));
+
+        verify(salesApplicationService).advanceOrderStatus(AUTHENTICATED_USER_ID, 9L);
+    }
+    // fin prueba
+
+    // Prueba integral: cancela orden pendiente (BE-INT-033)
+    @Test
+    void cancelsOrder() throws Exception {
+        when(salesApplicationService.cancelOrder(AUTHENTICATED_USER_ID, 9L))
+                .thenReturn(OrderResponse.builder()
+                        .id(9L)
+                        .orderNumber("77-001")
+                        .tableIdentifier("Mesa 4")
+                        .lineItems(List.of())
+                        .totalAmount(new BigDecimal("45.50"))
+                        .status(Order.OrderStatus.CANCELADA)
+                        .build());
+
+        mockMvc.perform(put("/api/orders/9/cancel"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Order cancelled successfully"))
+                .andExpect(jsonPath("$.data.status").value("CANCELADA"));
+
+        verify(salesApplicationService).cancelOrder(AUTHENTICATED_USER_ID, 9L);
+    }
+    // fin prueba
+
+    // Prueba integral: elimina orden existente (BE-INT-034)
+    @Test
+    void deletesOrder() throws Exception {
+        mockMvc.perform(delete("/api/orders/9"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Order deleted successfully"));
+
+        verify(salesApplicationService).deleteOrder(AUTHENTICATED_USER_ID, 9L);
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-INT-001: crea orden desde contrato HTTP y usuario autenticado.** Sirve para validar que crea orden desde contrato HTTP y usuario autenticado funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-002: rechaza orden sin mesa ni items.** Sirve para validar que rechaza orden sin mesa ni items funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-003: normaliza estado entregado al actualizar orden.** Sirve para validar que normaliza estado entregado al actualizar orden funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-030: lista ordenes del usuario autenticado.** Sirve para validar que lista ordenes del usuario autenticado funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-031: obtiene orden por identificador.** Sirve para validar que obtiene orden por identificador funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-032: avanza orden pendiente a entregada.** Sirve para validar que avanza orden pendiente a entregada funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-033: cancela orden pendiente.** Sirve para validar que cancela orden pendiente funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-034: elimina orden existente.** Sirve para validar que elimina orden existente funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### backend\src\test\java\com\foodflow\inventory\presentation\ProductControllerTest.java
+
+Cantidad de pruebas: **7**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.inventory.presentation;
+
+import com.foodflow.common.presentation.GlobalExceptionHandler;
+import com.foodflow.inventory.application.InventoryCategoryResponse;
+import com.foodflow.inventory.application.InventoryApplicationService;
+import com.foodflow.inventory.application.ProductResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import static com.foodflow.ControllerTestSupport.AUTHENTICATED_USER_ID;
+import static com.foodflow.ControllerTestSupport.authenticatedUserArgumentResolver;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(MockitoExtension.class)
+class ProductControllerTest {
+
+    private MockMvc mockMvc;
+
+    @Mock
+    private InventoryApplicationService inventoryApplicationService;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new ProductController(inventoryApplicationService))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setCustomArgumentResolvers(authenticatedUserArgumentResolver())
+                .build();
+    }
+
+    // Prueba integral: lista productos del usuario autenticado (BE-INT-004)
+    @Test
+    void listsProductsForAuthenticatedUser() throws Exception {
+        ProductResponse response = ProductResponse.builder()
+                .id(5L)
+                .name("Tomate")
+                .category("Vegetales")
+                .supplier("Mercado")
+                .stockLevel(new BigDecimal("20.00"))
+                .unitCost(new BigDecimal("3.50"))
+                .lowStockThreshold(new BigDecimal("5.00"))
+                .unitOfMeasure("kg")
+                .build();
+        when(inventoryApplicationService.getAllProducts(AUTHENTICATED_USER_ID))
+                .thenReturn(List.of(response));
+
+        mockMvc.perform(get("/api/products"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data[0].id").value(5))
+                .andExpect(jsonPath("$.data[0].name").value("Tomate"))
+                .andExpect(jsonPath("$.data[0].category").value("Vegetales"));
+
+        verify(inventoryApplicationService).getAllProducts(AUTHENTICATED_USER_ID);
+    }
+    // fin prueba
+
+    // Prueba integral: crea producto de inventario con payload valido (BE-INT-005)
+    @Test
+    void createsProductWithValidPayload() throws Exception {
+        ProductResponse response = ProductResponse.builder()
+                .id(6L)
+                .name("Harina")
+                .category("Panaderia")
+                .stockLevel(new BigDecimal("12.00"))
+                .unitCost(new BigDecimal("2.00"))
+                .lowStockThreshold(new BigDecimal("4.00"))
+                .unitOfMeasure("kg")
+                .build();
+        when(inventoryApplicationService.addProduct(eq(AUTHENTICATED_USER_ID), any()))
+                .thenReturn(response);
+
+        mockMvc.perform(post("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Harina",
+                                  "category": "Panaderia",
+                                  "stockLevel": 12,
+                                  "unitCost": 2,
+                                  "lowStockThreshold": 4,
+                                  "unitOfMeasure": "kg"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Product added successfully"))
+                .andExpect(jsonPath("$.data.id").value(6))
+                .andExpect(jsonPath("$.data.name").value("Harina"));
+
+        ArgumentCaptor<com.foodflow.inventory.application.ProductRequest> requestCaptor =
+                ArgumentCaptor.forClass(com.foodflow.inventory.application.ProductRequest.class);
+        verify(inventoryApplicationService).addProduct(eq(AUTHENTICATED_USER_ID), requestCaptor.capture());
+        assertThat(requestCaptor.getValue().getName()).isEqualTo("Harina");
+        assertThat(requestCaptor.getValue().getStockLevel()).isEqualByComparingTo("12");
+    }
+    // fin prueba
+
+    // Prueba integral: rechaza producto con stock y costo invalidos (BE-INT-006)
+    @Test
+    void rejectsInvalidProductPayload() throws Exception {
+        mockMvc.perform(post("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "",
+                                  "stockLevel": -1,
+                                  "unitCost": 0,
+                                  "unitOfMeasure": ""
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors").isArray());
+    }
+    // fin prueba
+
+    // Prueba integral: actualiza producto existente con payload valido (BE-INT-023)
+    @Test
+    void updatesExistingProduct() throws Exception {
+        ProductResponse response = ProductResponse.builder()
+                .id(6L)
+                .name("Harina Integral")
+                .category("Panaderia")
+                .stockLevel(new BigDecimal("18.00"))
+                .unitCost(new BigDecimal("2.40"))
+                .lowStockThreshold(new BigDecimal("5.00"))
+                .unitOfMeasure("kg")
+                .build();
+        when(inventoryApplicationService.updateProduct(eq(AUTHENTICATED_USER_ID), eq(6L), any()))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/products/6")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Harina Integral",
+                                  "stockLevel": 18,
+                                  "unitCost": 2.4,
+                                  "lowStockThreshold": 5,
+                                  "unitOfMeasure": "kg"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Product updated successfully"))
+                .andExpect(jsonPath("$.data.name").value("Harina Integral"));
+
+        verify(inventoryApplicationService).updateProduct(eq(AUTHENTICATED_USER_ID), eq(6L), any());
+    }
+    // fin prueba
+
+    // Prueba integral: asigna categoria a producto existente (BE-INT-024)
+    @Test
+    void updatesProductCategory() throws Exception {
+        ProductResponse response = ProductResponse.builder()
+                .id(6L)
+                .name("Harina")
+                .category("Panaderia")
+                .stockLevel(new BigDecimal("12.00"))
+                .unitCost(new BigDecimal("2.00"))
+                .lowStockThreshold(new BigDecimal("4.00"))
+                .unitOfMeasure("kg")
+                .build();
+        when(inventoryApplicationService.updateProductCategory(eq(AUTHENTICATED_USER_ID), eq(6L), any()))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/products/6/category")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Panaderia"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Product category updated successfully"))
+                .andExpect(jsonPath("$.data.category").value("Panaderia"));
+
+        verify(inventoryApplicationService).updateProductCategory(eq(AUTHENTICATED_USER_ID), eq(6L), any());
+    }
+    // fin prueba
+
+    // Prueba integral: administra categorias de inventario (BE-INT-025)
+    @Test
+    void managesInventoryCategories() throws Exception {
+        InventoryCategoryResponse category = InventoryCategoryResponse.builder()
+                .id(30L)
+                .name("Bebidas")
+                .value("Bebidas")
+                .label("Bebidas")
+                .build();
+        when(inventoryApplicationService.getCategories(AUTHENTICATED_USER_ID))
+                .thenReturn(List.of(category));
+        when(inventoryApplicationService.createCategory(eq(AUTHENTICATED_USER_ID), any()))
+                .thenReturn(category);
+        when(inventoryApplicationService.updateCategory(eq(AUTHENTICATED_USER_ID), eq(30L), any()))
+                .thenReturn(InventoryCategoryResponse.builder()
+                        .id(30L)
+                        .name("Bebidas frias")
+                        .value("Bebidas frias")
+                        .label("Bebidas frias")
+                        .build());
+
+        mockMvc.perform(get("/api/products/categories"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].name").value("Bebidas"));
+
+        mockMvc.perform(post("/api/products/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Bebidas"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Category created successfully"))
+                .andExpect(jsonPath("$.data.id").value(30));
+
+        mockMvc.perform(put("/api/products/categories/30")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Bebidas frias"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Category updated successfully"))
+                .andExpect(jsonPath("$.data.name").value("Bebidas frias"));
+
+        mockMvc.perform(delete("/api/products/categories/30"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Category deleted successfully"));
+
+        verify(inventoryApplicationService).getCategories(AUTHENTICATED_USER_ID);
+        verify(inventoryApplicationService).createCategory(eq(AUTHENTICATED_USER_ID), any());
+        verify(inventoryApplicationService).updateCategory(eq(AUTHENTICATED_USER_ID), eq(30L), any());
+        verify(inventoryApplicationService).deleteCategory(AUTHENTICATED_USER_ID, 30L);
+    }
+    // fin prueba
+
+    // Prueba integral: elimina producto existente (BE-INT-026)
+    @Test
+    void deletesProduct() throws Exception {
+        mockMvc.perform(delete("/api/products/6"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Product deleted successfully"));
+
+        verify(inventoryApplicationService).deleteProduct(AUTHENTICATED_USER_ID, 6L);
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-INT-004: lista productos del usuario autenticado.** Sirve para validar que lista productos del usuario autenticado funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-005: crea producto de inventario con payload valido.** Sirve para validar que crea producto de inventario con payload valido funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-006: rechaza producto con stock y costo invalidos.** Sirve para validar que rechaza producto con stock y costo invalidos funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-023: actualiza producto existente con payload valido.** Sirve para validar que actualiza producto existente con payload valido funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-024: asigna categoria a producto existente.** Sirve para validar que asigna categoria a producto existente funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-025: administra categorias de inventario.** Sirve para validar que administra categorias de inventario funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-026: elimina producto existente.** Sirve para validar que elimina producto existente funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### backend\src\test\java\com\foodflow\identity\presentation\AuthControllerTest.java
+
+Cantidad de pruebas: **3**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.identity.presentation;
+
+import com.foodflow.common.presentation.GlobalExceptionHandler;
+import com.foodflow.identity.application.IdentityApplicationService;
+import com.foodflow.identity.application.LoginResponse;
+import com.foodflow.identity.application.UserResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.LocalDateTime;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(MockitoExtension.class)
+class AuthControllerTest {
+
+    private MockMvc mockMvc;
+
+    @Mock
+    private IdentityApplicationService identityApplicationService;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new AuthController(identityApplicationService))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
+    }
+
+    // Prueba integral: registra usuario desde contrato HTTP (BE-INT-007)
+    @Test
+    void registersUser() throws Exception {
+        UserResponse response = UserResponse.builder()
+                .id(15L)
+                .name("Owner FoodFlow")
+                .email("owner@foodflow.test")
+                .subscriptionType("FREE")
+                .createdAt(LocalDateTime.of(2026, 5, 9, 9, 0))
+                .build();
+        when(identityApplicationService.register(any())).thenReturn(response);
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Owner FoodFlow",
+                                  "email": "owner@foodflow.test",
+                                  "password": "secret1"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("User registered successfully"))
+                .andExpect(jsonPath("$.data.email").value("owner@foodflow.test"))
+                .andExpect(jsonPath("$.data.subscriptionType").value("FREE"));
+    }
+    // fin prueba
+
+    // Prueba integral: inicia sesion y devuelve token (BE-INT-008)
+    @Test
+    void logsInUser() throws Exception {
+        UserResponse user = UserResponse.builder()
+                .id(15L)
+                .name("Owner FoodFlow")
+                .email("owner@foodflow.test")
+                .subscriptionType("STANDARD")
+                .build();
+        when(identityApplicationService.login(any())).thenReturn(LoginResponse.builder()
+                .token("jwt-token")
+                .user(user)
+                .build());
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "owner@foodflow.test",
+                                  "password": "secret1"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Login successful"))
+                .andExpect(jsonPath("$.data.token").value("jwt-token"))
+                .andExpect(jsonPath("$.data.user.subscriptionType").value("STANDARD"));
+
+        verify(identityApplicationService).login(any());
+    }
+    // fin prueba
+
+    // Prueba integral: rechaza registro con datos invalidos (BE-INT-009)
+    @Test
+    void rejectsInvalidRegistrationPayload() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "",
+                                  "email": "owner-foodflow.test",
+                                  "password": "123"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors").isArray());
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-INT-007: registra usuario desde contrato HTTP.** Sirve para validar que registra usuario desde contrato HTTP funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-008: inicia sesion y devuelve token.** Sirve para validar que inicia sesion y devuelve token funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-009: rechaza registro con datos invalidos.** Sirve para validar que rechaza registro con datos invalidos funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### backend\src\test\java\com\foodflow\identity\presentation\UserControllerTest.java
+
+Cantidad de pruebas: **4**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.identity.presentation;
+
+import com.foodflow.common.presentation.GlobalExceptionHandler;
+import com.foodflow.identity.application.IdentityApplicationService;
+import com.foodflow.identity.application.UserResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.LocalDateTime;
+
+import static com.foodflow.ControllerTestSupport.AUTHENTICATED_USER_ID;
+import static com.foodflow.ControllerTestSupport.authenticatedUserArgumentResolver;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(MockitoExtension.class)
+class UserControllerTest {
+
+    private MockMvc mockMvc;
+
+    @Mock
+    private IdentityApplicationService identityApplicationService;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new UserController(identityApplicationService))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setCustomArgumentResolvers(authenticatedUserArgumentResolver())
+                .build();
+    }
+
+    // Prueba integral: obtiene perfil del usuario autenticado (BE-INT-019)
+    @Test
+    void getsAuthenticatedUserProfile() throws Exception {
+        UserResponse response = UserResponse.builder()
+                .id(AUTHENTICATED_USER_ID)
+                .name("Owner FoodFlow")
+                .email("owner@foodflow.test")
+                .subscriptionType("FREE")
+                .createdAt(LocalDateTime.of(2026, 5, 10, 9, 0))
+                .build();
+        when(identityApplicationService.getProfile(AUTHENTICATED_USER_ID)).thenReturn(response);
+
+        mockMvc.perform(get("/api/users/profile"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id").value(AUTHENTICATED_USER_ID))
+                .andExpect(jsonPath("$.data.email").value("owner@foodflow.test"))
+                .andExpect(jsonPath("$.data.subscriptionType").value("FREE"));
+
+        verify(identityApplicationService).getProfile(AUTHENTICATED_USER_ID);
+    }
+    // fin prueba
+
+    // Prueba integral: actualiza perfil con nombre y correo validos (BE-INT-020)
+    @Test
+    void updatesAuthenticatedUserProfile() throws Exception {
+        UserResponse response = UserResponse.builder()
+                .id(AUTHENTICATED_USER_ID)
+                .name("Owner Updated")
+                .email("updated@foodflow.test")
+                .subscriptionType("STANDARD")
+                .build();
+        when(identityApplicationService.updateProfile(eq(AUTHENTICATED_USER_ID), any()))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/users/profile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Owner Updated",
+                                  "email": "updated@foodflow.test"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Profile updated successfully"))
+                .andExpect(jsonPath("$.data.name").value("Owner Updated"))
+                .andExpect(jsonPath("$.data.email").value("updated@foodflow.test"));
+
+        ArgumentCaptor<com.foodflow.identity.application.UpdateProfileRequest> requestCaptor =
+                ArgumentCaptor.forClass(com.foodflow.identity.application.UpdateProfileRequest.class);
+        verify(identityApplicationService).updateProfile(eq(AUTHENTICATED_USER_ID), requestCaptor.capture());
+        assertThat(requestCaptor.getValue().getName()).isEqualTo("Owner Updated");
+        assertThat(requestCaptor.getValue().getEmail()).isEqualTo("updated@foodflow.test");
+    }
+    // fin prueba
+
+    // Prueba integral: cambia password del usuario autenticado (BE-INT-021)
+    @Test
+    void updatesAuthenticatedUserPassword() throws Exception {
+        mockMvc.perform(put("/api/users/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "currentPassword": "secret1",
+                                  "newPassword": "secret2"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Password updated successfully"));
+
+        ArgumentCaptor<com.foodflow.identity.application.UpdatePasswordRequest> requestCaptor =
+                ArgumentCaptor.forClass(com.foodflow.identity.application.UpdatePasswordRequest.class);
+        verify(identityApplicationService).updatePassword(eq(AUTHENTICATED_USER_ID), requestCaptor.capture());
+        assertThat(requestCaptor.getValue().getCurrentPassword()).isEqualTo("secret1");
+        assertThat(requestCaptor.getValue().getNewPassword()).isEqualTo("secret2");
+    }
+    // fin prueba
+
+    // Prueba integral: rechaza perfil y password con datos invalidos (BE-INT-022)
+    @Test
+    void rejectsInvalidProfileAndPasswordPayloads() throws Exception {
+        mockMvc.perform(put("/api/users/profile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "A",
+                                  "email": "bad-email"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors").isArray());
+
+        mockMvc.perform(put("/api/users/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "currentPassword": "",
+                                  "newPassword": "123"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors").isArray());
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-INT-019: obtiene perfil del usuario autenticado.** Sirve para validar que obtiene perfil del usuario autenticado funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-020: actualiza perfil con nombre y correo validos.** Sirve para validar que actualiza perfil con nombre y correo validos funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-021: cambia password del usuario autenticado.** Sirve para validar que cambia password del usuario autenticado funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-022: rechaza perfil y password con datos invalidos.** Sirve para validar que rechaza perfil y password con datos invalidos funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### backend\src\test\java\com\foodflow\catalog\presentation\DishControllerTest.java
+
+Cantidad de pruebas: **6**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.catalog.presentation;
+
+import com.foodflow.catalog.application.CatalogApplicationService;
+import com.foodflow.catalog.application.DishResponse;
+import com.foodflow.common.presentation.GlobalExceptionHandler;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.foodflow.ControllerTestSupport.AUTHENTICATED_USER_ID;
+import static com.foodflow.ControllerTestSupport.authenticatedUserArgumentResolver;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(MockitoExtension.class)
+class DishControllerTest {
+
+    private MockMvc mockMvc;
+
+    @Mock
+    private CatalogApplicationService catalogApplicationService;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new DishController(catalogApplicationService))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setCustomArgumentResolvers(authenticatedUserArgumentResolver())
+                .build();
+    }
+
+    // Prueba integral: crea plato con usuario autenticado (BE-INT-010)
+    @Test
+    void createsDishForAuthenticatedUser() throws Exception {
+        DishResponse response = DishResponse.builder()
+                .id(22L)
+                .name("Ceviche")
+                .price(new BigDecimal("32.00"))
+                .ingredients("pescado, limon")
+                .createdAt(LocalDateTime.of(2026, 5, 9, 10, 0))
+                .build();
+        when(catalogApplicationService.addDish(eq(AUTHENTICATED_USER_ID), any()))
+                .thenReturn(response);
+
+        mockMvc.perform(post("/api/dishes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Ceviche",
+                                  "description": "Clasico",
+                                  "price": 32,
+                                  "ingredients": "pescado, limon"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Dish added successfully"))
+                .andExpect(jsonPath("$.data.id").value(22))
+                .andExpect(jsonPath("$.data.name").value("Ceviche"));
+
+        verify(catalogApplicationService).addDish(eq(AUTHENTICATED_USER_ID), any());
+    }
+    // fin prueba
+
+    // Prueba integral: busca platos por query string (BE-INT-011)
+    @Test
+    void searchesDishesWithQueryParameter() throws Exception {
+        when(catalogApplicationService.searchDishes(AUTHENTICATED_USER_ID, "cev"))
+                .thenReturn(List.of(DishResponse.builder()
+                        .id(22L)
+                        .name("Ceviche")
+                        .price(new BigDecimal("32.00"))
+                        .createdAt(LocalDateTime.of(2026, 5, 9, 10, 0))
+                        .build()));
+
+        mockMvc.perform(get("/api/dishes").param("search", "cev"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data[0].name").value("Ceviche"));
+
+        verify(catalogApplicationService).searchDishes(AUTHENTICATED_USER_ID, "cev");
+    }
+    // fin prueba
+
+    // Prueba integral: rechaza plato con nombre corto y precio invalido (BE-INT-012)
+    @Test
+    void rejectsInvalidDishPayload() throws Exception {
+        mockMvc.perform(post("/api/dishes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "A",
+                                  "price": 0,
+                                  "ingredients": "x"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors").isArray());
+    }
+    // fin prueba
+
+    // Prueba integral: obtiene plato por identificador (BE-INT-027)
+    @Test
+    void getsDishById() throws Exception {
+        when(catalogApplicationService.getDishById(AUTHENTICATED_USER_ID, 22L))
+                .thenReturn(DishResponse.builder()
+                        .id(22L)
+                        .name("Ceviche")
+                        .description("Clasico")
+                        .price(new BigDecimal("32.00"))
+                        .ingredients("pescado, limon")
+                        .createdAt(LocalDateTime.of(2026, 5, 9, 10, 0))
+                        .build());
+
+        mockMvc.perform(get("/api/dishes/22"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id").value(22))
+                .andExpect(jsonPath("$.data.description").value("Clasico"));
+
+        verify(catalogApplicationService).getDishById(AUTHENTICATED_USER_ID, 22L);
+    }
+    // fin prueba
+
+    // Prueba integral: actualiza plato existente (BE-INT-028)
+    @Test
+    void updatesDish() throws Exception {
+        when(catalogApplicationService.updateDish(eq(AUTHENTICATED_USER_ID), eq(22L), any()))
+                .thenReturn(DishResponse.builder()
+                        .id(22L)
+                        .name("Ceviche Mixto")
+                        .price(new BigDecimal("38.00"))
+                        .ingredients("pescado, mariscos, limon")
+                        .createdAt(LocalDateTime.of(2026, 5, 9, 10, 0))
+                        .build());
+
+        mockMvc.perform(put("/api/dishes/22")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Ceviche Mixto",
+                                  "description": "Especial",
+                                  "price": 38,
+                                  "ingredients": "pescado, mariscos, limon"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Dish updated successfully"))
+                .andExpect(jsonPath("$.data.name").value("Ceviche Mixto"));
+
+        verify(catalogApplicationService).updateDish(eq(AUTHENTICATED_USER_ID), eq(22L), any());
+    }
+    // fin prueba
+
+    // Prueba integral: elimina plato existente (BE-INT-029)
+    @Test
+    void deletesDish() throws Exception {
+        mockMvc.perform(delete("/api/dishes/22"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Dish deleted successfully"));
+
+        verify(catalogApplicationService).deleteDish(AUTHENTICATED_USER_ID, 22L);
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-INT-010: crea plato con usuario autenticado.** Sirve para validar que crea plato con usuario autenticado funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-011: busca platos por query string.** Sirve para validar que busca platos por query string funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-012: rechaza plato con nombre corto y precio invalido.** Sirve para validar que rechaza plato con nombre corto y precio invalido funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-027: obtiene plato por identificador.** Sirve para validar que obtiene plato por identificador funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-028: actualiza plato existente.** Sirve para validar que actualiza plato existente funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-029: elimina plato existente.** Sirve para validar que elimina plato existente funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### backend\src\test\java\com\foodflow\billing\presentation\SubscriptionControllerTest.java
+
+Cantidad de pruebas: **5**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.billing.presentation;
+
+import com.foodflow.billing.application.BillingApplicationService;
+import com.foodflow.billing.application.SubscriptionPlanResponse;
+import com.foodflow.billing.application.SubscriptionResponse;
+import com.foodflow.common.presentation.GlobalExceptionHandler;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.foodflow.ControllerTestSupport.AUTHENTICATED_USER_ID;
+import static com.foodflow.ControllerTestSupport.authenticatedUserArgumentResolver;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(MockitoExtension.class)
+class SubscriptionControllerTest {
+
+    private MockMvc mockMvc;
+
+    @Mock
+    private BillingApplicationService billingApplicationService;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new SubscriptionController(billingApplicationService))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setCustomArgumentResolvers(authenticatedUserArgumentResolver())
+                .build();
+    }
+
+    // Prueba integral: lista planes de suscripcion disponibles (BE-INT-013)
+    @Test
+    void listsSubscriptionPlans() throws Exception {
+        when(billingApplicationService.getAvailablePlans()).thenReturn(List.of(
+                SubscriptionPlanResponse.builder()
+                        .name("Free")
+                        .monthlyPrice(0.0)
+                        .benefits(List.of("Basic dashboard access"))
+                        .build(),
+                SubscriptionPlanResponse.builder()
+                        .name("Premium")
+                        .monthlyPrice(79.99)
+                        .benefits(List.of("Advanced analytics"))
+                        .build()
+        ));
+
+        mockMvc.perform(get("/api/subscriptions/plans"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data[0].name").value("Free"))
+                .andExpect(jsonPath("$.data[1].monthlyPrice").value(79.99));
+    }
+    // fin prueba
+
+    // Prueba integral: suscribe usuario autenticado a plan valido (BE-INT-014)
+    @Test
+    void subscribesAuthenticatedUser() throws Exception {
+        SubscriptionResponse response = SubscriptionResponse.builder()
+                .id("sub-1")
+                .plan("Premium")
+                .status("ACTIVE")
+                .startDate(LocalDateTime.of(2026, 5, 9, 10, 0))
+                .build();
+        when(billingApplicationService.subscribe(eq(AUTHENTICATED_USER_ID), any()))
+                .thenReturn(response);
+
+        mockMvc.perform(post("/api/subscriptions/subscribe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "plan": "PREMIUM"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Subscription created successfully"))
+                .andExpect(jsonPath("$.data.plan").value("Premium"))
+                .andExpect(jsonPath("$.data.status").value("ACTIVE"));
+
+        verify(billingApplicationService).subscribe(eq(AUTHENTICATED_USER_ID), any());
+    }
+    // fin prueba
+
+    // Prueba integral: rechaza plan de suscripcion invalido (BE-INT-015)
+    @Test
+    void rejectsInvalidSubscriptionPlan() throws Exception {
+        mockMvc.perform(post("/api/subscriptions/subscribe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "plan": "ENTERPRISE"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Validation failed"))
+                .andExpect(jsonPath("$.errors").isArray());
+    }
+    // fin prueba
+
+    // Prueba integral: consulta suscripcion actual del usuario (BE-INT-035)
+    @Test
+    void getsCurrentSubscription() throws Exception {
+        SubscriptionResponse response = SubscriptionResponse.builder()
+                .id("sub-current")
+                .plan("Standard")
+                .status("ACTIVE")
+                .startDate(LocalDateTime.of(2026, 5, 9, 10, 0))
+                .endDate(LocalDateTime.of(2026, 6, 9, 10, 0))
+                .build();
+        when(billingApplicationService.getCurrentSubscription(AUTHENTICATED_USER_ID))
+                .thenReturn(response);
+
+        mockMvc.perform(get("/api/subscriptions/current"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.id").value("sub-current"))
+                .andExpect(jsonPath("$.data.status").value("ACTIVE"));
+
+        verify(billingApplicationService).getCurrentSubscription(AUTHENTICATED_USER_ID);
+    }
+    // fin prueba
+
+    // Prueba integral: cancela suscripcion actual del usuario (BE-INT-036)
+    @Test
+    void cancelsCurrentSubscription() throws Exception {
+        SubscriptionResponse response = SubscriptionResponse.builder()
+                .id("sub-current")
+                .plan("Standard")
+                .status("CANCELLED")
+                .startDate(LocalDateTime.of(2026, 5, 9, 10, 0))
+                .endDate(LocalDateTime.of(2026, 6, 9, 10, 0))
+                .cancellationDate(LocalDateTime.of(2026, 5, 10, 12, 0))
+                .build();
+        when(billingApplicationService.cancelSubscription(AUTHENTICATED_USER_ID))
+                .thenReturn(response);
+
+        mockMvc.perform(post("/api/subscriptions/cancel"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Subscription cancelled successfully"))
+                .andExpect(jsonPath("$.data.status").value("CANCELLED"));
+
+        verify(billingApplicationService).cancelSubscription(AUTHENTICATED_USER_ID);
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-INT-013: lista planes de suscripcion disponibles.** Sirve para validar que lista planes de suscripcion disponibles funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-014: suscribe usuario autenticado a plan valido.** Sirve para validar que suscribe usuario autenticado a plan valido funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-015: rechaza plan de suscripcion invalido.** Sirve para validar que rechaza plan de suscripcion invalido funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-035: consulta suscripcion actual del usuario.** Sirve para validar que consulta suscripcion actual del usuario funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-036: cancela suscripcion actual del usuario.** Sirve para validar que cancela suscripcion actual del usuario funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+
+#### backend\src\test\java\com\foodflow\finance\presentation\FinanceControllerTest.java
+
+Cantidad de pruebas: **3**
+
+Codigo de la suite:
+
+````java
+package com.foodflow.finance.presentation;
+
+import com.foodflow.common.domain.ValidationException;
+import com.foodflow.common.presentation.GlobalExceptionHandler;
+import com.foodflow.finance.application.DashboardResponse;
+import com.foodflow.finance.application.FinanceApplicationService;
+import com.foodflow.finance.application.FinancialMetricsResponse;
+import com.foodflow.finance.application.FinancialReportResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.foodflow.ControllerTestSupport.AUTHENTICATED_USER_ID;
+import static com.foodflow.ControllerTestSupport.authenticatedUserArgumentResolver;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(MockitoExtension.class)
+class FinanceControllerTest {
+
+    private MockMvc mockMvc;
+
+    @Mock
+    private FinanceApplicationService financeApplicationService;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new FinanceController(financeApplicationService))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setCustomArgumentResolvers(authenticatedUserArgumentResolver())
+                .build();
+    }
+
+    // Prueba integral: consulta dashboard financiero por periodo (BE-INT-016)
+    @Test
+    void getsDashboardForRequestedPeriod() throws Exception {
+        when(financeApplicationService.getDashboard(AUTHENTICATED_USER_ID, "MONTHLY"))
+                .thenReturn(DashboardResponse.builder()
+                        .period("MONTHLY")
+                        .startDate(LocalDateTime.of(2026, 5, 1, 0, 0))
+                        .endDate(LocalDateTime.of(2026, 6, 1, 0, 0))
+                        .totalIncome(new BigDecimal("900.00"))
+                        .totalExpenses(new BigDecimal("350.00"))
+                        .netProfit(new BigDecimal("550.00"))
+                        .orderCount(20L)
+                        .top5Dishes(List.of())
+                        .build());
+
+        mockMvc.perform(get("/api/finance/dashboard").param("period", "MONTHLY"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.period").value("MONTHLY"))
+                .andExpect(jsonPath("$.data.totalIncome").value(900.00))
+                .andExpect(jsonPath("$.data.netProfit").value(550.00));
+
+        verify(financeApplicationService).getDashboard(AUTHENTICATED_USER_ID, "MONTHLY");
+    }
+    // fin prueba
+
+    // Prueba integral: consulta reporte financiero detallado (BE-INT-017)
+    @Test
+    void getsFinancialReport() throws Exception {
+        when(financeApplicationService.getFinancialReport(AUTHENTICATED_USER_ID, "WEEKLY"))
+                .thenReturn(FinancialReportResponse.builder()
+                        .period("WEEKLY")
+                        .startDate(LocalDateTime.of(2026, 5, 4, 0, 0))
+                        .endDate(LocalDateTime.of(2026, 5, 11, 0, 0))
+                        .metrics(FinancialMetricsResponse.builder()
+                                .totalIncome(new BigDecimal("480.00"))
+                                .totalExpenses(new BigDecimal("155.00"))
+                                .netProfit(new BigDecimal("325.00"))
+                                .build())
+                        .topDishes(List.of())
+                        .expenseBreakdown(List.of())
+                        .orderCount(9L)
+                        .build());
+
+        mockMvc.perform(get("/api/finance/reports").param("period", "WEEKLY"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.period").value("WEEKLY"))
+                .andExpect(jsonPath("$.data.metrics.netProfit").value(325.00))
+                .andExpect(jsonPath("$.data.orderCount").value(9));
+    }
+    // fin prueba
+
+    // Prueba integral: propaga validacion de periodo financiero invalido (BE-INT-018)
+    @Test
+    void returnsBadRequestWhenPeriodIsInvalid() throws Exception {
+        when(financeApplicationService.getDashboard(AUTHENTICATED_USER_ID, "YEARLY"))
+                .thenThrow(new ValidationException("period", "Period must be DAILY, WEEKLY, or MONTHLY"));
+
+        mockMvc.perform(get("/api/finance/dashboard").param("period", "YEARLY"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("period: Period must be DAILY, WEEKLY, or MONTHLY"));
+    }
+    // fin prueba
+}
+
+````
+
+Explicacion de las pruebas:
+
+- **BE-INT-016: consulta dashboard financiero por periodo.** Sirve para validar que consulta dashboard financiero por periodo funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-017: consulta reporte financiero detallado.** Sirve para validar que consulta reporte financiero detallado funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
+- **BE-INT-018: propaga validacion de periodo financiero invalido.** Sirve para validar que propaga validacion de periodo financiero invalido funcione al interactuar con controladores, servicios, rutas, hooks o componentes. Es util porque comprueba contratos de entrada/salida y reduce errores entre modulos.
 
 ### 6.1.3. Core Behavior-Driven Development
 
+En el desarrollo de FoodFlow, se aplicó un enfoque orientado a comportamiento mediante pruebas funcionales automatizadas con Selenium. Esto permite verificar que los flujos principales de la aplicación respondan a lo esperado por el dueño del restaurante, incluyendo registro, inicio de sesión, gestión de platos, inventario, órdenes, finanzas, configuración, suscripción, idioma, tema y cierre de sesión.
+
+Por ejemplo, para validar el flujo de creación y gestión de órdenes, el escenario se plantea así:
+
+Dado que soy un usuario autenticado en FoodFlow y tengo platos registrados en el menú,  
+Cuando creo una nueva orden seleccionando un plato, indicando la mesa y definiendo la cantidad,  
+Entonces el sistema calcula automáticamente el total, registra la orden, permite marcarla como entregada o cancelada, y refleja esa información en el dashboard y en los reportes financieros.
+
+Este enfoque ayuda a comprobar que las funcionalidades desarrolladas realmente cumplen con las historias de usuario definidas. Además, facilita detectar errores funcionales en flujos completos de la aplicación, asegurando una experiencia más consistente y confiable.
+
+Se grabó un video donde se muestra la ejecución de la prueba funcional: [https://youtu.be/_X_rxmdsp6w](https://youtu.be/_X_rxmdsp6w)
+
+A continuación el codigo de la prueba funcional:
+
+```python
+"""
+Suite funcional Selenium para FoodFlow.
+
+Variables opcionales:
+  FOODFLOW_URL: URL base del frontend.
+  FOODFLOW_EMAIL: correo de usuario existente.
+  FOODFLOW_PASSWORD: password del usuario existente.
+  FOODFLOW_HEADLESS: "1" para ejecutar Chrome en modo headless.
+  FOODFLOW_RUN_REGISTRATION: "0" para omitir la creacion de una cuenta QA.
+  FOODFLOW_MUTATE_SUBSCRIPTION: "1" para confirmar cambios de plan; por defecto solo abre y cancela.
+"""
+
+from __future__ import annotations
+
+import os
+import time
+import uuid
+from dataclasses import dataclass
+from typing import Callable
+
+from selenium import webdriver
+from selenium.common.exceptions import (
+    ElementClickInterceptedException,
+    ElementNotInteractableException,
+    StaleElementReferenceException,
+    TimeoutException,
+)
+from selenium.webdriver import ChromeOptions
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.remote.webdriver import WebDriver, WebElement
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+
+BASE_URL = os.getenv("FOODFLOW_URL", "https://foodflowfrontend.vercel.app")
+EMAIL = os.getenv("FOODFLOW_EMAIL", "sal@cedo.com")
+PASSWORD = os.getenv("FOODFLOW_PASSWORD", "yosoyredes1")
+HEADLESS = os.getenv("FOODFLOW_HEADLESS", "0") == "1"
+WAIT_SECONDS = int(os.getenv("FOODFLOW_WAIT_SECONDS", "18"))
+RUN_REGISTRATION = os.getenv("FOODFLOW_RUN_REGISTRATION", "1") != "0"
+MUTATE_SUBSCRIPTION = os.getenv("FOODFLOW_MUTATE_SUBSCRIPTION", "0") == "1"
+ACCENTED_CHARS = "\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00c1\u00c9\u00cd\u00d3\u00da\u00dc\u00f1\u00d1"
+UNACCENTED_CHARS = "aeiouuAEIOUUnN"
+
+
+@dataclass
+class TestData:
+    run_id: str
+    dish_name: str
+    dish_name_updated: str
+    product_name: str
+    product_name_updated: str
+    product_edit_name: str
+    product_edit_name_updated: str
+    category_name: str
+    category_name_updated: str
+    order_table: str
+    cancel_order_table: str
+    register_name: str
+    register_email: str
+    register_password: str
+
+    @classmethod
+    def create(cls) -> "TestData":
+        run_id = uuid.uuid4().hex[:8]
+        return cls(
+            run_id=run_id,
+            dish_name=f"QA Plato {run_id}",
+            dish_name_updated=f"QA Plato Editado {run_id}",
+            product_name=f"QA Producto {run_id}",
+            product_name_updated=f"QA Producto Editado {run_id}",
+            product_edit_name=f"QA Producto Edicion {run_id}",
+            product_edit_name_updated=f"QA Producto Edicion OK {run_id}",
+            category_name=f"QA Categoria {run_id}",
+            category_name_updated=f"QA Categoria Editada {run_id}",
+            order_table=f"QA Mesa {run_id}",
+            cancel_order_table=f"QA Mesa Cancelada {run_id}",
+            register_name=f"QA Usuario {run_id}",
+            register_email=f"qa.{run_id}@example.com",
+            register_password="secret1",
+        )
+
+
+class FoodFlowFunctionalSuite:
+    def __init__(self) -> None:
+        self.driver = self._build_driver()
+        self.wait = WebDriverWait(self.driver, WAIT_SECONDS)
+        self.data = TestData.create()
+        self.known_issues: list[str] = []
+
+    def _build_driver(self) -> WebDriver:
+        options = ChromeOptions()
+        options.add_argument("--window-size=1440,1000")
+        options.add_argument("--disable-notifications")
+        if HEADLESS:
+            options.add_argument("--headless=new")
+        return webdriver.Chrome(options=options)
+
+    def run(self) -> None:
+        try:
+            self.test_registration_flow()
+            self.test_login_and_dashboard_navigation()
+            self.test_dish_crud_and_search()
+            self.test_inventory_category_product_crud()
+            self.test_order_lifecycle()
+            self.test_finance_and_settings_navigation()
+            self.test_logout_and_protected_redirect()
+            if self.known_issues:
+                print("Se encontraron incumplimientos funcionales:")
+                for issue in self.known_issues:
+                    print(f"- {issue}")
+                raise AssertionError("; ".join(self.known_issues))
+            print("Todas las pruebas funcionales finalizaron correctamente.")
+        except Exception:
+            self.driver.save_screenshot("functional_failure.png")
+            with open("functional_failure.html", "w", encoding="utf-8") as html_file:
+                html_file.write(self.driver.page_source)
+            print("Se guardaron functional_failure.png y functional_failure.html para diagnostico.")
+            raise
+        finally:
+            self.driver.quit()
+
+    def login(self) -> None:
+        self.driver.get(BASE_URL)
+        self.wait_visible(By.NAME, "email").clear()
+        self.driver.find_element(By.NAME, "email").send_keys(EMAIL)
+        password_input = self.driver.find_element(By.NAME, "password")
+        password_input.clear()
+        password_input.send_keys(PASSWORD)
+        self.click_text("button", "Iniciar sesion", "Iniciar sesiÃƒÂ³n", "Iniciar sesiÃ³n", "Sign In")
+        self.wait_text("Panel", "Dashboard", "FoodFlow")
+
+    def logout(self) -> None:
+        self.click_aria("Abrir menu de cuenta", "Abrir menÃƒÂº de cuenta", "Open account menu")
+        self.click_text("*", "Cerrar sesion", "Cerrar sesiÃƒÂ³n", "Cerrar sesiÃ³n", "Logout")
+        self.wait_visible(By.NAME, "email")
+
+    def go_to(self, *labels: str) -> None:
+        self.click_text("span", *labels)
+        self.wait_for_idle()
+
+    def wait_for_idle(self) -> None:
+        time.sleep(0.2)
+        try:
+            self.wait.until_not(EC.text_to_be_present_in_element((By.TAG_NAME, "body"), "Cargando"))
+        except TimeoutException:
+            pass
+
+    def wait_visible_dialog_closed(self) -> None:
+        active_dialog = f"//*[@role='dialog' and {self.visible_xpath_scope()}]"
+        self.wait.until_not(EC.visibility_of_element_located((By.XPATH, active_dialog)))
+
+    def wait_visible(self, by: str, locator: str) -> WebElement:
+        return self.wait.until(EC.visibility_of_element_located((by, locator)))
+
+    def wait_clickable(self, by: str, locator: str) -> WebElement:
+        return self.wait.until(EC.element_to_be_clickable((by, locator)))
+
+    def wait_text(self, *texts: str) -> WebElement:
+        xpath = self.text_xpath("*", *texts)
+        return self.wait_visible(By.XPATH, xpath)
+
+    def wait_source_contains(self, *texts: str) -> None:
+        self.wait.until(lambda driver: any(text in driver.page_source for text in texts))
+
+    def is_text_present(self, *texts: str, timeout: int = 2) -> bool:
+        short_wait = WebDriverWait(self.driver, timeout)
+        try:
+            short_wait.until(EC.visibility_of_element_located((By.XPATH, self.text_xpath("*", *texts))))
+            return True
+        except TimeoutException:
+            return False
+
+    def wait_url_contains(self, value: str) -> None:
+        self.wait.until(EC.url_contains(value))
+
+    def click_aria(self, *labels: str) -> None:
+        normalized_aria_label = (
+            "translate(normalize-space(@aria-label), "
+            f"{self.xpath_literal(ACCENTED_CHARS)}, {self.xpath_literal(UNACCENTED_CHARS)})"
+        )
+        xpath_parts = []
+        for label in labels:
+            xpath_parts.append(f"@aria-label={self.xpath_literal(label)}")
+            xpath_parts.append(
+                f"{normalized_aria_label}={self.xpath_literal(self.strip_accents(label))}"
+            )
+        self.click_xpath(f"//*[{self.visible_xpath_scope()} and ({' or '.join(xpath_parts)})]")
+
+    def click_text(self, tag: str, *texts: str) -> None:
+        self.click_xpath(self.text_xpath(tag, *texts))
+
+    def click_xpath(self, xpath: str) -> None:
+        last_error: Exception | None = None
+        for _ in range(3):
+            try:
+                element = self.wait_clickable(By.XPATH, xpath)
+                self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+                element.click()
+                return
+            except (ElementClickInterceptedException, ElementNotInteractableException) as exc:
+                last_error = exc
+                self.driver.execute_script("arguments[0].click();", element)
+                return
+            except StaleElementReferenceException as exc:
+                last_error = exc
+                time.sleep(0.3)
+        if last_error:
+            raise last_error
+
+    def text_xpath(self, tag: str, *texts: str) -> str:
+        normalized_node_text = (
+            "translate(normalize-space(.), "
+            f"{self.xpath_literal(ACCENTED_CHARS)}, {self.xpath_literal(UNACCENTED_CHARS)})"
+        )
+        predicates = []
+        for text in texts:
+            predicates.append(f"contains(normalize-space(.), {self.xpath_literal(text)})")
+            predicates.append(
+                f"contains({normalized_node_text}, {self.xpath_literal(self.strip_accents(text))})"
+            )
+        predicate = f"({' or '.join(predicates)})"
+        return f"//{tag}[{self.visible_xpath_scope()} and {predicate} and not(.//*[{predicate}])]"
+
+    @staticmethod
+    def visible_xpath_scope() -> str:
+        return (
+            "not(ancestor::head) and not(self::title) and not(self::script) and "
+            "not(self::style) and not(ancestor-or-self::*[@aria-hidden='true']) and "
+            "not(ancestor-or-self::*[contains(@style, 'visibility: hidden')])"
+        )
+
+    @staticmethod
+    def strip_accents(value: str) -> str:
+        return value.translate(str.maketrans(ACCENTED_CHARS, UNACCENTED_CHARS))
+
+    def label_xpath(self, *labels: str) -> str:
+        normalized_label_text = (
+            "translate(normalize-space(.), "
+            f"{self.xpath_literal(ACCENTED_CHARS)}, {self.xpath_literal(UNACCENTED_CHARS)})"
+        )
+        predicates = []
+        for label in labels:
+            predicates.append(f"contains(normalize-space(.), {self.xpath_literal(label)})")
+            predicates.append(
+                f"contains({normalized_label_text}, {self.xpath_literal(self.strip_accents(label))})"
+            )
+        return f"//label[{self.visible_xpath_scope()} and ({' or '.join(predicates)})]"
+
+    def input_by_label(self, *labels: str) -> WebElement:
+        return self.wait_visible(
+            By.XPATH,
+            f"{self.label_xpath(*labels)}/following-sibling::div//input[not(@type='hidden')]",
+        )
+
+    def fill_by_label(self, label: str, value: str) -> None:
+        field = self.input_by_label(label)
+        self.set_input_value(field, value)
+
+    def get_input_value_by_label(self, label: str) -> str:
+        return self.input_by_label(label).get_attribute("value") or ""
+
+    def fill_textarea_by_label(self, label: str, value: str) -> None:
+        field = self.wait_visible(
+            By.XPATH,
+            f"{self.label_xpath(label)}/following-sibling::div//textarea[not(@readonly)]",
+        )
+        self.driver.execute_script(
+            """
+            const el = arguments[0];
+            const value = arguments[1];
+            const setter = Object.getOwnPropertyDescriptor(
+              window.HTMLTextAreaElement.prototype,
+              "value"
+            ).set;
+            setter.call(el, value);
+            el.dispatchEvent(new Event("input", { bubbles: true }));
+            """,
+            field,
+            value,
+        )
+
+    def search_for(self, placeholder_text: str, value: str) -> None:
+        last_error: Exception | None = None
+        for _ in range(3):
+            try:
+                field = self.wait_visible(
+                    By.XPATH,
+                    f"//input[contains(@placeholder, {self.xpath_literal(placeholder_text)})]",
+                )
+                self.set_input_value(field, value)
+                return
+            except StaleElementReferenceException as exc:
+                last_error = exc
+                time.sleep(0.3)
+        if last_error:
+            raise last_error
+
+    def set_input_value(self, field: WebElement, value: str) -> None:
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", field)
+        input_type = (field.get_attribute("type") or "").lower()
+        if input_type == "number":
+            self.set_input_value_js(field, value)
+            return
+
+        try:
+            field.click()
+            field.send_keys(Keys.CONTROL, "a")
+            field.send_keys(Keys.BACKSPACE)
+            if value:
+                field.send_keys(value)
+        except ElementNotInteractableException:
+            self.set_input_value_js(field, value)
+
+    def set_input_value_js(self, field: WebElement, value: str) -> None:
+        self.driver.execute_script(
+            """
+            const el = arguments[0];
+            const value = arguments[1];
+            el.focus();
+            const setter = Object.getOwnPropertyDescriptor(
+              window.HTMLInputElement.prototype,
+              "value"
+            ).set;
+            setter.call(el, value);
+            el.dispatchEvent(new Event("input", { bubbles: true }));
+            el.dispatchEvent(new Event("change", { bubbles: true }));
+            """,
+            field,
+            value,
+        )
+
+    def row_action(self, row_text: str, icon_test_id: str) -> None:
+        row_xpath = (
+            "//*[self::tr or self::li or @role='row' or contains(@class, 'MuiTableRow-root') "
+            "or contains(@class, 'MuiListItem-root')]"
+            f"[contains(normalize-space(.), {self.xpath_literal(row_text)})]"
+        )
+        button_xpath = (
+            f"{row_xpath}//button[.//*[name()='svg' and @data-testid="
+            f"{self.xpath_literal(icon_test_id)}]]"
+        )
+        try:
+            button = self.wait_clickable(By.XPATH, button_xpath)
+        except TimeoutException:
+            row = self.wait_visible(By.XPATH, row_xpath)
+            buttons = row.find_elements(By.XPATH, ".//button")
+            if not buttons:
+                raise
+
+            if icon_test_id == "DeleteIcon":
+                button = buttons[-1]
+            elif icon_test_id == "CancelIcon" and len(buttons) > 1:
+                button = buttons[1]
+            elif icon_test_id in {"EditIcon", "CheckCircleIcon"}:
+                button = buttons[0]
+            else:
+                button = buttons[-1]
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", button)
+        button.click()
+
+    def confirm_dialog(self) -> None:
+        self.click_text("button", "Confirmar", "Confirm")
+
+    def select_mui_option(self, label: str, option_text: str) -> None:
+        select = self.wait_clickable(
+            By.XPATH,
+            f"{self.label_xpath(label)}/following-sibling::div//*[@role='combobox']",
+        )
+        select.click()
+        option = self.wait_clickable(By.XPATH, self.text_xpath("*", option_text))
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", option)
+        try:
+            option.click()
+        except ElementClickInterceptedException:
+            self.driver.execute_script("arguments[0].click();", option)
+
+    def create_dish_if_missing(self) -> None:
+        self.go_to("Platos", "Dishes")
+        try:
+            self.search_for("Buscar platos", self.data.dish_name_updated)
+            self.wait_text(self.data.dish_name_updated)
+            return
+        except TimeoutException:
+            self.search_for("Buscar platos", "")
+        self.create_dish(self.data.dish_name)
+        self.edit_dish(self.data.dish_name, self.data.dish_name_updated)
+
+    def create_dish(self, name: str) -> None:
+        self.click_text("button", "Agregar plato", "Add Dish")
+        self.fill_by_label("Nombre", name)
+        self.fill_by_label("Precio", "28")
+        self.fill_textarea_by_label("Descripci", "Plato creado por pruebas funcionales Selenium.")
+        self.fill_textarea_by_label("Ingredientes", "tomate, queso, albahaca")
+        self.click_text("button", "Crear", "Create")
+        try:
+            self.wait_visible_dialog_closed()
+        except TimeoutException:
+            pass
+        self.search_for("Buscar platos", name)
+        self.wait_text(name)
+
+    def edit_dish(self, current_name: str, updated_name: str) -> None:
+        self.row_action(current_name, "EditIcon")
+        self.fill_by_label("Nombre", updated_name)
+        self.fill_by_label("Precio", "31")
+        self.click_text("button", "Actualizar", "Update")
+        try:
+            self.wait_visible_dialog_closed()
+        except TimeoutException:
+            pass
+        self.wait_for_idle()
+
+    def delete_named_row(self, row_text: str) -> None:
+        self.row_action(row_text, "DeleteIcon")
+        self.confirm_dialog()
+        self.wait_for_idle()
+
+    def delete_named_row_if_present(self, row_text: str) -> None:
+        try:
+            self.delete_named_row(row_text)
+        except TimeoutException:
+            pass
+
+    def create_order(self, table_identifier: str, quantity: str, expected_total: str) -> None:
+        self.click_text("button", "Nueva orden", "New Order")
+        self.fill_by_label("Mesa", table_identifier)
+        self.click_text("button", "Agregar item", "Agregar ÃƒÆ’Ã‚Â­tem", "Add Item")
+        self.select_mui_option("Plato", self.data.dish_name_updated)
+        self.fill_by_label("Cantidad", quantity)
+        self.wait_text(expected_total)
+        self.click_text("button", "Crear orden", "Create Order")
+        self.wait_text(table_identifier)
+
+    def cleanup_created_records(self) -> None:
+        self.go_to("rdenes", "Orders")
+        self.delete_named_row_if_present(self.data.cancel_order_table)
+        self.delete_named_row_if_present(self.data.order_table)
+
+        self.go_to("Platos", "Dishes")
+        self.search_for("Buscar platos", self.data.dish_name_updated)
+        self.delete_named_row_if_present(self.data.dish_name_updated)
+
+        self.go_to("Inventario", "Inventory")
+        self.search_for("Buscar productos", self.data.product_edit_name_updated)
+        self.delete_named_row_if_present(self.data.product_edit_name_updated)
+        self.search_for("Buscar productos", self.data.product_edit_name)
+        self.delete_named_row_if_present(self.data.product_edit_name)
+        self.search_for("Buscar productos", self.data.product_name_updated)
+        self.delete_named_row_if_present(self.data.product_name_updated)
+        self.search_for("Buscar productos", self.data.product_name)
+        self.delete_named_row_if_present(self.data.product_name)
+
+        self.click_text("button", "Gestionar categorias", "Manage categories")
+        self.delete_named_row_if_present(self.data.category_name_updated)
+        self.click_text("button", "Cerrar", "Close")
+
+    # Prueba funcional: registro de cuenta nueva (FUNC-000, US31)
+    def test_registration_flow(self) -> None:
+        print("FUNC-000: validando registro de cuenta...")
+        if not RUN_REGISTRATION:
+            print("FUNC-000 omitida por FOODFLOW_RUN_REGISTRATION=0.")
+            return
+
+        self.driver.get(f"{BASE_URL}/register")
+        self.wait_visible(By.NAME, "name")
+        self.wait_visible(By.NAME, "email")
+        self.wait_visible(By.NAME, "password")
+        self.wait_visible(By.NAME, "confirmPassword")
+
+        self.set_input_value(self.driver.find_element(By.NAME, "name"), self.data.register_name)
+        self.set_input_value(self.driver.find_element(By.NAME, "email"), self.data.register_email)
+        self.set_input_value(self.driver.find_element(By.NAME, "password"), self.data.register_password)
+        self.set_input_value(
+            self.driver.find_element(By.NAME, "confirmPassword"),
+            self.data.register_password,
+        )
+        self.click_text("button", "Crear cuenta", "Sign Up")
+        self.wait_text("Panel", "Dashboard")
+        self.logout()
+        print("FUNC-000 finalizada.")
+    # fin prueba
+
+    # Prueba funcional: inicio de sesion, dashboard y accesos rapidos (FUNC-001, US01, US03, US30)
+    def test_login_and_dashboard_navigation(self) -> None:
+        print("FUNC-001: validando login y panel...")
+        self.login()
+        self.wait_text("Panel", "Dashboard")
+        for label in ("Diario", "Semanal", "Mensual"):
+            try:
+                self.click_text("button", label)
+            except TimeoutException:
+                pass
+        self.wait_text("Ingresos totales", "Total Income")
+        self.wait_text("Gastos totales", "Total Expenses")
+        self.wait_text("Ganancia", "Profit")
+        self.wait_text("Ordenes totales", "Total Orders")
+        self.wait_text("Acciones rapidas", "Quick Actions")
+        self.wait_text("Agregar plato", "Add Dish")
+        self.wait_text("Nueva orden", "New Order")
+        self.wait_text("Ver reportes", "View Reports")
+        print("FUNC-001 finalizada.")
+    # fin prueba
+
+    # Prueba funcional: CRUD de platos, visualizacion y busqueda (FUNC-002, US10, US11, US12, US13)
+    def test_dish_crud_and_search(self) -> None:
+        print("FUNC-002: validando platos...")
+        self.go_to("Platos", "Dishes")
+        self.create_dish(self.data.dish_name)
+        self.search_for("Buscar platos", self.data.dish_name)
+        self.wait_text(self.data.dish_name)
+        self.edit_dish(self.data.dish_name, self.data.dish_name_updated)
+        self.search_for("Buscar platos", self.data.dish_name_updated)
+        self.wait_text(self.data.dish_name_updated)
+        print("FUNC-002 finalizada.")
+    # fin prueba
+
+    # Prueba funcional: categorias, inventario, busqueda y stock bajo (FUNC-003, US04, US05, US06, US07, US08, US09, US21)
+    def test_inventory_category_product_crud(self) -> None:
+        print("FUNC-003: validando inventario y categorias...")
+        self.go_to("Inventario", "Inventory")
+
+        self.click_text("button", "Gestionar categorias", "Manage categories")
+        self.fill_by_label("Nueva categoria", self.data.category_name)
+        self.click_text("button", "Crear", "Create")
+        self.wait_text(self.data.category_name)
+        self.row_action(self.data.category_name, "EditIcon")
+        self.fill_by_label("Renombrar categoria", self.data.category_name_updated)
+        self.click_text("button", "Actualizar", "Update")
+        self.wait_text(self.data.category_name_updated)
+        self.click_text("button", "Cerrar", "Close")
+
+        self.click_text("button", "Agregar producto", "Add Product")
+        self.fill_by_label("Nombre del producto", self.data.product_name)
+        self.fill_textarea_by_label("Descripci", "Producto creado por pruebas funcionales Selenium.")
+        self.fill_by_label("Stock", "3")
+        self.fill_by_label("Unidad de medida", "kg")
+        self.fill_by_label("Costo unitario", "4.5")
+        self.fill_by_label("Umbral de stock bajo", "5")
+        self.fill_by_label("Categor", self.data.category_name_updated)
+        self.fill_by_label("Proveedor", "Proveedor QA")
+        self.click_text("button", "Crear", "Create")
+        try:
+            self.wait_visible_dialog_closed()
+        except TimeoutException:
+            pass
+        self.search_for("Buscar productos", self.data.product_name)
+        self.wait_text(self.data.product_name)
+        self.wait_text(self.data.category_name_updated)
+        self.wait_text("stock bajo", "running low", "Low stock")
+
+        self.search_for("Buscar productos", self.data.product_name)
+        self.wait_text(self.data.product_name)
+
+        self.search_for("Buscar productos", "")
+        self.click_text("button", "Agregar producto", "Add Product")
+        self.fill_by_label("Nombre del producto", self.data.product_edit_name)
+        self.fill_textarea_by_label("Descripci", "Producto temporal para validar edicion y eliminacion.")
+        self.fill_by_label("Stock", "9")
+        self.fill_by_label("Unidad de medida", "unidad")
+        self.fill_by_label("Costo unitario", "2")
+        self.fill_by_label("Umbral de stock bajo", "1")
+        self.fill_by_label("Proveedor", "Proveedor QA Edicion")
+        self.click_text("button", "Crear", "Create")
+        try:
+            self.wait_visible_dialog_closed()
+        except TimeoutException:
+            pass
+        self.search_for("Buscar productos", self.data.product_edit_name)
+        self.wait_text(self.data.product_edit_name)
+
+        self.row_action(self.data.product_edit_name, "EditIcon")
+        self.fill_by_label("Nombre del producto", self.data.product_edit_name_updated)
+        self.fill_by_label("Stock", "10")
+        self.fill_by_label("Proveedor", "Proveedor QA Edicion OK")
+        self.click_text("button", "Actualizar", "Update")
+        edit_saved = True
+        try:
+            self.wait_visible_dialog_closed()
+        except TimeoutException:
+            if self.is_text_present("Server error", "No se pudo guardar", "Failed to save"):
+                self.known_issues.append(
+                    "US06: editar producto muestra 'Server error' y no persiste los cambios."
+                )
+                self.click_text("button", "Cancelar", "Cancel")
+                try:
+                    self.wait_visible_dialog_closed()
+                except TimeoutException:
+                    pass
+                edit_saved = False
+            else:
+                raise
+        if edit_saved:
+            self.search_for("Buscar productos", self.data.product_edit_name_updated)
+            self.wait_text(self.data.product_edit_name_updated)
+            self.wait_text("Proveedor QA Edicion OK")
+            self.delete_named_row(self.data.product_edit_name_updated)
+        else:
+            self.search_for("Buscar productos", self.data.product_edit_name)
+            self.delete_named_row_if_present(self.data.product_edit_name)
+
+        self.search_for("Buscar productos", self.data.product_name)
+        self.wait_text(self.data.product_name)
+        self.wait_text("stock bajo", "running low", "Low stock")
+        print("FUNC-003 finalizada.")
+    # fin prueba
+
+    # Prueba funcional: ordenes, totales, entrega, cancelacion y dashboard con ventas (FUNC-004, US02, US03, US14, US15, US16, US17, US18, US22)
+    def test_order_lifecycle(self) -> None:
+        print("FUNC-004: validando ordenes...")
+        self.create_dish_if_missing()
+        self.go_to("rdenes", "Orders")
+
+        self.create_order(self.data.order_table, "2", "$62.00")
+        self.wait_text("Pendiente", "Pending")
+
+        self.row_action(self.data.order_table, "CheckCircleIcon")
+        self.wait_text("Entregada", "Delivered")
+
+        self.go_to("Panel", "Dashboard")
+        self.wait_text("Platos con mas ingresos", "Top Dishes")
+        self.wait_text("Ordenes recientes", "Recent Orders")
+        self.wait_text(self.data.dish_name_updated)
+        self.wait_text(self.data.order_table)
+
+        self.go_to("rdenes", "Orders")
+        self.create_order(self.data.cancel_order_table, "1", "$31.00")
+        self.row_action(self.data.cancel_order_table, "CancelIcon")
+        self.wait_text("Cancelada", "Cancelled")
+        self.delete_named_row(self.data.cancel_order_table)
+        print("FUNC-004 finalizada.")
+    # fin prueba
+
+    # Prueba funcional: finanzas, perfil, seguridad, suscripcion, idioma, tema y limpieza (FUNC-005, US19, US20, US21, US22, US23, US24, US25, US26, US27, US28, US29)
+    def test_finance_and_settings_navigation(self) -> None:
+        print("FUNC-005: validando finanzas, perfil y configuracion...")
+        self.go_to("Finanzas", "Finance")
+        for label in ("Diario", "Semanal", "Mensual"):
+            try:
+                self.click_text("button", label)
+            except TimeoutException:
+                pass
+        self.wait_text("Ingresos totales", "Total Income")
+        self.wait_text("Gastos totales", "Total Expenses")
+        self.wait_text("Ganancia", "Profit")
+        self.wait_text("Ordenes totales", "Total Orders")
+        self.wait_text("Resumen financiero", "Financial Summary")
+        self.wait_text("Desglose de gastos", "Expenses Breakdown")
+        self.wait_text("Platos principales por ingresos", "Top dishes by revenue")
+        self.wait_text("vs periodo anterior", "vs previous")
+        self.wait_source_contains(self.data.dish_name_updated)
+        self.wait_source_contains("Sin categoria", "QA Categoria", self.data.category_name_updated)
+
+        self.go_to("Configuraci", "Settings")
+        self.click_text("*", "Perfil", "Profile")
+        self.wait_text("Informaci", "Profile Information")
+        original_name = self.get_input_value_by_label("Nombre")
+        updated_name = f"{original_name} QA" if original_name else f"QA Perfil {self.data.run_id}"
+        self.fill_by_label("Nombre", updated_name)
+        self.click_text("button", "Guardar cambios", "Save changes")
+        self.wait_text("Perfil actualizado", "Profile updated")
+        self.fill_by_label("Nombre", original_name or "CyberSalcedo")
+        self.click_text("button", "Guardar cambios", "Save changes")
+        self.wait_text("Perfil actualizado", "Profile updated")
+
+        self.click_text("*", "Seguridad", "Security")
+        self.wait_text("Cambiar contrase", "Change Password")
+        self.fill_by_label("Contrasena actual", "clave-invalida")
+        self.fill_by_label("Nueva contrasena", "secret1")
+        self.fill_by_label("Confirmar nueva contrasena", "secret2")
+        self.click_text("button", "Cambiar contrasena", "Change password")
+        self.wait_text("no coinciden", "do not match")
+
+        self.click_text("*", "Suscripci", "Subscription")
+        self.wait_text("Planes disponibles", "Available Plans")
+        self.wait_text("Gratis", "Free")
+        self.wait_text("Estandar", "Standard")
+        self.wait_text("Premium")
+        self.click_text("button", "Mejorar plan", "Upgrade")
+        self.wait_text("Confirmar cambio", "Confirm Subscription Change")
+        if MUTATE_SUBSCRIPTION:
+            self.click_text("button", "Confirmar", "Confirm")
+            self.wait_text("Suscripcion actualizada", "Subscription updated")
+        else:
+            self.click_text("button", "Cancelar", "Cancel")
+
+        self.click_aria("Ingles", "English")
+        self.wait_text("Settings")
+        self.click_aria("Espanol", "Spanish")
+        self.wait_text("Configuracion")
+        self.click_aria("Modo oscuro", "Dark mode")
+        self.click_aria("Modo claro", "Light mode")
+
+        self.cleanup_created_records()
+        print("FUNC-005 finalizada.")
+    # fin prueba
+
+    # Prueba funcional: cierre de sesion y proteccion de rutas (FUNC-006, US32)
+    def test_logout_and_protected_redirect(self) -> None:
+        print("FUNC-006: validando logout y ruta protegida...")
+        self.logout()
+        self.driver.get(f"{BASE_URL}/dashboard")
+        self.wait_visible(By.NAME, "email")
+        print("FUNC-006 finalizada.")
+    # fin prueba
+
+    @staticmethod
+    def xpath_literal(value: str) -> str:
+        if "'" not in value:
+            return f"'{value}'"
+        if '"' not in value:
+            return f'"{value}"'
+        parts = value.split("'")
+        return "concat(" + ", \"'\", ".join(f"'{part}'" for part in parts) + ")"
+
+
+def run_test(name: str, fn: Callable[[], None]) -> None:
+    try:
+        fn()
+    except Exception as exc:
+        print(f"{name} fallo: {exc}")
+        raise
+
+
+if __name__ == "__main__":
+    suite = FoodFlowFunctionalSuite()
+    suite.run()
+```
+
 ### 6.1.4. Core System Tests
+
+Se han ejecutado pruebas de sistemas centrales utilizando PageSpeed Insights para evaluar el desempeño de la Landing Page y la plataforma web. Cuyos resultados detallados se exponen a continuación.
+
+<p align="center">
+  <img src="assets/pruebaslandingpage.png" alt="PB" width="600">
+</p>
+
+<p align="center">
+  <img src="assets/pruebassystemweb.png" alt="PB" width="600">
+</p>
 
 # Capítulo VII: DevOps Practices
 
 ## 7.1. Continuous Integration
 
-### 7.1.1. Tools and Practices.
+### 7.1.1. Tools and Practices
 
-### 7.1.2. Build & Test Suite Pipeline Components.
+En el desarrollo de FoodFlow se aplicaron prácticas de integración continua para mantener la calidad del código tanto en el frontend como en el backend. La aplicación fue dividida en dos repositorios principales: `FoodFlow-Frontend` y `FoodFlow-Backend`, ambos gestionados con Git y GitHub.
+
+Para validar el correcto funcionamiento del sistema se incorporaron pruebas unitarias, pruebas de integración y pruebas funcionales. En el backend se utilizaron herramientas propias del ecosistema Java y Spring Boot, como JUnit, Mockito y MockMvc. En el frontend se emplearon Vitest y React Testing Library para validar servicios, hooks, componentes y utilidades. Además, se desarrollaron pruebas funcionales con Selenium para comprobar flujos completos de usuario.
+
+| Herramienta | Tipo | Descripción | Propósito |
+|---|---|---|---|
+| Git | Control de versiones | Sistema para gestionar cambios en el código fuente. | Mantener historial, ramas y versiones del proyecto. |
+| GitHub | Repositorio remoto | Plataforma donde se alojan frontend, backend y landing page. | Centralizar colaboración, commits, ramas y despliegues. |
+| JUnit | Pruebas unitarias backend | Framework de pruebas para Java. | Validar entidades, servicios y lógica interna del backend. |
+| Mockito | Mocking backend | Herramienta para simular dependencias. | Probar componentes aislados sin depender de servicios externos reales. |
+| MockMvc | Pruebas de integración backend | Herramienta de Spring para probar controladores REST. | Validar endpoints, respuestas HTTP y comunicación entre capas. |
+| Maven | Build backend | Gestor de dependencias y construcción para Java. | Compilar el backend y ejecutar pruebas automatizadas. |
+| Vitest | Pruebas frontend | Framework de pruebas para proyectos Vite/React. | Ejecutar pruebas unitarias e integrales del frontend. |
+| React Testing Library | Pruebas de componentes | Librería para probar comportamiento de componentes React. | Validar interacción del usuario con la interfaz. |
+| Selenium | Pruebas funcionales BDD | Automatiza flujos reales en navegador. | Validar funcionalidades completas de FoodFlow desde la UI. |
+| npm | Gestión frontend | Gestor de paquetes de Node.js. | Instalar dependencias y ejecutar pruebas del frontend. |
+
+### 7.1.2. Build & Test Suite Pipeline Components
+
+**Setup**
+
+En esta etapa se prepara el entorno de ejecución del proyecto. Para el frontend se instalan las dependencias mediante `npm install` o `npm ci`. Para el backend se utiliza Maven, descargando las dependencias necesarias definidas en `pom.xml`.
+
+Frontend:
+
+```bash
+cd frontend
+npm install
+```
+
+Backend:
+
+```bash
+cd backend
+mvn clean install
+```
+
+**Unit Tests**
+
+Las pruebas unitarias validan componentes individuales del sistema. En el backend se prueban entidades de dominio, validaciones, reglas de negocio y clases principales. En el frontend se prueban utilidades, servicios, hooks y componentes aislados.
+
+Frontend:
+
+```bash
+cd frontend
+npm test
+```
+
+Backend:
+
+```bash
+cd backend
+mvn test
+```
+
+**Integration Tests**
+
+Las pruebas de integración validan la comunicación entre módulos. En backend se probaron controladores REST usando MockMvc, verificando endpoints de autenticación, usuarios, platos, productos, órdenes, finanzas y suscripciones. En frontend se validaron servicios que se comunican con APIs y componentes que integran estado, eventos y renderizado.
+
+**Functional / Acceptance Tests**
+
+Además, se desarrollaron pruebas funcionales con Selenium para validar flujos completos de FoodFlow, como registro, login, gestión de platos, inventario, órdenes, finanzas, configuración y logout.
+
+```bash
+python functional_test.py
+```
 
 ## 7.2. Continuous Delivery
 
-### 7.2.1. Tools and Practices.
+El objetivo de Continuous Delivery en FoodFlow es mantener el código en un estado listo para desplegarse. Cada cambio agregado a las ramas principales debe poder compilarse, probarse y prepararse para producción con el menor riesgo posible.
 
-### 7.2.2. Stages Deployment Pipeline Components.
+### 7.2.1. Tools and Practices
 
-## 7.3. Continuous deployment
+**Tools**
 
-### 7.3.1. Tools and Practices.
+| Herramienta | Uso en FoodFlow |
+|---|---|
+| Git | Control de versiones del frontend, backend y landing page. |
+| GitHub | Hospedaje de repositorios, gestión de ramas, commits y merges. |
+| Vercel | Despliegue del frontend de FoodFlow. |
+| Render | Despliegue del backend desarrollado con Spring Boot. |
+| GitHub Pages | Despliegue de la landing page del proyecto. |
+| Supabase | Base de datos en la nube utilizada por la aplicación. |
+| PageSpeed Insights | Evaluación del rendimiento y experiencia web. |
 
-### 7.3.2. Production Deployment Pipeline Components. 
+**Practices**
 
+| Práctica | Descripción |
+|---|---|
+| Estrategia de ramas | Se trabaja con ramas `deploy` y `main`. Los cambios se integran primero en `deploy` y luego se fusionan hacia `main`. |
+| Conventional Commits | Los commits siguen una convención clara, por ejemplo `test: add frontend test coverage`. |
+| Integración continua | Antes de subir cambios se ejecutan pruebas automatizadas en frontend y backend. |
+| Separación frontend/backend | Cada parte de la aplicación tiene su propio repositorio y flujo de despliegue. |
+| Validación previa al despliegue | Las pruebas unitarias, integrales y funcionales permiten validar que los cambios no rompan funcionalidades existentes. |
+| Rollback controlado | En caso de error, se puede volver a una versión anterior usando Git, Vercel, Render o restauraciones de Supabase. |
 
+### 7.2.2. Stages Deployment Pipeline Components
+
+**Test Stage**
+
+| Componente | Herramienta |
+|---|---|
+| Pruebas unitarias backend | JUnit |
+| Simulación de dependencias backend | Mockito |
+| Pruebas de integración backend | MockMvc |
+| Pruebas unitarias frontend | Vitest |
+| Pruebas de componentes frontend | React Testing Library |
+| Pruebas funcionales | Selenium |
+
+**Staging Environment**
+
+| Componente | Herramienta |
+|---|---|
+| Frontend web | Vercel Preview / Vercel Deployments |
+| Backend API | Render |
+| Base de datos | Supabase |
+| Landing page | GitHub Pages |
+
+**Deployment Stage**
+
+| Componente | Herramienta |
+|---|---|
+| Deploy frontend | Vercel |
+| Deploy backend | Render |
+| Deploy landing page | GitHub Pages |
+| Control de versiones | GitHub |
+
+**Release Stage**
+
+Las versiones listas se integran en `main`. Desde esta rama se mantiene el estado estable del proyecto y se habilita el despliegue hacia los servicios conectados.
+
+**Rollback and Recovery**
+
+| Necesidad | Herramienta |
+|---|---|
+| Revertir código | Git / GitHub |
+| Revertir frontend | Historial de deployments de Vercel |
+| Revertir backend | Historial de deployments de Render |
+| Restaurar base de datos | Backups o restauración desde Supabase |
+
+**Release Management**
+
+La gestión de versiones se realiza mediante GitHub, ramas `deploy` y `main`, mensajes Conventional Commits y trazabilidad de commits en los repositorios.
+
+## 7.3. Continuous Deployment
+
+### 7.3.1. Tools and Practices
+
+FoodFlow utiliza herramientas cloud para automatizar el despliegue de sus componentes principales.
+
+| Herramienta | Uso |
+|---|---|
+| Vercel | Despliegue automático del frontend React/Vite. |
+| Render | Despliegue automático del backend Spring Boot. |
+| GitHub Pages | Publicación de la landing page. |
+| Supabase | Base de datos en la nube para persistencia de datos. |
+| GitHub | Fuente central de código y ramas de despliegue. |
+| PageSpeed Insights | Evaluación de rendimiento del frontend desplegado. |
+
+El frontend se despliega en Vercel, el backend en Render, la landing page en GitHub Pages y la base de datos se mantiene en Supabase. Esto permite que cada parte del sistema tenga un flujo independiente, pero conectado mediante GitHub como fuente principal de control.
+
+### 7.3.2. Production Deployment Pipeline Components
+
+**Componentes del Pipeline de Base de Datos**
+
+| Componente | Descripción |
+|---|---|
+| Supabase | Servicio cloud que aloja la base de datos de FoodFlow. |
+| Variables de entorno | Configuran credenciales y URLs necesarias para conectar backend con base de datos. |
+| Backups / restauración | Permiten recuperar información en caso de fallos. |
+| Control de acceso | Supabase permite gestionar credenciales y permisos de conexión. |
+
+**Componentes del Pipeline del Backend**
+
+| Componente | Descripción |
+|---|---|
+| GitHub Repository | Contiene el código fuente del backend Spring Boot. |
+| Maven | Compila el proyecto, instala dependencias y ejecuta pruebas. |
+| JUnit / Mockito / MockMvc | Validan el backend antes del despliegue. |
+| Render | Plataforma donde se ejecuta el backend en producción. |
+| Variables de entorno de Render | Guardan configuración sensible como conexión a Supabase y secretos. |
+| Logs de Render | Permiten revisar errores, arranque de la app y comportamiento del backend. |
+
+**Componentes del Pipeline del Frontend**
+
+| Componente | Descripción |
+|---|---|
+| GitHub Repository | Contiene el código fuente del frontend React/Vite. |
+| Node.js & npm | Instalan dependencias y ejecutan scripts del proyecto. |
+| Vite | Herramienta de build del frontend. |
+| Vitest / React Testing Library | Ejecutan pruebas del frontend. |
+| Vercel | Plataforma de despliegue del frontend. |
+| Variables de entorno de Vercel | Configuran URLs del backend y datos necesarios para la app. |
+| PageSpeed Insights | Evalúa rendimiento, accesibilidad, SEO y buenas prácticas. |
+
+**Componentes del Pipeline de Landing Page**
+
+| Componente | Descripción |
+|---|---|
+| GitHub Pages | Hospeda la landing page del proyecto. |
+| GitHub Repository | Almacena el código fuente estático de la landing. |
+| GitHub Actions / Pages build | Publica la landing page a partir del repositorio. |
 
 
 # Conclusiones y recomendaciones
@@ -3208,6 +7360,12 @@ Link del video about the product: [https://1drv.ms/v/c/21f348d94fc5db3f/IQC7_Ni9
 
 5. El diseño UI/UX de FoodFlow refuerza la identidad del producto mediante una experiencia visual ordenada, profesional y coherente con el sector gastronómico. La landing page, la guía de estilo, la arquitectura de información, los mockups y los diagramas de organización permiten comunicar con claridad la propuesta de valor del sistema y facilitan que el usuario comprenda rápidamente cómo la plataforma puede ayudarlo a gestionar su restaurante con datos.
 
+6. FoodFlow logró centralizar procesos clave del restaurante, como gestión de platos, inventario, órdenes, finanzas, perfil y suscripción, reduciendo la dependencia de registros manuales.
+
+7. La incorporación de pruebas unitarias, integrales y funcionales permitió validar la aplicación desde distintos niveles: lógica interna, comunicación entre módulos y flujos reales de usuario.
+
+8. El uso de frontend en Vercel, backend en Render, base de datos en Supabase y control de versiones en GitHub permitió construir un flujo de despliegue moderno, separado y fácil de mantener.
+
 ## Recomendaciones
 
 1. Se recomienda continuar validando FoodFlow con dueños de restaurantes reales, priorizando pruebas de usabilidad sobre los módulos principales del MVP. Esto permitirá identificar si el dashboard, los reportes, el inventario, el menú y las órdenes son comprendidos fácilmente por usuarios con distintos niveles de experiencia tecnológica.
@@ -3219,6 +7377,12 @@ Link del video about the product: [https://1drv.ms/v/c/21f348d94fc5db3f/IQC7_Ni9
 4. Se recomienda conservar la consistencia visual definida en la guía de estilo, especialmente en el uso de colores, tipografía, componentes, espaciado, tarjetas de métricas y gráficos. Esta coherencia permitirá que la landing page y la aplicación web transmitan confianza, profesionalismo y claridad en toda la experiencia del usuario.
 
 5. Se recomienda documentar y mantener actualizados los procesos técnicos del proyecto, incluyendo control de versiones, convenciones de código, pruebas, despliegue y documentación de API. Esto permitirá que FoodFlow pueda evolucionar de forma ordenada, facilitando futuras mejoras, mantenimiento del sistema y colaboración entre integrantes del equipo.
+
+6. Automatizar la ejecución de pruebas en GitHub Actions para que cada push o merge valide frontend y backend antes de llegar a main.
+
+7. Mejorar el monitoreo en producción incorporando alertas automáticas para errores del backend, caídas del servicio y degradación de rendimiento.
+
+8. Continuar ampliando pruebas funcionales para cubrir escenarios negativos, errores de red, permisos, datos vacíos y casos límite en órdenes, inventario y reportes financieros.
 
 # Bibliografía
 
