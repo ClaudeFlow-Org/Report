@@ -52,6 +52,8 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
 
 # Contenido
 
+- [Registro de versiones del informe](#registro-de-versiones-del-informe)
+- [Project Report Collaboration Insights](#project-report-collaboration-insights)
 - [Student Outcome](#student-outcome)
 - [Capítulo I: Introducción](#capítulo-i-introducción)
   - [1.1 Startup Profile](#11-startup-profile)
@@ -71,13 +73,13 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
       - [1.2.2.1. Lean UX Problem Statement](#1221-lean-ux-problem-statement)
       - [1.2.2.2. Lean UX Assumptions](#1222-lean-ux-assumptions)
       - [1.2.2.3. Lean UX Hypothesis Statements](#1223-lean-ux-hypothesis-statements)
-      - [1.2.2.4. Minimum Viable Product](#minimum-viable-product)
+      - [1.2.2.4. Minimum Viable Product](#1224-minimum-viable-product)
       - [1.2.2.5. Lean UX Canvas](#1224-lean-ux-canvas)
   - [1.3. Segmento Objetivo](#13-segmento-objetivo)
 - [Capítulo II: Requirements \& Analysis](#capítulo-ii-requirements--analysis)
   - [2.1 Competidores](#21-competidores)
-    - [2.1.1. Análisis competitivo.](#211-análisis-competitivo)
-  - [2.1.2. Estrategias y Tácticas Competitivas de FoodFlow](#212-estrategias-y-tácticas-competitivas-de-foodflow)
+    - [2.1.1. Análisis competitivo](#211-análisis-competitivo)
+    - [2.1.2. Estrategias y Tácticas Competitivas de FoodFlow](#212-estrategias-y-tácticas-competitivas-de-foodflow)
   - [2.2 Entrevistas](#22-entrevistas)
     - [2.2.1. Diseño de entrevistas](#221-diseño-de-entrevistas)
     - [2.2.2. Registro de entrevistas.](#222-registro-de-entrevistas)
@@ -88,15 +90,18 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
     - [2.3.3 User Journey Mapping](#233-user-journey-mapping)
     - [2.3.4 Empathy Map](#234-empathy-map)
     - [2.3.5 As-is Scenario Mapping](#235-as-is-scenario-mapping)
-    - [2.4 Ubiquitous Language](#24-ubiquitous-language)
+  - [2.4 Ubiquitous Language](#24-ubiquitous-language)
 - [Capítulo III: Requirements Specification](#capítulo-iii-requirements-specification)
   - [3.1 To-Be Scenario Mapping](#31-to-be-scenario-mapping)
-  - [3.2 ](#32-user-stories)
+  - [3.2 User Stories](#32-user-stories)
+    - [3.2.1 Épicas del Proyecto](#321-épicas-del-proyecto)
+    - [3.2.2 User Stories Detalladas](#322-user-stories-detalladas)
   - [3.3 Product Backlog](#33-product-backlog)
   - [3.4 Impact Map](#34-impact-map)
 - [Capítulo IV: Product Design](#capítulo-iv-product-design)
   - [4.1 Style Guidelines](#41-style-guidelines)
     - [4.1.1. General Style Guidelines](#411-general-style-guidelines)
+    - [4.1.2. Web Style Guidelines](#412-web-style-guidelines)
   - [4.2 Information Architecture](#42-information-architecture)
     - [4.2.1 Organization Systems](#421-organization-systems)
     - [4.2.2 Labeling Systems](#422-labeling-systems)
@@ -138,15 +143,33 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
     - [5.1.1. Software Development Environment Configuration.](#511-software-development-environment-configuration)
     - [5.1.2. Source Code Management.](#512-source-code-management)
     - [5.1.3. Source Code Style Guide \& Conventions.](#513-source-code-style-guide--conventions)
+    - [5.1.4. Software Deployment Configuration.](#514-software-deployment-configuration)
   - [5.2. Product Implementation \& Deployment.](#52-product-implementation--deployment)
     - [5.2.1. Sprint Backlogs.](#521-sprint-backlogs)
     - [5.2.2. Implemented Landing Page Evidence](#522-implemented-landing-page-evidence)
     - [5.2.3. Implemented Frontend-Web Application Evidence](#523-implemented-frontend-web-application-evidence)
     - [5.2.4. Acuerdo de Servicio - SaaS](#524-acuerdo-de-servicio---saas)
-    - [5.2.5. Implemented RESTful API and/or Serverless Backend Evidence](#525-implemented-restful-api-andor-serverless-backend-evidence)
-    - [5.2.6. RESTful API documentation](#526-restful-api-documentation)
-    - [5.2.7. Team Collaboration Insights](#527-team-collaboration-insights)
+    - [5.2.5. Implemented Native-Mobile Application Evidence](#525-implemented-native-mobile-application-evidence)
+    - [5.2.6. Implemented RESTful API and/or Serverless Backend Evidence](#526-implemented-restful-api-andor-serverless-backend-evidence)
+    - [5.2.7. RESTful API documentation](#527-restful-api-documentation)
+    - [5.2.8. Team Collaboration Insights](#528-team-collaboration-insights)
   - [5.3. Video About-the-Product](#53-video-about-the-product)
+- [Capítulo VI: Product Verification & Validation](#capítulo-vi-product-verification--validation)
+  - [6.1. Testing Suites & Validation](#61-testing-suites--validation)
+    - [6.1.1. Core Entities Unit Tests](#611-core-entities-unit-tests)
+    - [6.1.2. Core Integration Tests](#612-core-integration-tests)
+    - [6.1.3. Core Behavior-Driven Development](#613-core-behavior-driven-development)
+    - [6.1.4. Core System Tests](#614-core-system-tests)
+- [Capítulo VII: DevOps Practices](#capítulo-vii-devops-practices)
+  - [7.1. Continuous Integration](#71-continuous-integration)
+    - [7.1.1. Tools and Practices](#711-tools-and-practices)
+    - [7.1.2. Build & Test Suite Pipeline Components](#712-build--test-suite-pipeline-components)
+  - [7.2. Continuous Delivery](#72-continuous-delivery)
+    - [7.2.1. Tools and Practices](#721-tools-and-practices)
+    - [7.2.2. Stages Deployment Pipeline Components](#722-stages-deployment-pipeline-components)
+  - [7.3. Continuous Deployment](#73-continuous-deployment)
+    - [7.3.1. Tools and Practices](#731-tools-and-practices)
+    - [7.3.2. Production Deployment Pipeline Components](#732-production-deployment-pipeline-components)
 - [Conclusiones y recomendaciones](#conclusiones-y-recomendaciones)
   - [Conclusiones](#conclusiones)
   - [Recomendaciones](#recomendaciones)
@@ -1762,7 +1785,29 @@ Cada tarjeta representa un plan distinto, mostrando precio, periodicidad, lista 
 
 ### 4.4.2 Web Applications Wireflow Diagrams
 
+- Registro de cuenta en la plataforma
 
+<p align="center">
+  <img src="assets/WireflowRegistro.png" alt="Wireflow de registro de cuenta en FoodFlow">
+</p>
+
+- Registro de plato en el menú
+
+<p align="center">
+  <img src="assets/WireflowPlato.png" alt="Wireflow de registro de plato en menú">
+</p>
+
+- Registro de producto en inventario
+
+<p align="center">
+  <img src="assets/WireflowProducto.png" alt="Wireflow de registro de producto en inventario">
+</p>
+
+- Registro de pedido
+
+<p align="center">
+  <img src="assets/WireflowPedido.png" alt="Wireflow de registro de pedido">
+</p>
 
 ### 4.4.3 Web Applications Mock-ups
 
@@ -1946,7 +1991,7 @@ Esta funcionalidad asegura que la aplicación sea accesible para un público má
 
 ## 4.5 Web Applications Prototyping
 
-
+[https://www.figma.com/proto/gv3UOYrPRwONOcieRKHNyw/FoodFlow---Prototype?node-id=0-1&t=kgUNblXo9QLdzQM3-1](https://www.figma.com/proto/gv3UOYrPRwONOcieRKHNyw/FoodFlow---Prototype?node-id=0-1&t=kgUNblXo9QLdzQM3-1)
 
 ## 4.6 Domain-Driven Software Architecture
 
