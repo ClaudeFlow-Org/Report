@@ -2942,11 +2942,55 @@ La adopción de estas convenciones permite que FoodFlow mantenga una base de có
 
 El primer avance del informe se desarrolló entre el 24 de abril y el 1 de mayo. Durante este periodo se trabajó en la organización inicial del documento, la redacción de contenidos base y la integración de las secciones principales del reporte.
 
-| Sprint | Fecha de inicio | Fecha de fin | Objetivo | Actividades principales | Estado |
-|--------|-----------------|--------------|----------|-------------------------|--------|
-| Sprint 1 | 24/04/26 | 01/05/26 | Consolidar la base del primer avance del informe. | Organicé la estructura general del documento, redacté contenidos iniciales de las secciones principales, ajusté el índice para mejorar la navegación y revisé la coherencia entre apartados. | Completado |
-| Sprint 1 | 24/04/26 | 01/05/26 | Avanzar con la documentación académica y técnica. | Desarrollé la descripción del producto, el análisis del problema, la propuesta de valor y la primera integración de evidencia visual y referencial. | Completado |
-| Sprint 1 | 24/04/26 | 01/05/26 | Dejar listo el documento para revisión interna. | Realicé una revisión final de formato, enlaces internos, títulos y consistencia de redacción para preparar el documento para el siguiente avance. | Completado |
+| Sprint # | Sprint 1 |
+| Sprint Planning Background | |
+| Date | 05/05/2026 |
+| Time | 3:30 PM |
+| Location | Virtual |
+| Prepared by | Werner Lang |
+| Attendees | Werner Lang <br> Santiago Suárez <br> Luis Román <br> Luis Rodríguez <br> Gabriel Borja |
+| Sprint Goal \& User Stories | Landing Page, Frontend y Backend |
+| Sprint Goal | Our focus is on implementar la Landing Page, el Frontend y el Backend de FoodFlow como una plataforma integral para la gestion de restaurantes.<br>We believe it delivers una experiencia centralizada, clara y accionable a los duenos de restaurantes.<br>This will be confirmed when la Landing Page, el Frontend y el Backend esten implementados e integrados para validacion. |
+| Sprint 1 Velocity | 30 |
+| Sum of Story Points | 26 | 
+
+| User Story Id | Title | Task Id | Task Title | Description | Estimation (Hours) | Assigned To | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| LP01 | Landing Page | T01 | Diseno y construccion de landing page | Implementar la pagina de presentacion de FoodFlow con hero, secciones de funciones, beneficios, prueba social, planes, contacto y footer responsivo. | 12 | Gabriel Borja | Done |
+| US01 | Visualizar resumen financiero en dashboard | T02 | Dashboard financiero por periodo | Construir tarjetas de ingresos, egresos, utilidad y ordenes con selector diario, semanal y mensual. | 8 | Luis Rodriguez | Done |
+| US02 | Identificar platos mas vendidos | T03 | Top platos mas vendidos | Mostrar el ranking de los platos con mayor venta e ingresos en la vista principal. | 5 | Luis Rodriguez | Done |
+| US03 | Consultar ordenes recientes y accesos rapidos | T04 | Ordenes recientes y accesos rapidos | Agregar la tabla de ordenes recientes y los accesos directos a menu, ordenes y reportes. | 4 | Gabriel Borja | Done |
+| US04 | Visualizar inventario actual | T05 | Visualizacion de inventario | Crear la tabla principal de productos con stock, costo, valor total, categoria y proveedor. | 6 | Luis Roman | Done |
+| US05 | Registrar producto en inventario | T06 | Registro de producto | Implementar el formulario para crear productos con stock, costo, unidad, umbral, categoria y proveedor. | 6 | Luis Roman | Done |
+| US06 | Editar y eliminar productos | T07 | Edicion y eliminacion de productos | Habilitar las acciones para actualizar o eliminar productos desde la tabla de inventario. | 5 | Luis Roman | Done |
+| US07 | Buscar productos del inventario | T08 | Busqueda de productos | Agregar el buscador por nombre, categoria o proveedor y filtrar la tabla en tiempo real. | 4 | Luis Rodriguez | Done |
+| US08 | Gestionar categorias de productos | T09 | Gestion de categorias | Crear, renombrar y eliminar categorias de inventario para mantener organizada la clasificacion de productos. | 4 | Luis Rodriguez | Done |
+| US09 | Detectar productos con bajo stock | T10 | Alertas de bajo stock | Implementar alertas visuales y generales cuando el stock llegue al umbral configurado. | 3 | Gabriel Borja | Done |
+| US10 | Visualizar menu completo | T11 | Menu completo | Desarrollar la vista de platos con nombre, descripcion, precio, ingredientes y acciones. | 5 | Santiago Suarez | Done |
+| US11 | Registrar nuevo plato | T12 | Registro de plato | Crear el formulario modal para agregar nuevos platos al menu. | 6 | Santiago Suarez | Done |
+| US12 | Buscar platos existentes | T13 | Busqueda de platos | Habilitar la busqueda por nombre para localizar platos registrados con rapidez. | 4 | Santiago Suarez | Done |
+| US13 | Editar y eliminar platos | T14 | Edicion y eliminacion de platos | Permitir actualizar la informacion de platos o retirarlos del menu con confirmacion. | 5 | Santiago Suarez | Done |
+| US14 | Visualizar ordenes existentes | T15 | Visualizacion de ordenes | Construir la tabla de ordenes con numero, mesa, tipo, items, total y estado. | 5 | Werner Lang | Done |
+| US15 | Crear nueva orden | T16 | Creacion de orden | Implementar el formulario para registrar nuevas ordenes con platos y cantidades. | 8 | Werner Lang | Done |
+| US16 | Calcular total automaticamente | T17 | Calculo automatico de total | Calcular el total de la orden de forma automatica al modificar los items. | 4 | Werner Lang | Done |
+| US17 | Cambiar estado de una orden | T18 | Cambio de estado de orden | Agregar la accion para marcar una orden pendiente como entregada. | 3 | Werner Lang | Done |
+| US18 | Cancelar o eliminar una orden | T19 | Cancelacion y eliminacion de orden | Permitir cancelar ordenes pendientes o eliminarlas con confirmacion. | 4 | Werner Lang | Done |
+| US19 | Visualizar reportes financieros por periodo | T20 | Reportes financieros por periodo | Mostrar ingresos, egresos, utilidad y graficos financieros por periodo seleccionado. | 8 | Gabriel Borja | Done |
+| US20 | Navegar entre periodos financieros | T21 | Navegacion entre periodos financieros | Habilitar el cambio entre vistas diaria, semanal y mensual en finanzas. | 4 | Gabriel Borja | Done |
+| US21 | Analizar gastos por categoria | T22 | Analisis de gastos por categoria | Visualizar el desglose de gastos por categoria con montos, porcentajes y grafico. | 5 | Luis Rodriguez | Done |
+| US22 | Analizar platos con mayores ingresos | T23 | Analisis de platos con mayores ingresos | Construir el grafico de platos con mayores ingresos dentro del modulo financiero. | 5 | Luis Rodriguez | Done |
+| US23 | Comparar con periodo anterior | T24 | Comparacion con periodo anterior | Mostrar las variaciones de ingresos y egresos frente al periodo previo disponible. | 4 | Luis Roman | Done |
+| US24 | Visualizar perfil de usuario | T25 | Visualizacion de perfil | Presentar nombre, correo y plan actual dentro de la seccion de configuracion. | 3 | Werner Lang | Done |
+| US25 | Actualizar datos del perfil | T26 | Actualizacion de perfil | Permitir editar nombre y correo con validaciones y confirmacion de guardado. | 4 | Werner Lang | Done |
+| US26 | Cambiar contrasena | T27 | Cambio de contrasena | Implementar el formulario de seguridad con contrasena actual, nueva y confirmacion. | 4 | Santiago Suarez | Done |
+| US27 | Visualizar planes de suscripcion | T28 | Visualizacion de planes | Mostrar los planes Free, Standard y Premium con precio y beneficios. | 3 | Gabriel Borja | Done |
+| US28 | Cambiar plan de suscripcion | T29 | Cambio de plan | Permitir seleccionar otro plan y actualizar la suscripcion del usuario. | 4 | Gabriel Borja | Done |
+| US29 | Configurar idioma y tema | T30 | Idioma y tema | Habilitar el cambio de idioma entre espanol e ingles y el modo claro u oscuro. | 2 | Luis Roman | Done |
+| US30 | Iniciar sesion | T31 | Inicio de sesion | Crear el flujo de autenticacion con correo y contrasena para acceder al sistema. | 6 | Werner Lang | Done |
+| US31 | Crear cuenta nueva | T32 | Registro de cuenta | Implementar el formulario de registro con nombre, correo y contrasena. | 6 | Gabriel Borja | Done |
+| US32 | Cerrar sesion y proteger rutas | T33 | Cierre de sesion y proteccion de rutas | Agregar el cierre de sesion y la proteccion de paginas privadas para usuarios autenticados. | 4 | Santiago Suarez | Done |
+
+
 
 ### 5.2.2. Implemented Landing Page Evidence
 
