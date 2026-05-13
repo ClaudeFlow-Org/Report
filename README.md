@@ -41,6 +41,7 @@
 | Versión | Fecha | Autores | Descripción de la modificación |
 | :--- | :--- | :--- | :--- |
 | 1.0 (AV1) | 30/04/26 | - Borja Molina, Gabriel Sebastián<br>- Lang Nassi, Werner Khalil<br>- Rodriguez Rodriguez, Luis Piero<br>- Román Pajuelo, Luis Gustavo<br>- Suárez Romero, Santiago Manuel | **Capítulos I, II, III, IV y V** |
+| 2.0 (TB1) | 13/05/26 | - Borja Molina, Gabriel Sebastián<br>- Lang Nassi, Werner Khalil<br>- Rodriguez Rodriguez, Luis Piero<br>- Román Pajuelo, Luis Gustavo<br>- Suárez Romero, Santiago Manuel | **Capítulos VI Y VII** |
 
 ---
 
@@ -7494,3 +7495,4 @@ El frontend se despliega en Vercel, el backend en Render, la landing page en Git
 - Bounded Context Canvas: https://miro.com/app/board/uXjVHZHeSzc=/?share_link_id=246445723878
 - Domain Message Flow Modelling: https://miro.com/app/board/uXjVHZAXIRc=/?share_link_id=910118949056
 - Event Storming: https://miro.com/app/board/uXjVHZDYSgE=/?share_link_id=949441154741
+- Video de exposición trabajo parcial: https://youtu.be/nfYw-8_gPm4
