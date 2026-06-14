@@ -7181,6 +7181,131 @@ Se han ejecutado pruebas de sistemas centrales utilizando PageSpeed Insights par
   <img src="assets/pruebassystemweb.png" alt="PB" width="600">
 </p>
 
+## 6.2. Static testing & Verification
+
+Las pruebas estáticas y actividades de verificación de FoodFlow buscan identificar defectos sin depender de la ejecución completa de la aplicación. Para ello se inspeccionan el código fuente, los tipos, las reglas de estilo, las dependencias, la configuración de seguridad y los cambios registrados en GitHub. Este proceso complementa las pruebas dinámicas de la sección 6.1 y permite encontrar problemas de mantenibilidad y seguridad antes del despliegue.
+
+La verificación descrita en esta sección considera los repositorios `FoodFlow-Frontend` y `FoodFlow-Backend`, así como las herramientas, configuraciones y prácticas utilizadas en ambos proyectos.
+
+| Área verificada | Frontend | Backend | Resultado actual |
+|---|---|---|---|
+| Reglas de estilo | ESLint 9, TypeScript ESLint y reglas de React Hooks | Convenciones Java 17 y organización por capas | Frontend: 0 errores y 6 advertencias. Backend: revisión estructural sin Checkstyle configurado. |
+| Tipado y compilación | TypeScript en modo `strict` mediante `tsc -b` | Maven Compiler Plugin con Java 17 | Ambos proyectos compilan correctamente. |
+| Calidad | ESLint, compilador TypeScript, pruebas y revisión de pull requests | Compilador Java, pruebas y revisión de pull requests | Los pipelines generan evidencia reproducible; no existe todavía una herramienta de métricas de complejidad o duplicación. |
+| Seguridad | `npm audit`, revisión del manejo del token y variables de entorno | Spring Security, JWT, BCrypt, Bean Validation y revisión de configuración | Se identificaron controles implementados y riesgos pendientes descritos en 6.2.1.2. |
+| Revisión de cambios | Pull requests, comentarios en línea y GitHub Actions | Pull requests, comentarios en línea y GitHub Actions | Existen revisiones automáticas de GitHub Copilot; falta formalizar la aprobación humana obligatoria. |
+
+### 6.2.1. Static Code Analysis
+
+El análisis estático se aplicó sobre los archivos del proyecto y sus configuraciones sin iniciar los servidores web ni ejecutar flujos funcionales de usuario. En el frontend se utilizaron las herramientas declaradas en el propio repositorio. En el backend se verificó la compilación estática de Java y se inspeccionaron las convenciones, validaciones y controles de seguridad presentes en el código.
+
+| Herramienta o mecanismo | Alcance | Configuración observada | Resultado |
+|---|---|---|---|
+| ESLint | Archivos TypeScript y TSX del frontend | [`eslint.config.js`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/blob/main/eslint.config.js) extiende las reglas recomendadas de JavaScript y TypeScript con información de tipos. También incorpora React Hooks y React Refresh. | `npm run lint` terminó con 0 errores y 6 advertencias. |
+| TypeScript Compiler | Tipado estático del frontend | [`tsconfig.app.json`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/blob/main/tsconfig.app.json) activa `strict`, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch` y `noUncheckedSideEffectImports`. | `npm run build`, que inicia con `tsc -b`, terminó correctamente. |
+| Maven Compiler Plugin | Código Java del backend | El [`pom.xml`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/pom.xml) configura Java 17, Maven Compiler Plugin 3.11.0 y el procesamiento de anotaciones de Lombok. | `mvn --batch-mode -DskipTests compile` terminó con `BUILD SUCCESS`. |
+| Bean Validation | Datos recibidos por la API | Uso de `@Valid`, `@NotBlank`, `@Email`, `@Size` y otras restricciones en requests y controladores. | Las restricciones permiten detectar entradas inválidas antes de ejecutar la lógica de aplicación. |
+| GitHub Pull Request Review | Diferencias de código antes de integrar ramas | Comentarios automáticos por archivo en pull requests del frontend y backend. | Se encontraron observaciones de configuración, seguridad, concurrencia, mantenibilidad y rendimiento. |
+
+Las seis advertencias de ESLint no impiden la compilación, pero representan deuda técnica. Cuatro corresponden a dependencias faltantes en arreglos de `useEffect` y dos a archivos que exportan componentes junto con otros elementos incompatibles con la regla de Fast Refresh. Por ello, el resultado se considera **aprobado con observaciones**, no completamente libre de hallazgos.
+
+#### 6.2.1.1. Coding standard & Code conventions.
+
+FoodFlow utiliza convenciones distintas para cada tecnología, pero mantiene como principios comunes los nombres descriptivos en inglés, la separación de responsabilidades, la validación temprana y una estructura predecible de archivos. No se encontró Prettier en el frontend ni Checkstyle en el backend; por lo tanto, ESLint, TypeScript, el compilador Java y la revisión de código constituyen actualmente los principales mecanismos de verificación de convenciones.
+
+**Convenciones del frontend**
+
+| Elemento | Convención aplicada | Ejemplo del proyecto |
+|---|---|---|
+| Componentes, clases y tipos | `PascalCase` | `SettingsPage`, `ErrorBoundary`, `LoginResponse`. |
+| Variables, funciones y métodos | `camelCase` | `normalizeEmail`, `loadDashboard`, `updatePassword`. |
+| Hooks personalizados | Prefijo `use` | `useFinance`, `useApi`. |
+| Archivos | `.tsx` para componentes con JSX y `.ts` para lógica, servicios, tipos y utilidades | `SettingsPage.tsx`, `authService.ts`. |
+| Importaciones | Alias `@/*` para representar `src/*` | `import type { User } from '@/types'`. |
+| Tipado | Evitar variables sin tipo y restringir `any` | TypeScript `strict` y regla `no-explicit-any` como advertencia. |
+| React | Cumplir las reglas de Hooks y mantener componentes compatibles con Fast Refresh | Plugins `react-hooks` y `react-refresh`. |
+| Servicios HTTP | Centralizar llamadas y respuestas tipadas | `api.ts` y servicios como `authService.ts`. |
+
+**Convenciones del backend**
+
+| Elemento | Convención aplicada | Ejemplo del proyecto |
+|---|---|---|
+| Clases, interfaces y enumeraciones | `PascalCase` | `SecurityConfig`, `UserRepository`, `SubscriptionPlan`. |
+| Métodos, parámetros y atributos | `camelCase` | `generateToken`, `encodedPassword`, `findByUserId`. |
+| Paquetes | Minúsculas y agrupados por bounded context | `identity`, `billing`, `catalog`, `inventory`, `sales` y `finance`. |
+| Capas | `domain`, `application`, `infrastructure` y `presentation` | Cada contexto separa reglas de negocio, casos de uso, persistencia y API. |
+| Sufijos | El nombre comunica la responsabilidad | `Controller`, `ApplicationService`, `Repository`, `Request`, `Response` y `JpaEntity`. |
+| Inyección de dependencias | Preferencia por constructor | `@RequiredArgsConstructor` o constructores explícitos. |
+| Validación | Restricciones declarativas en DTOs y `@Valid` en controladores | `RegisterRequest`, `DishRequest` y `ProductRequest`. |
+| Persistencia | Repositorios Spring Data y parámetros nombrados en JPQL | Consultas con `:userId`, `:startDate` y otros parámetros. |
+
+La arquitectura del backend aplica principios de Domain-Driven Design al organizar el modelo en contextos delimitados. Esta separación evita concentrar toda la lógica en los controladores y facilita que entidades, servicios, repositorios y adaptadores puedan evolucionar de forma independiente.
+
+#### 6.2.1.2. Code Quality & Code Security.
+
+La calidad fue evaluada mediante reglas estáticas, compilación, pruebas y revisiones de cambios. Estas verificaciones permiten encontrar código no utilizado, errores de tipos, uso incorrecto de Hooks, fallos de compilación y problemas señalados durante los pull requests. Sin embargo, el proyecto todavía no integra SonarQube, PMD, Checkstyle o una herramienta equivalente que calcule automáticamente complejidad ciclomática, duplicación y deuda técnica; su incorporación queda registrada como mejora del proceso.
+
+**Controles de calidad observados**
+
+| Control | Evidencia | Interpretación |
+|---|---|---|
+| ESLint con análisis tipado | `recommendedTypeChecked` utiliza los archivos `tsconfig` del proyecto. | Detecta problemas que requieren conocer los tipos de TypeScript. |
+| TypeScript estricto | La compilación rechaza incompatibilidades, variables sin uso y casos inseguros configurados. | Reduce errores antes de generar el bundle. |
+| Compilación Java 17 | Maven compila las clases y procesa anotaciones. | Detecta errores sintácticos y de tipos del backend. |
+| Pruebas automatizadas | 34 pruebas del frontend y 65 pruebas del backend integradas en GitHub Actions. | Complementan el análisis estático con validación dinámica. |
+| Pull request review | Comentarios asociados a líneas y archivos concretos. | Permite detectar problemas de diseño, configuración y mantenibilidad. |
+
+El build del frontend terminó correctamente, aunque Vite informó que el bundle principal supera los 500 kB después de la minificación y que `authService.ts` se importa de forma estática y dinámica. Estas advertencias no rompen la aplicación, pero sugieren revisar la división del bundle y las importaciones para mejorar mantenibilidad y rendimiento.
+
+**Controles de seguridad implementados**
+
+| Control | Implementación en FoodFlow | Riesgo mitigado |
+|---|---|---|
+| Autenticación JWT | [`SecurityConfig.java`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/java/com/foodflow/identity/infrastructure/SecurityConfig.java) exige autenticación y el proveedor JWT valida tokens firmados y con fecha de expiración. | Acceso no autenticado y manipulación básica del token. |
+| Contraseñas protegidas | [`PasswordEncoderImpl.java`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/java/com/foodflow/identity/infrastructure/PasswordEncoderImpl.java) utiliza `BCryptPasswordEncoder` para generar hashes y verificar credenciales sin guardar contraseñas en texto plano. | Exposición directa de contraseñas almacenadas. |
+| API sin sesión de servidor | `SessionCreationPolicy.STATELESS`. | Dependencia de sesiones persistentes y parte de los riesgos asociados a ellas. |
+| Autorización de endpoints | Solo autenticación, planes públicos, health check y documentación se permiten sin JWT; los demás endpoints requieren autenticación. | Acceso anónimo a operaciones privadas. |
+| Validación de entrada | Bean Validation y objetos de valor validan email, longitud y campos obligatorios. | Datos mal formados y parte de los ataques basados en entradas inválidas. |
+| Consultas parametrizadas | Los repositorios emplean Spring Data JPA y parámetros nombrados en JPQL. | Reduce el riesgo de inyección SQL por concatenación manual. |
+| Secretos de producción | [`application-prod.yml`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/resources/application-prod.yml) obtiene base de datos y `JWT_SECRET` mediante variables de entorno. | Publicación de credenciales reales en el repositorio. |
+| Renderizado React | No se encontró uso de `dangerouslySetInnerHTML` en `src`. | Reduce la introducción directa de HTML no confiable y parte del riesgo XSS. |
+
+Como verificación de dependencias se ejecutó `npm audit --omit=dev`. El resultado reportó **4 vulnerabilidades en dependencias de producción: 3 de severidad alta y 1 moderada**, asociadas a Axios, `follow-redirects` y React Router. El comando indicó que existen correcciones disponibles mediante actualización, pero estas no se aplicaron como parte de la documentación para evitar cambios no evaluados en el producto desplegado.
+
+**Hallazgos y acciones recomendadas**
+
+| Hallazgo | Estado | Acción recomendada |
+|---|---|---|
+| 4 vulnerabilidades reportadas por `npm audit` | Pendiente | Actualizar las dependencias en una rama separada, ejecutar las 34 pruebas, construir el frontend y validar el despliegue antes de integrar. |
+| JWT almacenado en `localStorage` | Riesgo residual | Evaluar cookies `HttpOnly`, `Secure` y `SameSite` para reducir el impacto de un eventual XSS. |
+| CORS permite el patrón `https://*.vercel.app` con credenciales | Riesgo residual señalado también en review | Restringir los orígenes a los dominios concretos utilizados por FoodFlow. |
+| Configuración local contiene valores predeterminados para desarrollo | Controlado por perfil, pero requiere cuidado | Garantizar que producción siempre utilice el perfil `prod` y variables de entorno; evitar reutilizar secretos de desarrollo. |
+| No existe SAST ni análisis automático de complejidad/duplicación en backend | Mejora pendiente | Incorporar CodeQL, SonarQube, PMD, Checkstyle u OWASP Dependency-Check en el pipeline. |
+| 6 advertencias de ESLint | Mejora pendiente | Corregir dependencias de `useEffect` y separar exportaciones para Fast Refresh. |
+
+### 6.2.2. Reviews
+
+La revisión de código se realiza mediante pull requests de GitHub, donde es posible inspeccionar los archivos modificados, agregar comentarios en líneas específicas y conservar la trazabilidad hasta el merge. Los repositorios contienen evidencia de revisiones automáticas realizadas por GitHub Copilot Pull Request Reviewer. Estas revisiones son útiles como apoyo técnico, pero no equivalen a una aprobación humana formal.
+
+| Repositorio | Pull request | Alcance | Resultado de la revisión |
+|---|---|---|---|
+| Frontend | [PR #9: `chore(release): merge main into deploy`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/pull/9) | 13 archivos modificados, 11 commits | Merge completado. Copilot revisó 13 de 13 archivos y generó 6 comentarios. |
+| Frontend | [PR #10: `chore(release): merge main into develop`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/pull/10) | 9 archivos modificados, 22 commits | Merge completado. Copilot revisó 9 de 9 archivos y generó 4 comentarios. |
+| Backend | [PR #1: `feat: Update application configuration and add deployment files`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/pull/1) | 152 archivos modificados, 1 commit | Merge completado. Copilot revisó 6 de 152 archivos y generó 4 comentarios. |
+| Backend | [PR #2: `chore(deploy): merge pull request #2 from ClaudeFlow-Org/deploy`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/pull/2) | 263 archivos modificados, 7 commits | Merge completado. Copilot revisó 69 de 263 archivos y generó 7 comentarios. |
+
+Entre los hallazgos registrados en las revisiones del frontend se encontraron una URL de backend de ejemplo en la configuración de Vercel, manejo mejorable del estado de autenticación, un temporizador sin limpieza, uso de colores fuera del tema, mensajes internos visibles en el `ErrorBoundary`, solicitudes duplicadas y textos sin internacionalización. En el backend se observaron archivos generados dentro de `target`, una inconsistencia inicial del perfil de Render, una política CORS demasiado amplia, endpoints de health probes, generación de secuencias sin protección frente a concurrencia, transiciones de estado dependientes del orden de un `enum`, consultas repetidas y oportunidades de mejorar nombres de adaptadores.
+
+La evidencia demuestra que el mecanismo de review sí detectó problemas relacionados con funcionamiento, seguridad, mantenibilidad, rendimiento y consistencia. No obstante, varios pull requests fueron integrados sin revisores humanos solicitados y las revisiones aparecen con estado `COMMENTED`, no `APPROVED`. Por ello, se propone el siguiente procedimiento para las siguientes entregas:
+
+1. Crear una rama por cambio y abrir un pull request hacia la rama de integración o despliegue correspondiente.
+2. Describir el propósito, alcance, pruebas realizadas y riesgos del cambio.
+3. Esperar que GitHub Actions complete lint, pruebas y build.
+4. Solicitar al menos una revisión humana de otro integrante del equipo.
+5. Clasificar y responder cada observación como corregida, aceptada como deuda técnica o no aplicable con una justificación.
+6. Integrar únicamente cuando los checks estén aprobados y no existan conversaciones bloqueantes pendientes.
+7. Proteger `main` y `deploy` para requerir checks exitosos y al menos una aprobación antes del merge.
+
 # Capítulo VII: DevOps Practices
 
 ## 7.1. Continuous Integration
