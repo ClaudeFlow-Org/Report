@@ -7443,6 +7443,180 @@ El frontend se despliega en Vercel, el backend en Render, la landing page en Git
 | GitHub Repository | Almacena el código fuente estático de la landing. |
 | GitHub Actions / Pages build | Publica la landing page a partir del repositorio. |
 
+## 7.4. Continuous Monitoring
+
+El monitoreo continuo de FoodFlow permite comprobar automáticamente el estado técnico del frontend y del backend cada vez que se publica un cambio en GitHub. Para ello se implementaron dos workflows independientes de GitHub Actions:
+
+- **Frontend CI**, incorporado en la rama `main` del repositorio `FoodFlow-Frontend` mediante el commit [`54810d3`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/commit/54810d3d6b20a377e0088ccab797078b6f8c79b9).
+- **Backend CI**, incorporado en la rama `deploy` del repositorio `FoodFlow-Backend` mediante el commit [`e4ca0d6`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/commit/e4ca0d61822a77b990c2662fa5c6dda561486e6d).
+
+Cada ejecución registra el repositorio, la rama, el commit, el responsable del cambio, la duración, el resultado de cada etapa, los logs y los artefactos generados. De este modo, el equipo puede detectar problemas antes de que afecten a los usuarios. GitHub Actions supervisa la calidad y capacidad de construcción del software, mientras que Spring Boot Actuator y Render permiten comprobar la disponibilidad básica del backend desplegado.
+
+```mermaid
+flowchart LR
+    A[Push o pull request] --> B[GitHub Actions]
+    B --> C{Validaciones}
+    C -->|Frontend| D[Lint + Vitest + Vite build]
+    C -->|Backend| E[Maven + 65 pruebas + JAR]
+    D --> F[Estado, logs y artefactos]
+    E --> F
+    F -->|Éxito| G[Check aprobado]
+    F -->|Fallo| H[Alerta en GitHub]
+    H --> I[Notificación al equipo]
+    J[Render] --> K["GET /actuator/health"]
+```
+
+### 7.4.1. Tools and Practices
+
+| Herramienta o práctica | Aplicación en FoodFlow |
+|---|---|
+| GitHub Actions | Ejecuta y registra los pipelines de monitoreo continuo del frontend y backend. |
+| Workflow del frontend | El archivo [`.github/workflows/frontend-ci.yml`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/blob/main/.github/workflows/frontend-ci.yml) instala dependencias con `npm ci`, ejecuta ESLint, las pruebas de Vitest y el build de Vite. |
+| Workflow del backend | El archivo [`.github/workflows/backend-ci.yml`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/.github/workflows/backend-ci.yml) configura Java 17 y ejecuta `mvn --batch-mode clean verify`. |
+| GitHub Checks | Muestra el resultado de cada workflow asociado a un commit o pull request mediante estados de éxito, fallo o cancelación. |
+| Logs por step | Conservan la salida de instalación, lint, pruebas, compilación y empaquetado para facilitar el diagnóstico. |
+| Artifacts | Conservan durante siete días el bundle `dist` del frontend, el JAR del backend y los reportes Surefire. |
+| Spring Boot Actuator | Expone `/actuator/health` para el health check del backend desplegado en Render. |
+| Ejecución por eventos | Los workflows se activan con `push`, `pull_request` y también permiten ejecución manual mediante `workflow_dispatch`. |
+| Cancelación de ejecuciones obsoletas | La propiedad `concurrency` cancela una ejecución anterior de la misma rama cuando se publica un cambio más reciente. |
+| Permisos mínimos | Los workflows declaran únicamente el permiso `contents: read`, reduciendo accesos innecesarios. |
+
+La práctica principal consiste en revisar el estado de los checks antes de integrar cambios. Un workflow exitoso confirma que el código puede instalarse, analizarse, probarse y construirse en un entorno limpio. Un workflow fallido debe investigarse mediante el step y log correspondiente antes de continuar con el merge o despliegue. Como medida adicional, los checks `Frontend CI / Lint, test and build` y `Backend CI / Test and package` pueden declararse obligatorios en las reglas de protección de `main` y `deploy`.
+
+La primera ejecución de **Frontend CI** terminó con estado `Success` y una duración aproximada de 58 segundos. La primera ejecución de **Backend CI** también terminó con estado `Success` y una duración aproximada de 38 segundos. Estas ejecuciones demuestran que GitHub Actions quedó correctamente integrado en ambos repositorios.
+
+Resumen general de Frontend CI:
+
+<p align="center">
+  <img src="assets/FrontendCI.png" alt="">
+</p>
+
+Resumen general de Backend CI:
+
+<p align="center">
+  <img src="assets/BackendCI.png" alt="">
+</p>
+
+### 7.4.2. Monitoring Pipeline Components
+
+| Componente | Frontend | Backend | Información monitoreada |
+|---|---|---|---|
+| Trigger | `push`, `pull_request` y ejecución manual | `push`, `pull_request` y ejecución manual | Repositorio, rama, actor, commit y hora de inicio. |
+| Runner | `ubuntu-latest` | `ubuntu-latest` | Estado del entorno y tiempo total de ejecución. |
+| Preparación | `actions/checkout@v4` y `actions/setup-node@v4` con Node.js 22 y caché npm | `actions/checkout@v4` y `actions/setup-java@v4` con Temurin 17 y caché Maven | Descarga del código, versión del runtime y resolución de dependencias. |
+| Calidad estática | `npm run lint` | Compilación de Maven | Errores de lint o compilación asociados al cambio. |
+| Pruebas automatizadas | `npm test` con Vitest | `mvn clean verify` con JUnit, Mockito y MockMvc | Suites ejecutadas, pruebas aprobadas, fallidas u omitidas. |
+| Build | `npm run build` genera `dist` | Maven genera `foodflow-backend-1.0.0.jar` | Capacidad de producir un artefacto desplegable. |
+| Evidencia | Artifact `foodflow-frontend-dist` | Artifacts `backend-test-reports` y `foodflow-backend-jar` | Archivos resultantes disponibles durante siete días. |
+| Estado final | Job `Lint, test and build` | Job `Test and package` | Resultado `success`, `failure`, `cancelled` o `timed_out`. |
+| Salud en producción | Vercel registra el estado del despliegue del frontend | Render consulta `/actuator/health` | Disponibilidad básica de los componentes desplegados. |
+
+La secuencia del pipeline funciona como una cadena de control. Si la instalación de dependencias, el lint, las pruebas o el build fallan, GitHub Actions detiene las etapas posteriores y marca la ejecución como fallida. De esta manera, el equipo identifica tanto el commit que introdujo el problema como el punto exacto en que se produjo.
+
+#### Evidencia del pipeline del frontend
+
+La [ejecución de Frontend CI](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/actions/runs/27492663687) procesó ocho archivos de pruebas y obtuvo **34 pruebas aprobadas de 34**, sin pruebas fallidas. Luego, Vite construyó correctamente el bundle de producción y GitHub almacenó el directorio `dist` en el artifact `foodflow-frontend-dist`.
+
+Step "Run tests" del frontend desplegado, mostrando "Test Files 8 passed (8)" y "Tests 34 passed (34)":
+
+<p align="center">
+  <img src="assets/RunTestFrontend.png" alt="">
+</p>
+
+Step "Build production bundle" del frontend desplegado, mostrando la generación de los archivos de dist y el mensaje "built":
+
+<p align="center">
+  <img src="assets/BuildProductionFrontend.png" alt="">
+</p>
+
+Sección Artifacts de Frontend CI mostrando el artifact "foodflow-frontend-dist":
+
+<p align="center">
+  <img src="assets/ArtifactsFrontend.png" alt="">
+</p>
+
+#### Evidencia del pipeline del backend
+
+La [ejecución de Backend CI](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/actions/runs/27493281773) ejecutó el ciclo de verificación de Maven y obtuvo **65 pruebas aprobadas**, sin fallos, errores ni pruebas omitidas. Después generó el archivo ejecutable `foodflow-backend-1.0.0.jar`. Como evidencia, GitHub conservó el JAR y los reportes de Surefire en dos artifacts independientes.
+
+
+Step "Run tests and package application" mostrando la creación del JAR y el mensaje "BUILD SUCCESS":
+
+<p align="center">
+  <img src="assets/RunTestBackend.png" alt="">
+</p>
+
+Sección Artifacts de Backend CI mostrando "backend-test-reports" y "foodflow-backend-jar":
+
+<p align="center">
+  <img src="assets/ArtifactsBackend.png" alt="">
+</p>
+
+Finalmente, el endpoint público `/actuator/health` respondió con código HTTP `200` y estado `UP`, incluyendo los grupos `liveness` y `readiness`. Esto confirma que el backend continuó disponible después de incorporar el workflow.
+
+Navegador mostrando https://foodflow-backend-y3lj.onrender.com/actuator/health con la respuesta {"status":"UP","groups":["liveness","readiness"]}:
+
+<p align="center">
+  <img src="assets/Actuator.png" alt="">
+</p>
+
+### 7.4.3. Alerting Pipeline Components
+
+| Condición detectada | Mecanismo de alerta | Evidencia disponible | Acción esperada |
+|---|---|---|---|
+| Dependencias no reproducibles | El step `npm ci` o Maven cambia a estado fallido. | Log de paquetes faltantes, incompatibles o no resolubles. | Sincronizar el lockfile o corregir la dependencia y volver a ejecutar. |
+| Error de lint o compilación | El job se marca en rojo y señala el step responsable. | Mensaje de ESLint, TypeScript, Vite o Maven. | Corregir el archivo indicado antes del merge. |
+| Prueba automatizada fallida | GitHub Actions registra `failure`. | Nombre de la suite, prueba y traza; en backend también se conserva Surefire. | Reproducir el error localmente, corregirlo y publicar un nuevo commit. |
+| Build no generado | Falla el step de build o empaquetado. | Log del comando y ausencia del artifact esperado. | Corregir configuración o código hasta producir el artefacto. |
+| Ejecución excede el límite | El job termina con timeout después de 15 minutos. | Duración y último step ejecutado. | Revisar bloqueos, pruebas lentas o problemas de descarga. |
+| Cambio reemplazado por otro más reciente | `concurrency` cancela la ejecución anterior. | Estado `cancelled` vinculado a la rama. | Revisar únicamente la ejecución más reciente. |
+| Backend no saludable en producción | Render obtiene una respuesta no saludable de `/actuator/health`. | Eventos y logs del servicio en Render. | Revisar variables de entorno, base de datos y logs de arranque. |
+
+Las alertas de CI se clasifican como bloqueantes para la integración cuando el resultado es `failure` o `timed_out`. El estado `cancelled` producido por una ejecución más reciente es informativo y no representa por sí mismo un defecto. Para impedir que una alerta bloqueante sea ignorada, las reglas de rama deben requerir los checks de ambos repositorios antes de aprobar el merge.
+
+GitHub también presenta **annotations** o advertencias dentro del resumen. En la primera ejecución del backend se mostró una advertencia relacionada con la futura actualización del runtime de Node.js utilizado internamente por algunas acciones oficiales. Esta advertencia no produjo un fallo: el job, las 65 pruebas y el empaquetado terminaron correctamente. Sin embargo, queda registrada para que el equipo pueda actualizar las versiones de las acciones cuando sea necesario.
+
+No se generó intencionalmente una ejecución fallida, ya que introducir un error artificial en las ramas de despliegue podría afectar el proyecto. El funcionamiento del mecanismo de alertas se evidencia mediante los estados de cada step, la sección de annotations y los logs disponibles para diagnóstico.
+
+Sección "Annotations" del resumen de Backend CI, manteniendo visible que el resultado general del workflow fue Success:
+
+<p align="center">
+  <img src="assets/AnnotationsBackend.png" alt="">
+</p>
+
+Render complementa estas alertas mediante sus logs de inicio. Si el servicio no logra arrancar o el health check no responde correctamente, el equipo puede consultar estos eventos para encontrar la etapa en la que se produjo el problema.
+
+Pantalla de Render mostrando el proceso de activación e inicio de la instancia del backend:
+
+<p align="center">
+  <img src="assets/ActivarRender.png" alt="">
+</p>
+
+### 7.4.4. Notification Pipeline Components
+
+GitHub concentra las notificaciones del pipeline en la pestaña **Actions**, en la sección **Checks** de cada pull request y en el estado asociado al commit. Según las preferencias de suscripción de cada integrante, estos eventos también pueden recibirse mediante notificaciones web o correo electrónico. No se configuró un canal externo como Slack o Microsoft Teams; por ello, GitHub constituye el canal oficial para los eventos de integración continua.
+
+| Evento | Destinatario principal | Canal | Contenido mínimo |
+|---|---|---|---|
+| Workflow exitoso | Autor del cambio y revisores | Check del commit o pull request | Repositorio, workflow, rama, commit y estado aprobado. |
+| Workflow fallido | Autor del cambio y equipo responsable del repositorio | Actions, check del pull request y notificación según suscripción | Step fallido, enlace a logs, commit y hora de ejecución. |
+| Workflow cancelado | Autor del cambio | Historial de Actions | Ejecución reemplazada y referencia de la rama. |
+| Artifact disponible | Desarrolladores y responsables del despliegue | Resumen de la ejecución | Nombre del artifact, ejecución de origen y periodo de retención. |
+| Health check fallido | Responsables del backend | Dashboard y eventos de Render | Servicio afectado, estado y logs relacionados. |
+
+El flujo de atención establecido es: recibir o consultar la notificación, abrir la ejecución, localizar el primer step fallido, revisar el log o artifact, reproducir el problema localmente, aplicar la corrección y publicar un nuevo commit. La nueva ejecución permite verificar la recuperación y mantiene la trazabilidad entre alerta, corrección y resultado final.
+
+El canal de notificación implementado actualmente es GitHub. Los integrantes pueden consultar el resultado desde la pestaña **Actions** y desde el estado asociado al commit. Las notificaciones web o por correo dependen de las preferencias personales configuradas por cada integrante. No se configuró un canal externo como Slack o Microsoft Teams.
+
+El flujo completo de notificación y atención queda definido de la siguiente manera:
+
+```text
+Push al repositorio -> GitHub Actions ejecuta el workflow
+-> GitHub muestra Success o Failure
+-> El equipo consulta la notificación y los logs
+-> Se corrige el problema, si existe
+-> Un nuevo push vuelve a ejecutar la validación
+```
 
 # Conclusiones y recomendaciones
 
