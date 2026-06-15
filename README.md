@@ -7236,128 +7236,156 @@ Se han ejecutado pruebas de sistemas centrales utilizando PageSpeed Insights par
 
 ## 6.2. Static testing & Verification
 
-Las pruebas estáticas y actividades de verificación de FoodFlow buscan identificar defectos sin depender de la ejecución completa de la aplicación. Para ello se inspeccionan el código fuente, los tipos, las reglas de estilo, las dependencias, la configuración de seguridad y los cambios registrados en GitHub. Este proceso complementa las pruebas dinámicas de la sección 6.1 y permite encontrar problemas de mantenibilidad y seguridad antes del despliegue.
+La verificación estática permite revisar la estructura y configuración de FoodFlow sin tener que recorrer todos los flujos de la aplicación. Su finalidad es encontrar con anticipación errores de sintaxis o tipado, diferencias en el estilo del código, dependencias vulnerables, configuraciones riesgosas y aspectos que podrían dificultar el mantenimiento.
 
-La verificación descrita en esta sección considera los repositorios `FoodFlow-Frontend` y `FoodFlow-Backend`, así como las herramientas, configuraciones y prácticas utilizadas en ambos proyectos.
-
-| Área verificada | Frontend | Backend | Resultado actual |
-|---|---|---|---|
-| Reglas de estilo | ESLint 9, TypeScript ESLint y reglas de React Hooks | Convenciones Java 17 y organización por capas | Frontend: 0 errores y 6 advertencias. Backend: revisión estructural sin Checkstyle configurado. |
-| Tipado y compilación | TypeScript en modo `strict` mediante `tsc -b` | Maven Compiler Plugin con Java 17 | Ambos proyectos compilan correctamente. |
-| Calidad | ESLint, compilador TypeScript, pruebas y revisión de pull requests | Compilador Java, pruebas y revisión de pull requests | Los pipelines generan evidencia reproducible; no existe todavía una herramienta de métricas de complejidad o duplicación. |
-| Seguridad | `npm audit`, revisión del manejo del token y variables de entorno | Spring Security, JWT, BCrypt, Bean Validation y revisión de configuración | Se identificaron controles implementados y riesgos pendientes descritos en 6.2.1.2. |
-| Revisión de cambios | Pull requests, comentarios en línea y GitHub Actions | Pull requests, comentarios en línea y GitHub Actions | Existen revisiones automáticas de GitHub Copilot; falta formalizar la aprobación humana obligatoria. |
+Para ello se combinan herramientas automáticas de ambos repositorios con la inspección del equipo y el seguimiento de cambios en GitHub. Estas comprobaciones complementan las pruebas dinámicas de la sección 6.1 y permiten corregir observaciones antes de que alcancen etapas posteriores.
 
 ### 6.2.1. Static Code Analysis
 
-El análisis estático se aplicó sobre los archivos del proyecto y sus configuraciones sin iniciar los servidores web ni ejecutar flujos funcionales de usuario. En el frontend se utilizaron las herramientas declaradas en el propio repositorio. En el backend se verificó la compilación estática de Java y se inspeccionaron las convenciones, validaciones y controles de seguridad presentes en el código.
+El análisis comprende los repositorios `FoodFlow-Frontend` y `FoodFlow-Backend`. Los archivos TypeScript y TSX se comprueban mediante ESLint y el compilador de TypeScript. Para Java se utiliza Maven Compiler Plugin y se revisan también las validaciones declarativas, la distribución de responsabilidades y las reglas de seguridad.
 
-| Herramienta o mecanismo | Alcance | Configuración observada | Resultado |
-|---|---|---|---|
-| ESLint | Archivos TypeScript y TSX del frontend | [`eslint.config.js`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/blob/main/eslint.config.js) extiende las reglas recomendadas de JavaScript y TypeScript con información de tipos. También incorpora React Hooks y React Refresh. | `npm run lint` terminó con 0 errores y 6 advertencias. |
-| TypeScript Compiler | Tipado estático del frontend | [`tsconfig.app.json`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/blob/main/tsconfig.app.json) activa `strict`, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch` y `noUncheckedSideEffectImports`. | `npm run build`, que inicia con `tsc -b`, terminó correctamente. |
-| Maven Compiler Plugin | Código Java del backend | El [`pom.xml`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/pom.xml) configura Java 17, Maven Compiler Plugin 3.11.0 y el procesamiento de anotaciones de Lombok. | `mvn --batch-mode -DskipTests compile` terminó con `BUILD SUCCESS`. |
-| Bean Validation | Datos recibidos por la API | Uso de `@Valid`, `@NotBlank`, `@Email`, `@Size` y otras restricciones en requests y controladores. | Las restricciones permiten detectar entradas inválidas antes de ejecutar la lógica de aplicación. |
-| GitHub Pull Request Review | Diferencias de código antes de integrar ramas | Comentarios automáticos por archivo en pull requests del frontend y backend. | Se encontraron observaciones de configuración, seguridad, concurrencia, mantenibilidad y rendimiento. |
+**1. Revisión automatizada de la aplicación web**
 
-Las seis advertencias de ESLint no impiden la compilación, pero representan deuda técnica. Cuatro corresponden a dependencias faltantes en arreglos de `useEffect` y dos a archivos que exportan componentes junto con otros elementos incompatibles con la regla de Fast Refresh. Por ello, el resultado se considera **aprobado con observaciones**, no completamente libre de hallazgos.
+El archivo [`eslint.config.js`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/blob/main/eslint.config.js) extiende las reglas recomendadas de JavaScript y TypeScript con información de tipos. También incorpora reglas de React Hooks y React Refresh. El comando `npm run lint` finalizó sin errores bloqueantes y reportó seis advertencias: cuatro relacionadas con dependencias de `useEffect` y dos con la organización de exportaciones para Fast Refresh.
+
+El archivo [`tsconfig.app.json`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/blob/main/tsconfig.app.json) activa el modo `strict` y reglas como `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch` y `noUncheckedSideEffectImports`. Además, `npm run build` inicia con `tsc -b`, por lo que el bundle solo puede generarse cuando el código supera la validación de tipos configurada.
+
+**2. Comprobación estructural del servicio backend**
+
+El [`pom.xml`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/pom.xml) configura Java 17 y Maven Compiler Plugin 3.11.0. La compilación permite detectar referencias inexistentes, incompatibilidades de tipos, errores sintácticos y problemas de procesamiento de anotaciones antes de empaquetar la aplicación.
+
+La verificación también considera el uso de Bean Validation. Los objetos de entrada emplean anotaciones como `@NotBlank`, `@Email` y `@Size`, mientras los controladores utilizan `@Valid` para aplicar estas restricciones. Esto establece contratos claros para los datos recibidos por la API y evita que entradas incorrectas lleguen directamente a la lógica de negocio.
+
+**3. Estado de la verificación**
+
+El frontend y el backend pueden compilarse correctamente con su configuración actual. Las advertencias encontradas no impiden el build, pero representan deuda técnica y deben revisarse para evitar errores futuros relacionados con efectos de React, actualización en desarrollo y tamaño del bundle.
 
 #### 6.2.1.1. Coding standard & Code conventions.
 
-FoodFlow utiliza convenciones distintas para cada tecnología, pero mantiene como principios comunes los nombres descriptivos en inglés, la separación de responsabilidades, la validación temprana y una estructura predecible de archivos. No se encontró Prettier en el frontend ni Checkstyle en el backend; por lo tanto, ESLint, TypeScript, el compilador Java y la revisión de código constituyen actualmente los principales mecanismos de verificación de convenciones.
+FoodFlow aplica criterios comunes de escritura y organización para que el código resulte comprensible y pueda evolucionar sin introducir estilos incompatibles. Estas pautas se reflejan en los nombres, la separación de responsabilidades, la estructura de módulos y las reglas configuradas para cada tecnología.
 
-**Convenciones del frontend**
+**1. Criterios generales de escritura del código**
 
-| Elemento | Convención aplicada | Ejemplo del proyecto |
-|---|---|---|
-| Componentes, clases y tipos | `PascalCase` | `SettingsPage`, `ErrorBoundary`, `LoginResponse`. |
-| Variables, funciones y métodos | `camelCase` | `normalizeEmail`, `loadDashboard`, `updatePassword`. |
-| Hooks personalizados | Prefijo `use` | `useFinance`, `useApi`. |
-| Archivos | `.tsx` para componentes con JSX y `.ts` para lógica, servicios, tipos y utilidades | `SettingsPage.tsx`, `authService.ts`. |
-| Importaciones | Alias `@/*` para representar `src/*` | `import type { User } from '@/types'`. |
-| Tipado | Evitar variables sin tipo y restringir `any` | TypeScript `strict` y regla `no-explicit-any` como advertencia. |
-| React | Cumplir las reglas de Hooks y mantener componentes compatibles con Fast Refresh | Plugins `react-hooks` y `react-refresh`. |
-| Servicios HTTP | Centralizar llamadas y respuestas tipadas | `api.ts` y servicios como `authService.ts`. |
+- **Identificadores descriptivos:** Las clases, funciones y variables expresan la tarea que realizan. Algunos ejemplos son `IdentityApplicationService`, `normalizeEmail`, `updatePassword` y `loadDashboard`.
+- **Responsabilidades delimitadas:** Los controladores reciben solicitudes, los servicios coordinan operaciones, los repositorios abstraen la persistencia y los componentes del frontend atienden funciones visuales concretas.
+- **Tratamiento uniforme de errores:** El backend emplea excepciones del dominio y `GlobalExceptionHandler`; el frontend concentra las solicitudes y respuestas en `api.ts`.
+- **Comentarios con propósito:** Se favorece el código autoexplicativo y se añaden comentarios cuando una decisión, regla o escenario necesita contexto adicional.
+- **Control de datos de entrada:** La información se comprueba en los límites del sistema antes de aplicar reglas del negocio o acceder a la persistencia.
 
-**Convenciones del backend**
+**2. Organización arquitectónica por áreas del negocio**
 
-| Elemento | Convención aplicada | Ejemplo del proyecto |
-|---|---|---|
-| Clases, interfaces y enumeraciones | `PascalCase` | `SecurityConfig`, `UserRepository`, `SubscriptionPlan`. |
-| Métodos, parámetros y atributos | `camelCase` | `generateToken`, `encodedPassword`, `findByUserId`. |
-| Paquetes | Minúsculas y agrupados por bounded context | `identity`, `billing`, `catalog`, `inventory`, `sales` y `finance`. |
-| Capas | `domain`, `application`, `infrastructure` y `presentation` | Cada contexto separa reglas de negocio, casos de uso, persistencia y API. |
-| Sufijos | El nombre comunica la responsabilidad | `Controller`, `ApplicationService`, `Repository`, `Request`, `Response` y `JpaEntity`. |
-| Inyección de dependencias | Preferencia por constructor | `@RequiredArgsConstructor` o constructores explícitos. |
-| Validación | Restricciones declarativas en DTOs y `@Valid` en controladores | `RegisterRequest`, `DishRequest` y `ProductRequest`. |
-| Persistencia | Repositorios Spring Data y parámetros nombrados en JPQL | Consultas con `:userId`, `:startDate` y otros parámetros. |
+El backend se divide de acuerdo con las áreas funcionales `identity`, `billing`, `catalog`, `inventory`, `sales` y `finance`. En cada una, los elementos se agrupan según la responsabilidad que cumplen dentro de la arquitectura:
 
-La arquitectura del backend aplica principios de Domain-Driven Design al organizar el modelo en contextos delimitados. Esta separación evita concentrar toda la lógica en los controladores y facilita que entidades, servicios, repositorios y adaptadores puedan evolucionar de forma independiente.
+- **Núcleo del negocio (`domain`):** Reúne entidades, objetos de valor, enumeraciones y contratos asociados con las reglas principales.
+- **Coordinación de operaciones (`application`):** Contiene servicios y modelos de entrada o salida que organizan los casos de uso.
+- **Soporte técnico (`infrastructure`):** Implementa persistencia, seguridad, mapeadores y adaptadores tecnológicos.
+- **Exposición de servicios (`presentation`):** Incluye los controladores REST y los elementos utilizados para comunicar la API.
+
+Esta separación corresponde a una arquitectura orientada al dominio y evita acumular las reglas en controladores o clases genéricas. Nombres como `Subscription`, `Dish`, `Product`, `Order` y `FinancialReport` conservan, además, una relación directa con los conceptos utilizados en la gestión del restaurante.
+
+**3. Reglas de escritura para React y TypeScript**
+
+- Los componentes, clases y tipos utilizan `PascalCase`, por ejemplo `SettingsPage`, `ErrorBoundary` y `LoginResponse`.
+- Las variables, funciones y métodos utilizan `camelCase`, por ejemplo `normalizeEmail`, `loadDashboard` y `updatePassword`.
+- Los hooks personalizados comienzan con el prefijo `use`, como `useFinance` y `useApi`.
+- Los archivos `.tsx` se utilizan para componentes con JSX y los archivos `.ts` para servicios, tipos, estado y utilidades.
+- Las importaciones internas pueden utilizar el alias `@/*`, configurado para representar el directorio `src`.
+- Se emplea TypeScript en modo estricto y se restringe el uso de `any` para conservar contratos de tipos claros.
+- Las solicitudes HTTP se centralizan mediante Axios y servicios específicos, evitando duplicar la configuración de comunicación con el backend.
+
+**4. Reglas de escritura para Java y Spring Boot**
+
+- Las clases, interfaces y enumeraciones utilizan `PascalCase`; los métodos, parámetros y atributos utilizan `camelCase`.
+- Los paquetes se escriben en minúsculas y reflejan el contexto y la capa a la que pertenecen.
+- Se utilizan sufijos como `Controller`, `ApplicationService`, `Repository`, `Request`, `Response` y `JpaEntity` para comunicar la responsabilidad de cada clase.
+- Las dependencias se proporcionan mediante constructor, usando `@RequiredArgsConstructor` o constructores explícitos.
+- Los repositorios Spring Data emplean consultas parametrizadas y parámetros nombrados como `:userId` y `:startDate`.
+- Los valores monetarios y cálculos financieros se modelan con tipos adecuados para evitar pérdida de precisión.
+
+**5. Comprobación de las reglas durante la integración**
+
+FoodFlow no cuenta actualmente con Prettier, Checkstyle ni hooks de pre-commit configurados. El cumplimiento se verifica mediante ESLint y TypeScript en el frontend, el compilador de Java en el backend, las revisiones de pull requests y los workflows de GitHub Actions. En el frontend, el pipeline ejecuta lint, pruebas y build; en el backend ejecuta la verificación de Maven y genera el archivo JAR.
 
 #### 6.2.1.2. Code Quality & Code Security.
 
-La calidad fue evaluada mediante reglas estáticas, compilación, pruebas y revisiones de cambios. Estas verificaciones permiten encontrar código no utilizado, errores de tipos, uso incorrecto de Hooks, fallos de compilación y problemas señalados durante los pull requests. Sin embargo, el proyecto todavía no integra SonarQube, PMD, Checkstyle o una herramienta equivalente que calcule automáticamente complejidad ciclomática, duplicación y deuda técnica; su incorporación queda registrada como mejora del proceso.
+La compilación correcta no garantiza por sí sola que una solución sea mantenible o esté libre de riesgos. Por esta razón, FoodFlow evalúa conjuntamente el estilo, el tipado, las dependencias, las pruebas automatizadas y las configuraciones relacionadas con la seguridad.
 
-**Controles de calidad observados**
+**1. Mecanismos utilizados para la evaluación**
 
-| Control | Evidencia | Interpretación |
-|---|---|---|
-| ESLint con análisis tipado | `recommendedTypeChecked` utiliza los archivos `tsconfig` del proyecto. | Detecta problemas que requieren conocer los tipos de TypeScript. |
-| TypeScript estricto | La compilación rechaza incompatibilidades, variables sin uso y casos inseguros configurados. | Reduce errores antes de generar el bundle. |
-| Compilación Java 17 | Maven compila las clases y procesa anotaciones. | Detecta errores sintácticos y de tipos del backend. |
-| Pruebas automatizadas | 34 pruebas del frontend y 65 pruebas del backend integradas en GitHub Actions. | Complementan el análisis estático con validación dinámica. |
-| Pull request review | Comentarios asociados a líneas y archivos concretos. | Permite detectar problemas de diseño, configuración y mantenibilidad. |
+- **ESLint y TypeScript ESLint:** Detectan variables sin uso, incumplimientos de las reglas de Hooks, uso inseguro de tipos y otros problemas del frontend.
+- **TypeScript Compiler:** Verifica contratos de tipos antes de producir el bundle de Vite.
+- **Maven Compiler Plugin:** Comprueba la validez sintáctica y semántica del código Java 17.
+- **npm audit:** Contrasta las dependencias instaladas con avisos conocidos de seguridad.
+- **GitHub Actions:** Ejecuta de forma reproducible lint, pruebas, compilación y empaquetado en un entorno limpio.
+- **GitHub Pull Request Review:** Permite asociar observaciones de calidad y seguridad con archivos y líneas específicas.
 
-El build del frontend terminó correctamente, aunque Vite informó que el bundle principal supera los 500 kB después de la minificación y que `authService.ts` se importa de forma estática y dinámica. Estas advertencias no rompen la aplicación, pero sugieren revisar la división del bundle y las importaciones para mejorar mantenibilidad y rendimiento.
+FoodFlow no integra actualmente SonarQube, CodeQL, PMD o Checkstyle. Por ello, no se afirma que existan métricas automáticas de complejidad ciclomática, duplicación o deuda técnica, ni una puerta SAST de seguridad. Estas herramientas representan oportunidades de mejora para futuras iteraciones.
 
-**Controles de seguridad implementados**
+**2. Estado de la calidad del código**
 
-| Control | Implementación en FoodFlow | Riesgo mitigado |
-|---|---|---|
-| Autenticación JWT | [`SecurityConfig.java`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/java/com/foodflow/identity/infrastructure/SecurityConfig.java) exige autenticación y el proveedor JWT valida tokens firmados y con fecha de expiración. | Acceso no autenticado y manipulación básica del token. |
-| Contraseñas protegidas | [`PasswordEncoderImpl.java`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/java/com/foodflow/identity/infrastructure/PasswordEncoderImpl.java) utiliza `BCryptPasswordEncoder` para generar hashes y verificar credenciales sin guardar contraseñas en texto plano. | Exposición directa de contraseñas almacenadas. |
-| API sin sesión de servidor | `SessionCreationPolicy.STATELESS`. | Dependencia de sesiones persistentes y parte de los riesgos asociados a ellas. |
-| Autorización de endpoints | Solo autenticación, planes públicos, health check y documentación se permiten sin JWT; los demás endpoints requieren autenticación. | Acceso anónimo a operaciones privadas. |
-| Validación de entrada | Bean Validation y objetos de valor validan email, longitud y campos obligatorios. | Datos mal formados y parte de los ataques basados en entradas inválidas. |
-| Consultas parametrizadas | Los repositorios emplean Spring Data JPA y parámetros nombrados en JPQL. | Reduce el riesgo de inyección SQL por concatenación manual. |
-| Secretos de producción | [`application-prod.yml`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/resources/application-prod.yml) obtiene base de datos y `JWT_SECRET` mediante variables de entorno. | Publicación de credenciales reales en el repositorio. |
-| Renderizado React | No se encontró uso de `dangerouslySetInnerHTML` en `src`. | Reduce la introducción directa de HTML no confiable y parte del riesgo XSS. |
+ESLint utiliza análisis tipado mediante `recommendedTypeChecked`, mientras TypeScript se ejecuta en modo estricto. En el backend, Maven valida el código Java y las dependencias requeridas para su compilación. Este proceso se complementa con 34 pruebas del frontend y 65 pruebas del backend ejecutadas por GitHub Actions.
 
-Como verificación de dependencias se ejecutó `npm audit --omit=dev`. El resultado reportó **4 vulnerabilidades en dependencias de producción: 3 de severidad alta y 1 moderada**, asociadas a Axios, `follow-redirects` y React Router. El comando indicó que existen correcciones disponibles mediante actualización, pero estas no se aplicaron como parte de la documentación para evitar cambios no evaluados en el producto desplegado.
+El análisis permitió registrar seis advertencias de ESLint. Además, Vite informó que el bundle principal supera los 500 kB después de la minificación y que `authService.ts` se importa de forma estática y dinámica. Estos hallazgos no impiden la construcción actual, pero señalan oportunidades para corregir dependencias de efectos, separar exportaciones y mejorar la división del bundle.
 
-**Hallazgos y acciones recomendadas**
+**3. Protecciones y riesgos identificados**
 
-| Hallazgo | Estado | Acción recomendada |
-|---|---|---|
-| 4 vulnerabilidades reportadas por `npm audit` | Pendiente | Actualizar las dependencias en una rama separada, ejecutar las 34 pruebas, construir el frontend y validar el despliegue antes de integrar. |
-| JWT almacenado en `localStorage` | Riesgo residual | Evaluar cookies `HttpOnly`, `Secure` y `SameSite` para reducir el impacto de un eventual XSS. |
-| CORS permite el patrón `https://*.vercel.app` con credenciales | Riesgo residual señalado también en review | Restringir los orígenes a los dominios concretos utilizados por FoodFlow. |
-| Configuración local contiene valores predeterminados para desarrollo | Controlado por perfil, pero requiere cuidado | Garantizar que producción siempre utilice el perfil `prod` y variables de entorno; evitar reutilizar secretos de desarrollo. |
-| No existe SAST ni análisis automático de complejidad/duplicación en backend | Mejora pendiente | Incorporar CodeQL, SonarQube, PMD, Checkstyle u OWASP Dependency-Check en el pipeline. |
-| 6 advertencias de ESLint | Mejora pendiente | Corregir dependencias de `useEffect` y separar exportaciones para Fast Refresh. |
+- **Autenticación y autorización:** [`SecurityConfig.java`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/java/com/foodflow/identity/infrastructure/SecurityConfig.java) configura una API stateless. Los endpoints privados requieren un JWT válido y solo se permite acceso público a autenticación, planes, health check y documentación.
+- **Protección de contraseñas:** [`PasswordEncoderImpl.java`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/java/com/foodflow/identity/infrastructure/PasswordEncoderImpl.java) utiliza BCrypt para almacenar hashes y comparar credenciales sin guardar contraseñas en texto plano.
+- **Validación de entradas:** Bean Validation y los objetos de valor comprueban campos obligatorios, formato de correo y longitudes antes de procesar solicitudes.
+- **Prevención de inyección SQL:** La persistencia se realiza mediante Spring Data JPA y consultas con parámetros nombrados, evitando concatenar directamente datos del usuario en sentencias SQL.
+- **Manejo de secretos:** [`application-prod.yml`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/blob/deploy/src/main/resources/application-prod.yml) obtiene las credenciales de base de datos y `JWT_SECRET` desde variables de entorno.
+- **Prevención básica de XSS:** No se encontró el uso de `dangerouslySetInnerHTML` dentro del código fuente del frontend, por lo que React mantiene el escape predeterminado del contenido renderizado.
+
+La auditoría `npm audit --omit=dev` reportó cuatro vulnerabilidades en dependencias de producción: tres de severidad alta y una moderada, asociadas a Axios, `follow-redirects` y React Router. Las actualizaciones deben realizarse en una rama independiente y validarse mediante lint, las 34 pruebas del frontend, build y revisión del despliegue antes de integrarlas.
+
+También se mantienen riesgos residuales: el JWT se almacena en `localStorage`, CORS permite un patrón amplio de dominios de Vercel y el backend no cuenta todavía con un escaneo SAST automatizado. Se recomienda evaluar cookies `HttpOnly`, restringir los orígenes permitidos e incorporar CodeQL, SonarQube u OWASP Dependency-Check en una iteración posterior.
+
+**4. Validación dentro del flujo de integración**
+
+La revisión comienza en el entorno local mediante lint y compilación. Después, cada cambio publicado activa GitHub Actions. El workflow del frontend ejecuta instalación reproducible, ESLint, Vitest y build de Vite; el workflow del backend ejecuta `mvn clean verify`, genera los reportes y empaqueta el JAR. Si un comando devuelve un error, el job cambia a estado fallido y los logs permiten localizar la etapa responsable.
+
+Actualmente los workflows proporcionan evidencia automática, pero no existe una regla confirmada que exija aprobación humana o un Quality Gate SAST antes del merge. Como mejora, las ramas `main` y `deploy` deberían requerir checks exitosos, una aprobación de otro integrante y la resolución de observaciones bloqueantes.
 
 ### 6.2.2. Reviews
 
-La revisión de código se realiza mediante pull requests de GitHub, donde es posible inspeccionar los archivos modificados, agregar comentarios en líneas específicas y conservar la trazabilidad hasta el merge. Los repositorios contienen evidencia de revisiones automáticas realizadas por GitHub Copilot Pull Request Reviewer. Estas revisiones son útiles como apoyo técnico, pero no equivalen a una aprobación humana formal.
+La revisión de cambios ayuda a registrar observaciones y conservar la trazabilidad de las decisiones técnicas tomadas durante el desarrollo. FoodFlow utiliza los pull requests de GitHub y el análisis automático de GitHub Copilot como recursos de apoyo, sin considerar que estos sustituyan el criterio o la aprobación de los integrantes del equipo.
 
-| Repositorio | Pull request | Alcance | Resultado de la revisión |
-|---|---|---|---|
-| Frontend | [PR #9: `chore(release): merge main into deploy`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/pull/9) | 13 archivos modificados, 11 commits | Merge completado. Copilot revisó 13 de 13 archivos y generó 6 comentarios. |
-| Frontend | [PR #10: `chore(release): merge main into develop`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/pull/10) | 9 archivos modificados, 22 commits | Merge completado. Copilot revisó 9 de 9 archivos y generó 4 comentarios. |
-| Backend | [PR #1: `feat: Update application configuration and add deployment files`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/pull/1) | 152 archivos modificados, 1 commit | Merge completado. Copilot revisó 6 de 152 archivos y generó 4 comentarios. |
-| Backend | [PR #2: `chore(deploy): merge pull request #2 from ClaudeFlow-Org/deploy`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/pull/2) | 263 archivos modificados, 7 commits | Merge completado. Copilot revisó 69 de 263 archivos y generó 7 comentarios. |
+**1. Medio empleado para revisar los cambios**
 
-Entre los hallazgos registrados en las revisiones del frontend se encontraron una URL de backend de ejemplo en la configuración de Vercel, manejo mejorable del estado de autenticación, un temporizador sin limpieza, uso de colores fuera del tema, mensajes internos visibles en el `ErrorBoundary`, solicitudes duplicadas y textos sin internacionalización. En el backend se observaron archivos generados dentro de `target`, una inconsistencia inicial del perfil de Render, una política CORS demasiado amplia, endpoints de health probes, generación de secuencias sin protección frente a concurrencia, transiciones de estado dependientes del orden de un `enum`, consultas repetidas y oportunidades de mejorar nombres de adaptadores.
+GitHub permite inspeccionar los archivos modificados, revisar el diff, comentar líneas concretas y relacionar cada observación con el commit correspondiente. El proceso se complementa con GitHub Actions, que informa si el frontend y el backend superan las verificaciones automáticas.
 
-La evidencia demuestra que el mecanismo de review sí detectó problemas relacionados con funcionamiento, seguridad, mantenibilidad, rendimiento y consistencia. No obstante, varios pull requests fueron integrados sin revisores humanos solicitados y las revisiones aparecen con estado `COMMENTED`, no `APPROVED`. Por ello, se propone el siguiente procedimiento para las siguientes entregas:
+Los principales criterios utilizados en las revisiones son:
 
-1. Crear una rama por cambio y abrir un pull request hacia la rama de integración o despliegue correspondiente.
-2. Describir el propósito, alcance, pruebas realizadas y riesgos del cambio.
-3. Esperar que GitHub Actions complete lint, pruebas y build.
-4. Solicitar al menos una revisión humana de otro integrante del equipo.
-5. Clasificar y responder cada observación como corregida, aceptada como deuda técnica o no aplicable con una justificación.
-6. Integrar únicamente cuando los checks estén aprobados y no existan conversaciones bloqueantes pendientes.
-7. Proteger `main` y `deploy` para requerir checks exitosos y al menos una aprobación antes del merge.
+- Correctitud funcional y consistencia con las historias de usuario.
+- Cumplimiento de las convenciones del frontend y backend.
+- Separación adecuada entre dominio, aplicación, infraestructura y presentación.
+- Manejo de errores y validación de entradas.
+- Protección de secretos, autenticación, autorización y configuración CORS.
+- Mantenibilidad, rendimiento, duplicación y claridad de nombres.
+- Ausencia de archivos generados o configuraciones de ejemplo dentro del código de producción.
+
+**2. Evidencia disponible en los repositorios**
+
+| Repositorio | Pull request | Resultado |
+|---|---|---|
+| Frontend | [PR #9: `chore(release): merge main into deploy`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/pull/9) | Copilot revisó 13 de 13 archivos y generó 6 comentarios. |
+| Frontend | [PR #10: `chore(release): merge main into develop`](https://github.com/ClaudeFlow-Org/FoodFlow-Frontend/pull/10) | Copilot revisó 9 de 9 archivos y generó 4 comentarios. |
+| Backend | [PR #1: `feat: Update application configuration and add deployment files`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/pull/1) | Copilot revisó 6 de 152 archivos y generó 4 comentarios. |
+| Backend | [PR #2: `chore(deploy): merge pull request #2 from ClaudeFlow-Org/deploy`](https://github.com/ClaudeFlow-Org/FoodFlow-Backend/pull/2) | Copilot revisó 69 de 263 archivos y generó 7 comentarios. |
+
+**3. Observaciones encontradas durante las revisiones**
+
+En el frontend se señalaron una URL de backend de ejemplo en la configuración de Vercel, manejo mejorable del estado de autenticación, un temporizador sin limpieza, colores fuera del tema, exposición de mensajes internos en el `ErrorBoundary`, solicitudes duplicadas y textos sin internacionalización.
+
+En el backend se observaron archivos generados dentro de `target`, una inconsistencia inicial del perfil de Render, una política CORS demasiado amplia, aspectos de los health probes, generación de secuencias sin protección frente a concurrencia, transiciones dependientes del orden de un `enum`, consultas repetidas y nombres de adaptadores que podían expresar mejor su responsabilidad.
+
+Estos hallazgos demuestran que el review puede detectar problemas de funcionamiento, seguridad, mantenibilidad, rendimiento y consistencia que no siempre aparecen durante la compilación.
+
+**4. Criterios propuestos para futuras revisiones**
+
+Para fortalecer el proceso, cada cambio debería desarrollarse en una rama propia y presentarse mediante un pull request con descripción, alcance, pruebas realizadas y riesgos conocidos. Antes del merge se deberá esperar la finalización de GitHub Actions, solicitar al menos una revisión humana de otro integrante y responder cada observación como corregida, aceptada como deuda técnica o descartada con una justificación.
+
+Las ramas `main` del frontend y `deploy` del backend deberían protegerse para requerir checks exitosos, al menos una aprobación y la resolución de conversaciones bloqueantes. Las revisiones automáticas pueden complementar este proceso, pero la decisión final debe mantenerse bajo responsabilidad del equipo.
 
 # Capítulo VII: DevOps Practices
 
@@ -7742,6 +7770,375 @@ Push al repositorio -> GitHub Actions ejecuta el workflow
 -> Se corrige el problema, si existe
 -> Un nuevo push vuelve a ejecutar la validación
 ```
+
+# Capítulo VIII: Experiment-Driven Development
+
+## 8.1. Experiment Planning
+
+La planificación de experimentos de FoodFlow transforma los supuestos definidos durante el proceso Lean UX en preguntas que puedan responderse mediante evidencia. El propósito no es demostrar que las ideas iniciales son correctas, sino reducir la incertidumbre sobre la utilidad, facilidad de uso y viabilidad comercial del producto antes de invertir en nuevas funcionalidades.
+
+Esta sección utiliza la documentación existente, las historias de usuario, el Product Backlog y las capacidades observadas en el frontend y backend. Las tarjetas propuestas representan experimentos **planificados**. Sus resultados, aprendizajes y decisiones deberán registrarse después de trabajar con participantes pertenecientes al segmento objetivo.
+
+### 8.1.1. As-Is Summary.
+
+FoodFlow se encuentra en una etapa de producto mínimo viable funcional. La solución está orientada a dueños de restaurantes pequeños y medianos que necesitan centralizar información financiera y operativa que actualmente pueden gestionar mediante cuadernos, hojas de cálculo, reportes aislados o sistemas POS con capacidades limitadas.
+
+La plataforma dispone de una aplicación web desarrollada con React, TypeScript y Vite; un backend RESTful implementado con Java 17 y Spring Boot; una base de datos PostgreSQL alojada en Supabase; y servicios desplegados mediante Vercel y Render. Asimismo, GitHub Actions valida automáticamente el frontend y el backend mediante lint, pruebas, compilación y generación de artefactos.
+
+El producto implementado permite realizar las siguientes actividades:
+
+| Área | Capacidad disponible en el MVP |
+|---|---|
+| Autenticación | Registro, inicio de sesión, cierre de sesión y protección de rutas mediante JWT. |
+| Dashboard | Visualización de ingresos, gastos, utilidad, variaciones, órdenes recientes y platos destacados. |
+| Inventario | Registro y administración de productos, categorías, stock, costos, proveedores y umbrales de bajo stock. |
+| Menú | Creación, búsqueda, modificación y eliminación de platos. |
+| Órdenes | Registro de órdenes, cálculo de totales y gestión de estados. |
+| Finanzas | Reportes diarios, semanales y mensuales, comparación entre periodos, platos con mayores ingresos y gastos por categoría. |
+| Cuenta | Administración del perfil, cambio de contraseña, idioma y tema visual. |
+| Suscripciones | Visualización y selección de planes Free, Standard y Premium con precios y beneficios definidos. |
+
+Aunque las funcionalidades principales se encuentran implementadas y verificadas técnicamente, todavía deben validarse con evidencia del segmento objetivo. En particular, no se ha demostrado que los propietarios interpreten correctamente el dashboard, que las alertas de inventario influyan en sus decisiones de compra o que exista disposición real a pagar por los planes Standard y Premium.
+
+El módulo de suscripciones permite elegir y registrar un plan, pero no integra una pasarela de pago. Por ello, la selección de un plan dentro del MVP no debe interpretarse como una compra ni como evidencia de ingresos. Del mismo modo, el producto todavía no incorpora una herramienta de analítica de comportamiento que registre automáticamente eventos, frecuencia de uso, retención o conversión.
+
+El estado actual permite realizar pruebas de usabilidad moderadas, entrevistas, tareas guiadas y evaluaciones de intención de uso empleando la aplicación desplegada y datos controlados. Estas actividades proporcionarán una línea base para decidir qué aspectos deben mantenerse, corregirse o priorizarse en la siguiente iteración.
+
+### 8.1.2. Raw Material: Assumptions, Knowledge Gaps, Ideas, Claims.
+
+El material inicial de los experimentos proviene del Lean UX Problem Statement, las hipótesis del producto, las historias de usuario y las funciones presentes en el MVP. Los elementos se clasifican para distinguir aquello que el equipo cree, lo que todavía desconoce, las posibles respuestas de diseño y las afirmaciones que necesitan evidencia.
+
+**Assumptions**
+
+| ID | Tipo | Supuesto |
+|---|---|---|
+| A-01 | Usuario | Los dueños de restaurantes necesitan una visión centralizada de ingresos, gastos, utilidad, órdenes e inventario. |
+| A-02 | Usuario | Los propietarios sin conocimientos contables avanzados prefieren indicadores visuales y gráficos antes que tablas extensas o reportes dispersos. |
+| A-03 | Problema | El uso de registros manuales y herramientas desconectadas dificulta identificar pérdidas y tomar decisiones oportunas. |
+| A-04 | Solución | Un dashboard financiero permite comprender rápidamente la situación general del restaurante. |
+| A-05 | Solución | Los reportes diarios, semanales y mensuales ayudan a reconocer tendencias y comparar el desempeño del negocio. |
+| A-06 | Solución | Las alertas de bajo stock ayudan a priorizar compras y reducir órdenes no atendidas por falta de insumos. |
+| A-07 | Solución | Integrar menú, inventario, órdenes y finanzas reduce el tiempo empleado en revisar información. |
+| A-08 | Negocio | Los restaurantes pequeños y medianos percibirán suficiente valor para considerar un plan de pago. |
+| A-09 | Negocio | La especialización gastronómica diferencia a FoodFlow de una hoja de cálculo, un POS básico o un software contable genérico. |
+| A-10 | Adopción | Una interfaz sencilla y de baja curva de aprendizaje favorece el uso recurrente del producto. |
+
+**Knowledge Gaps**
+
+| ID | Conocimiento pendiente |
+|---|---|
+| KG-01 | ¿Qué indicador del dashboard resulta más útil para tomar una decisión real del restaurante? |
+| KG-02 | ¿Los usuarios comprenden la diferencia entre ingresos, gastos, utilidad y variación sin recibir explicación? |
+| KG-03 | ¿Con qué frecuencia necesitan consultar reportes diarios, semanales o mensuales? |
+| KG-04 | ¿Las alertas de bajo stock contienen información suficiente para decidir qué producto reponer? |
+| KG-05 | ¿Cuánto tiempo y cuántos errores requiere registrar una orden frente al método utilizado actualmente por el usuario? |
+| KG-06 | ¿Qué funciones son indispensables para que un propietario abandone hojas de cálculo o registros manuales? |
+| KG-07 | ¿Los beneficios de los planes Standard y Premium justifican sus precios para el segmento objetivo? |
+| KG-08 | ¿Qué objeción principal impide adoptar FoodFlow: precio, tiempo de configuración, confianza, complejidad o resistencia al cambio? |
+| KG-09 | ¿Qué información inicial necesita el usuario para que el dashboard y los reportes produzcan valor desde el primer uso? |
+| KG-10 | ¿La propuesta especializada en restaurantes se entiende claramente al observar la landing page y la aplicación? |
+
+**Ideas**
+
+| ID | Idea susceptible de experimentación |
+|---|---|
+| I-01 | Incorporar un recorrido inicial con datos de demostración para mostrar valor antes de que el usuario registre información propia. |
+| I-02 | Presentar recomendaciones simples junto a las métricas, por ejemplo, revisar una categoría de gastos que aumentó frente al periodo anterior. |
+| I-03 | Añadir una lista priorizada de productos con bajo stock y una acción para registrar su reposición. |
+| I-04 | Comparar distintas presentaciones del dashboard para identificar qué jerarquía de indicadores se comprende mejor. |
+| I-05 | Ofrecer un periodo de prueba de funciones Standard o Premium antes de solicitar una decisión de pago. |
+| I-06 | Explicar los planes mediante beneficios vinculados a problemas reales, como reducción de pérdidas, reportes avanzados y límites de operación. |
+| I-07 | Incorporar encuestas breves dentro de la aplicación después de completar tareas clave. |
+| I-08 | Registrar eventos de uso de dashboard, reportes, inventario, órdenes y suscripciones para medir adopción y recurrencia. |
+
+**Claims**
+
+Las siguientes afirmaciones expresan resultados esperados, pero permanecen **sin validar** hasta que se ejecuten los experimentos correspondientes:
+
+| ID | Afirmación por validar |
+|---|---|
+| C-01 | FoodFlow permite que un dueño comprenda la situación financiera general de su restaurante en pocos minutos. |
+| C-02 | La centralización de información reduce el tiempo dedicado a revisar ingresos, gastos, órdenes e inventario. |
+| C-03 | Las alertas de bajo stock facilitan decisiones de reposición y contribuyen a reducir pérdidas operativas. |
+| C-04 | Los reportes por periodo permiten detectar tendencias que no son evidentes mediante registros manuales. |
+| C-05 | La visualización de platos destacados ayuda a tomar decisiones sobre menú, precios y compras. |
+| C-06 | La experiencia especializada en restaurantes genera mayor valor percibido que una herramienta financiera genérica. |
+| C-07 | Una parte significativa de los usuarios de prueba considerará contratar un plan pagado después de experimentar las funciones principales. |
+
+### 8.1.3. Experiment-Ready Questions.
+
+Las preguntas listas para experimentación se redactaron de manera que puedan responderse mediante comportamientos observables, resultados de tareas o respuestas de participantes, evitando depender únicamente de opiniones generales.
+
+1. ¿Puede un dueño de restaurante identificar correctamente si su negocio obtuvo utilidad o pérdida y señalar una acción a partir del dashboard sin recibir asistencia?
+2. ¿Los reportes diarios, semanales y mensuales permiten reconocer cambios relevantes en ingresos, gastos y rendimiento del restaurante?
+3. ¿Las alertas y umbrales de bajo stock permiten identificar rápidamente qué productos necesitan reposición?
+4. ¿El flujo de creación de una orden permite registrar platos, cantidades y total con rapidez y sin errores críticos?
+5. ¿La información de platos más vendidos y con mayores ingresos resulta útil para tomar decisiones sobre el menú?
+6. ¿Los usuarios perciben que FoodFlow reduce el esfuerzo de reunir información que antes se encontraba distribuida en distintas herramientas?
+7. ¿Los beneficios mostrados en los planes Standard y Premium generan suficiente valor percibido para considerar una suscripción pagada?
+8. ¿La propuesta de valor comunica claramente que FoodFlow es una solución especializada en la gestión financiera y operativa de restaurantes?
+9. ¿Qué barrera representa el mayor riesgo para la adopción: precio, carga inicial de datos, complejidad, confianza o resistencia a cambiar el proceso actual?
+
+### 8.1.4. Question Backlog.
+
+Las preguntas se priorizan considerando el impacto que su respuesta tendría sobre la propuesta de valor, el nivel de incertidumbre actual y el esfuerzo requerido para obtener evidencia. La prioridad alta corresponde a supuestos capaces de invalidar el núcleo del producto o su modelo de negocio.
+
+| Orden | ID | Pregunta resumida | Impacto | Incertidumbre | Prioridad | Método inicial propuesto |
+|---:|---|---|---|---|---|---|
+| 1 | Q-01 | ¿El dashboard permite comprender la salud financiera y decidir una acción sin ayuda? | Alto | Alta | Alta | Prueba de usabilidad moderada con tareas y datos controlados. |
+| 2 | Q-07 | ¿Existe valor percibido y disposición a considerar los planes Standard o Premium? | Alto | Alta | Alta | Entrevista de valor y prueba de intención de selección de plan. |
+| 3 | Q-09 | ¿Cuál es la principal barrera para adoptar FoodFlow? | Alto | Alta | Alta | Entrevistas de problema con dueños de restaurantes. |
+| 4 | Q-03 | ¿Las alertas de bajo stock apoyan correctamente la reposición? | Alto | Media | Alta | Tarea guiada de identificación y priorización de compras. |
+| 5 | Q-02 | ¿Los reportes por periodo permiten reconocer tendencias relevantes? | Alto | Media | Alta | Prueba de interpretación de reportes y comparación de periodos. |
+| 6 | Q-06 | ¿La centralización reduce el esfuerzo percibido frente al proceso actual? | Alto | Media | Media | Comparación de tareas y entrevista posterior. |
+| 7 | Q-04 | ¿La creación de órdenes es rápida y evita errores críticos? | Medio | Media | Media | Prueba de usabilidad con medición de tiempo, éxito y errores. |
+| 8 | Q-08 | ¿Se comprende la especialización gastronómica de la propuesta? | Medio | Media | Media | Prueba de cinco segundos y entrevista sobre la landing page. |
+| 9 | Q-05 | ¿La información de platos destacados impulsa decisiones sobre el menú? | Medio | Alta | Media | Escenario de decisión con datos de ventas simulados. |
+
+El backlog es dinámico. Después de ejecutar cada experimento, la pregunta debe cerrarse, reformularse o volver a priorizarse según el aprendizaje obtenido. Las preguntas con evidencia insuficiente permanecen en el backlog y no deben presentarse como validadas.
+
+### 8.1.5. Experiment Cards.
+
+Las tarjetas siguientes definen los primeros experimentos sugeridos. Cada una relaciona una pregunta prioritaria con un procedimiento observable y un criterio previo de decisión. Los porcentajes representan condiciones de planificación, no resultados alcanzados.
+
+**Experiment Card EXP-01: Comprensión del dashboard financiero**
+
+| Campo | Definición |
+|---|---|
+| Question | ¿El dashboard permite comprender la salud financiera del restaurante y decidir una acción sin ayuda? |
+| Why | La comprensión del dashboard constituye el núcleo de la propuesta de valor de FoodFlow. Si los usuarios no interpretan sus indicadores, la centralización de datos no produce una mejora real. |
+| Participants | Dueños o administradores de restaurantes pequeños y medianos que revisen información financiera u operativa. |
+| What | Entregar una cuenta con datos controlados y solicitar que el participante identifique ingresos, gastos, utilidad, variación y una acción recomendada para el negocio. El moderador no debe explicar previamente los indicadores. |
+| Hypothesis | Al menos 4 de cada 5 participantes identificarán correctamente si existe utilidad o pérdida y propondrán una decisión coherente en un máximo de tres minutos, sin asistencia crítica. |
+| Evidence | Tasa de finalización, respuestas correctas, tiempo de tarea, solicitudes de ayuda y observaciones del participante. |
+| Decision | Mantener la estructura si se cumple el criterio; ajustar etiquetas, jerarquía o explicaciones si la comprensión es parcial; rediseñar si la mayoría interpreta incorrectamente los datos. |
+
+**Experiment Card EXP-02: Utilidad de las alertas de inventario**
+
+| Campo | Definición |
+|---|---|
+| Question | ¿Las alertas de bajo stock permiten identificar y priorizar los productos que deben reponerse? |
+| Why | El control de inventario es una de las funciones que debería reducir pérdidas y evitar la falta de insumos. |
+| Participants | Dueños, administradores o responsables de inventario de negocios gastronómicos. |
+| What | Presentar un inventario con diferentes niveles de stock y solicitar que el participante identifique los productos críticos, explique el orden de reposición y actualice un producto. |
+| Hypothesis | Al menos el 80 % de los productos críticos será identificado correctamente y 4 de cada 5 participantes completarán la tarea sin ayuda crítica. |
+| Evidence | Productos identificados, orden de prioridad, tiempo, errores y comentarios sobre la información que falta para decidir una compra. |
+| Decision | Mantener la alerta si guía correctamente la reposición; mejorar el contraste o la información mostrada si existen omisiones; reconsiderar el mecanismo si no apoya la decisión. |
+
+**Experiment Card EXP-03: Valor percibido de los planes pagados**
+
+| Campo | Definición |
+|---|---|
+| Question | ¿Los beneficios de Standard y Premium generan suficiente valor para considerar una suscripción pagada? |
+| Why | El modelo SaaS depende de que una parte del segmento perciba beneficios superiores al plan gratuito. La selección técnica de un plan no demuestra intención real de pago. |
+| Participants | Dueños de restaurantes pequeños y medianos que hayan completado previamente tareas de dashboard, inventario y reportes. |
+| What | Mostrar los límites y beneficios reales de Free, Standard y Premium. Solicitar que el participante elija un plan, explique su decisión y responda qué beneficio justificaría pagar y qué objeción se lo impediría. No se realizará un cobro real. |
+| Hypothesis | Al menos 3 de cada 5 participantes elegirán Standard o Premium como opción preferida y podrán mencionar un beneficio concreto que justifique su elección. |
+| Evidence | Plan seleccionado, razón de elección, intención declarada, beneficio principal, objeciones y precio considerado aceptable. |
+| Decision | Conservar la propuesta si se reconoce valor pagado; modificar beneficios o comunicación si existe interés sin claridad; revisar segmentación y precios si predomina Free por falta de valor. |
+
+**Experiment Card EXP-04: Interpretación de reportes por periodo**
+
+| Campo | Definición |
+|---|---|
+| Question | ¿Los reportes diarios, semanales y mensuales permiten reconocer tendencias relevantes para el negocio? |
+| Why | Los reportes deben convertir datos operativos en información útil para decidir sobre gastos, ventas y menú. |
+| Participants | Dueños o administradores que realicen revisiones periódicas del rendimiento de un restaurante. |
+| What | Presentar datos de dos periodos y solicitar que el participante identifique qué cambió, qué categoría concentra el gasto y qué plato genera mayores ingresos. |
+| Hypothesis | Al menos 4 de cada 5 participantes identificarán correctamente la tendencia principal y dos datos relevantes sin apoyo del moderador. |
+| Evidence | Respuestas correctas, tiempo de interpretación, errores, periodo preferido y decisiones propuestas. |
+| Decision | Mantener la visualización si facilita conclusiones correctas; simplificar gráficos y etiquetas si existen dudas; revisar el modelo de reporte si los datos no conducen a decisiones. |
+
+Estas tarjetas constituyen el punto de partida para la fase `8.2. Experiment Design`, donde se detallarán las hipótesis nulas y alternativas, las métricas de dominio, las medidas, las condiciones y las escalas de decisión antes de ejecutar los experimentos.
+
+## 8.2. Experiment Design
+
+El diseño experimental establece de antemano qué se quiere comprobar, qué datos se recopilarán y cómo se tomará una decisión. Esta definición previa reduce interpretaciones subjetivas posteriores y evita modificar los criterios únicamente para hacer que los resultados coincidan con las expectativas del equipo.
+
+Los experimentos se plantean como evaluaciones formativas con participantes del segmento objetivo. Las cantidades y porcentajes incluidos son criterios de decisión propuestos; no representan resultados obtenidos. Para una primera iteración se considera una muestra mínima de cinco participantes por experimento, suficiente para detectar problemas frecuentes de comprensión y usabilidad, pero no para realizar generalizaciones estadísticas sobre todos los restaurantes.
+
+### 8.2.1. Hypotheses.
+
+Cada experimento cuenta con una hipótesis alternativa, que representa el comportamiento esperado, y una hipótesis nula, que representa la ausencia de evidencia suficiente a favor de la propuesta.
+
+| ID | Experimento | Hipótesis alternativa | Hipótesis nula |
+|---|---|---|---|
+| H-01 | Comprensión del dashboard | Si un dueño utiliza el dashboard con datos controlados, al menos 4 de cada 5 participantes identificarán correctamente si existe utilidad o pérdida y propondrán una acción coherente en un máximo de tres minutos sin ayuda crítica. | Menos de 4 de cada 5 participantes completarán correctamente la interpretación o necesitarán ayuda crítica, por lo que la presentación actual no proporcionará evidencia suficiente de comprensión autónoma. |
+| H-02 | Alertas de inventario | Si se muestran productos con distintos niveles y umbrales de stock, los participantes identificarán al menos el 80 % de los productos críticos y 4 de cada 5 completarán la priorización sin ayuda crítica. | Los participantes identificarán menos del 80 % de los productos críticos o la mayoría necesitará ayuda, por lo que las alertas actuales no apoyarán suficientemente la reposición. |
+| H-03 | Valor de planes pagados | Después de utilizar dashboard, inventario y reportes, al menos 3 de cada 5 participantes elegirán Standard o Premium como opción preferida y asociarán su elección con un beneficio concreto. | Menos de 3 de cada 5 participantes preferirán un plan pagado o no podrán relacionar el precio con un beneficio concreto, por lo que la propuesta comercial deberá revisarse. |
+| H-04 | Interpretación de reportes | Si se presentan reportes de dos periodos, al menos 4 de cada 5 participantes identificarán la tendencia principal, la categoría con mayor gasto y el plato con mayores ingresos sin ayuda. | Menos de 4 de cada 5 participantes interpretarán correctamente los datos principales, indicando que los reportes requieren cambios de jerarquía, etiquetas o visualización. |
+
+Las hipótesis H-01, H-02 y H-04 evalúan principalmente utilidad y comprensión. La H-03 evalúa valor percibido e intención declarada, pero no permite afirmar que exista una conversión comercial real porque el MVP no procesa pagos.
+
+### 8.2.2. Domain Business Metrics
+
+Las métricas de dominio conectan los experimentos con el funcionamiento de un restaurante y con el modelo SaaS de FoodFlow. Algunas pueden medirse durante pruebas moderadas, mientras que otras requieren instrumentación y uso longitudinal del producto.
+
+| Métrica | Definición | Cálculo propuesto | Relación con el negocio |
+|---|---|---|---|
+| Tasa de interpretación financiera | Participantes que interpretan correctamente la situación financiera. | Interpretaciones correctas / participantes × 100 | Indica si el dashboard ayuda a tomar decisiones basadas en datos. |
+| Tiempo para obtener una conclusión | Tiempo entre el inicio de la tarea y la identificación de utilidad o pérdida. | Suma de tiempos / tareas completadas | Aproxima el esfuerzo requerido para comprender el negocio. |
+| Tasa de identificación de stock crítico | Productos críticos identificados correctamente. | Productos críticos identificados / productos críticos presentados × 100 | Evalúa la capacidad para anticipar reposiciones y evitar faltantes. |
+| Tasa de finalización de órdenes | Órdenes registradas sin errores críticos. | Órdenes completadas / intentos de creación × 100 | Representa la facilidad para registrar ventas que alimentan las métricas financieras. |
+| Tasa de interpretación de reportes | Participantes que reconocen correctamente tendencias y datos clave. | Interpretaciones correctas / participantes × 100 | Evalúa si los reportes apoyan decisiones sobre gastos, compras y menú. |
+| Preferencia por plan pagado | Participantes que eligen Standard o Premium en el escenario de evaluación. | Preferencias pagadas / participantes × 100 | Proporciona una señal inicial sobre el valor percibido del modelo SaaS. |
+| Intención declarada de pago | Participantes que indican que considerarían pagar bajo condiciones concretas. | Intenciones positivas / participantes × 100 | Permite explorar viabilidad comercial, sin sustituir una compra real. |
+| Activación del producto | Restaurantes que completan las acciones mínimas para obtener valor inicial. | Restaurantes que registran datos y consultan un reporte / registros válidos × 100 | Mide cuántos usuarios llegan a experimentar la propuesta principal. |
+| Uso recurrente del dashboard | Restaurantes activos que consultan el dashboard en diferentes días. | Usuarios con visitas recurrentes / usuarios activos × 100 | Se relaciona con adopción y posible retención. |
+| Adopción de reportes | Usuarios activos que consultan al menos un reporte por periodo. | Usuarios que consultan reportes / usuarios activos × 100 | Indica si el análisis financiero se incorpora al trabajo habitual. |
+
+Para la ejecución inmediata de los cuatro experimentos se utilizarán las primeras siete métricas. Activación, recurrencia y adopción requieren un periodo de observación y un sistema de tracking que todavía no está implementado.
+
+### 8.2.3. Measures.
+
+Las medidas definen los datos específicos que el moderador debe registrar durante cada sesión. Se combinarán datos cuantitativos con observaciones cualitativas para comprender no solo si una tarea terminó, sino también por qué presentó dificultades.
+
+| Experimento | Medidas cuantitativas | Medidas cualitativas | Instrumento de registro |
+|---|---|---|---|
+| EXP-01 Dashboard | Tarea completada, respuestas correctas, tiempo total, número de ayudas y errores críticos. | Explicación de los indicadores, dudas, información buscada y acción propuesta. | Hoja de observación, cronómetro y entrevista posterior. |
+| EXP-02 Inventario | Porcentaje de productos críticos identificados, tiempo, ayudas y actualización completada. | Criterio de priorización, información faltante y percepción de claridad de la alerta. | Escenario controlado, lista de productos y hoja de observación. |
+| EXP-03 Suscripciones | Plan elegido, preferencia por plan pagado y rango de precio aceptable. | Beneficio valorado, objeción principal, motivo de elección y condiciones para pagar. | Guion de entrevista y ficha individual de respuestas. |
+| EXP-04 Reportes | Datos identificados correctamente, tiempo, ayudas y periodo seleccionado. | Interpretación de tendencias, decisión propuesta y elementos visuales confusos. | Reportes con datos controlados, cuestionario y hoja de observación. |
+
+Se considerará **ayuda crítica** cualquier intervención del moderador que revele dónde encontrar la respuesta, explique el significado de una métrica o indique el siguiente paso necesario para completar la tarea. Las preguntas neutrales, como solicitar al participante que piense en voz alta, no se contabilizarán como ayuda crítica.
+
+### 8.2.4. Conditions.
+
+Para mantener condiciones comparables, los participantes recibirán el mismo contexto, datos y orden básico de tareas. Cuando se utilice una condición de referencia, esta representa el proceso actual del participante o una presentación sin las ayudas específicas evaluadas.
+
+| Experimento | Condición experimental | Condición de referencia o control | Variables que deben mantenerse constantes |
+|---|---|---|---|
+| EXP-01 Dashboard | Dashboard de FoodFlow con tarjetas, variaciones, órdenes y platos destacados. | Explicación del proceso actual utilizado por el participante para conocer la situación del restaurante. | Mismos datos, consigna, tiempo máximo y ausencia de explicación previa. |
+| EXP-02 Inventario | Tabla de FoodFlow con stock, umbral e indicadores visuales de bajo stock. | Lista equivalente de productos sin resaltar automáticamente los niveles críticos. | Mismos productos, cantidades, costos y escenario de reposición. |
+| EXP-03 Suscripciones | Planes Free, Standard y Premium con precios y beneficios actuales. | Pregunta inicial sobre el gasto y herramientas que el participante utiliza actualmente, antes de mostrar los planes. | Mismo orden de presentación, sin descuentos ficticios ni presión de compra. |
+| EXP-04 Reportes | Reportes de FoodFlow con comparación de periodos, gastos por categoría y platos destacados. | Datos equivalentes presentados como registros separados o tabla básica. | Mismos valores, periodos, preguntas y tiempo máximo. |
+
+Las sesiones deben realizarse en un equipo con conexión estable y una cuenta preparada con datos ficticios. No se utilizarán credenciales personales, información financiera real ni datos identificables del restaurante. En EXP-03 no se solicitarán tarjetas ni se realizará cobro alguno.
+
+### 8.2.5. Scale Calculations and Decisions.
+
+La escala se define para una muestra inicial de cinco participantes. Cada participante representa 20 puntos porcentuales; por ello, los resultados se interpretarán como señales formativas y no como estimaciones estadísticas definitivas.
+
+| Hipótesis | Factor principal | Desfavorable | Parcial / requiere mejora | Favorable | Decisión asociada |
+|---|---|---|---|---|---|
+| H-01 Dashboard | Participantes que interpretan correctamente sin ayuda crítica | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Rediseñar, ajustar o mantener la jerarquía del dashboard. |
+| H-01 Dashboard | Tiempo promedio de interpretación | Más de 5 min | Entre 3 y 5 min | Hasta 3 min | Simplificar navegación y etiquetas si el tiempo es elevado. |
+| H-02 Inventario | Productos críticos identificados correctamente | Menos de 60 % | 60-79 % | 80-100 % | Revisar o mantener alertas, contraste e información mostrada. |
+| H-02 Inventario | Participantes que priorizan sin ayuda crítica | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Mejorar el flujo si la alerta no conduce a una decisión. |
+| H-03 Suscripciones | Preferencia por Standard o Premium | 0-1 de 5 | 2 de 5 | 3-5 de 5 | Revisar precios, beneficios o segmentación cuando predomina Free. |
+| H-03 Suscripciones | Participantes que mencionan un beneficio concreto | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Mejorar la comunicación si no se entiende el valor diferencial. |
+| H-04 Reportes | Participantes que interpretan correctamente los datos clave | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Rediseñar, simplificar o mantener los reportes. |
+
+La decisión final no dependerá únicamente del porcentaje. Un error crítico repetido, como confundir gastos con utilidad o seleccionar un producto incorrecto para reposición, deberá analizarse aunque la tasa general alcance el rango favorable.
+
+### 8.2.6. Methods Selection.
+
+Se seleccionaron métodos de bajo riesgo y compatibles con el estado actual del MVP. No es necesario modificar el código para ejecutar la primera ronda, ya que los datos pueden recopilarse mediante observación y formularios externos.
+
+| Método | Aplicación | Ventaja | Limitación |
+|---|---|---|---|
+| Prueba de usabilidad moderada | EXP-01, EXP-02 y EXP-04 | Permite observar tareas, errores, dudas y razonamiento en tiempo real. | La presencia del moderador puede influir en el comportamiento. |
+| Entrevista semiestructurada | EXP-03 y análisis posterior de todas las pruebas | Profundiza en motivaciones, objeciones, procesos actuales y valor percibido. | Las respuestas declaradas no garantizan comportamiento futuro. |
+| Think Aloud | Durante las tareas de dashboard, inventario y reportes | Ayuda a conocer qué interpreta el participante y dónde se confunde. | Puede aumentar ligeramente el tiempo de tarea. |
+| Observación de tareas | Registro de pasos, ayudas, errores y finalización | Produce evidencia conductual más sólida que una opinión aislada. | Requiere criterios uniformes entre observadores. |
+| Encuesta breve posterior | Facilidad percibida, claridad y utilidad | Facilita comparar respuestas entre participantes. | Una muestra pequeña no permite generalización estadística. |
+| Comparación con el proceso actual | Contraste entre FoodFlow y registros manuales o herramientas existentes | Permite entender si la solución reduce esfuerzo o fragmentación. | Los procesos actuales pueden variar entre restaurantes. |
+
+El procedimiento general será el siguiente:
+
+1. Explicar el propósito académico y solicitar consentimiento para registrar respuestas y observaciones.
+2. Recopilar únicamente información general del perfil y del proceso de gestión actual.
+3. Presentar el escenario sin explicar cómo resolver la tarea.
+4. Registrar tiempo, finalización, errores, ayudas y comentarios.
+5. Realizar preguntas posteriores sobre utilidad, dificultad y mejoras.
+6. Anonimizar los resultados mediante identificadores como `P01`, `P02` y `P03`.
+7. Consolidar la información sin alterar los criterios definidos en esta sección.
+
+### 8.2.7. Data Analytics: Goals, KPIs and Metrics Selection.
+
+El plan de analítica busca relacionar el comportamiento de uso con objetivos de producto y negocio. Los KPIs propuestos deben implementarse progresivamente; por ahora funcionan como especificación para futuras mediciones.
+
+| Objetivo | KPI principal | Métricas de apoyo | Interpretación esperada |
+|---|---|---|---|
+| Lograr que el usuario comprenda rápidamente la situación del restaurante | Tasa de interpretación financiera | Tiempo de interpretación, ayudas y errores críticos | Una tasa alta con poco tiempo indica que el dashboard comunica valor de forma clara. |
+| Ayudar a prevenir problemas de inventario | Tasa de identificación de stock crítico | Alertas consultadas, productos actualizados y tiempo de reposición | Permite saber si la alerta conduce a una acción operativa. |
+| Facilitar el análisis periódico | Tasa de interpretación y adopción de reportes | Periodos consultados, frecuencia y decisiones propuestas | Indica si los reportes se incorporan a la revisión del negocio. |
+| Validar el valor del modelo SaaS | Preferencia e intención declarada por plan pagado | Plan elegido, beneficio principal, objeción y rango de precio | Sirve como señal inicial para ajustar planes antes de integrar pagos. |
+| Reducir la dependencia de herramientas dispersas | Activación y recurrencia | Tareas principales completadas, visitas al dashboard y módulos usados | Permite observar si FoodFlow se convierte en un punto central de gestión. |
+
+La métrica guía propuesta para una etapa posterior es el **porcentaje de restaurantes activados que consultan información financiera y realizan al menos una acción operativa en semanas diferentes**. Esta combinación evita considerar como éxito una simple visita y busca representar uso real del ciclo integrado de FoodFlow.
+
+### 8.2.8. Web and Mobile Tracking Plan.
+
+FoodFlow dispone actualmente de una aplicación web responsive, pero no cuenta con una aplicación móvil nativa implementada. Por ello, el plan inmediato corresponde al entorno web. Si posteriormente se desarrolla una aplicación móvil, deberá reutilizar los nombres y propiedades de eventos para mantener comparabilidad entre plataformas.
+
+El tracking descrito a continuación es una propuesta pendiente de implementación. No se afirma que Google Analytics, Mixpanel u otra plataforma de analítica esté instalada actualmente.
+
+| Evento propuesto | Momento de registro | Propiedades mínimas no sensibles | KPI relacionado |
+|---|---|---|---|
+| `account_registered` | Registro completado correctamente | `anonymous_user_id`, `timestamp`, `platform` | Registros y activación. |
+| `login_succeeded` | Inicio de sesión exitoso | `anonymous_user_id`, `timestamp`, `platform` | Usuarios activos y recurrencia. |
+| `dashboard_viewed` | Carga correcta del dashboard | `anonymous_user_id`, `period`, `timestamp` | Uso recurrente del dashboard. |
+| `dashboard_period_changed` | Cambio entre periodo diario, semanal o mensual | `from_period`, `to_period` | Preferencia de periodos. |
+| `low_stock_alert_viewed` | Visualización de productos con stock crítico | `critical_product_count` | Uso de alertas de inventario. |
+| `inventory_product_updated` | Actualización exitosa de un producto | `changed_fields_count`, `was_low_stock` | Acción posterior a una alerta. |
+| `order_created` | Orden registrada correctamente | `line_item_count`, `order_type` | Finalización de órdenes y activación. |
+| `financial_report_viewed` | Reporte cargado correctamente | `period`, `has_comparison` | Adopción de reportes. |
+| `subscription_plans_viewed` | Visualización de los planes disponibles | `current_plan` | Alcance del embudo de suscripción. |
+| `subscription_plan_selected` | Selección confirmada de un plan | `current_plan`, `selected_plan` | Preferencia por plan; no equivale a pago. |
+| `feedback_submitted` | Envío de una encuesta breve | `context`, `rating` | Satisfacción y aprendizaje cualitativo. |
+
+**Reglas de privacidad y calidad de datos**
+
+- No registrar nombres, correos, contraseñas, tokens JWT ni texto libre que pueda contener datos personales.
+- No enviar importes detallados, nombres de platos, proveedores o información financiera identificable a la herramienta de analítica.
+- Utilizar identificadores anónimos o seudónimos y documentar el periodo de retención.
+- Solicitar consentimiento cuando corresponda y explicar el propósito del seguimiento.
+- Mantener nombres de eventos y propiedades consistentes entre frontend, backend y futuras plataformas.
+- Validar que un evento se registre una sola vez por acción y que los entornos de desarrollo no contaminen los datos de producción.
+
+La implementación futura puede realizarse con una herramienta de analítica web o con eventos propios enviados al backend. La selección tecnológica debe considerar costo, privacidad, facilidad de integración y capacidad de exportar datos para análisis.
+
+## 8.3. Experimentation
+
+La fase de experimentación conecta los aprendizajes esperados con la evolución del producto. Debido a que los experimentos todavía no han sido ejecutados, las siguientes historias y prioridades representan una propuesta **To-Be preliminar**. Después de obtener resultados, el equipo deberá confirmar, modificar, descartar o repriorizar cada elemento.
+
+### 8.3.1. To-Be User Stories.
+
+| ID | Título | User Story | Criterios de aceptación | Experimento relacionado |
+|---|---|---|---|---|
+| TBU-01 | Explicación contextual de métricas | Como dueño de restaurante, quiero consultar una explicación breve de cada indicador financiero para interpretar correctamente ingresos, gastos, utilidad y variación. | **Given** que visualizo una métrica del dashboard o reporte<br>**When** solicito ayuda contextual<br>**Then** veo una definición clara, su forma de cálculo y una interpretación básica sin abandonar la pantalla. | EXP-01 y EXP-04 |
+| TBU-02 | Resumen financiero accionable | Como dueño de restaurante, quiero recibir un resumen de los cambios más relevantes del periodo para identificar rápidamente qué aspecto del negocio debo revisar. | **Given** que existen datos del periodo actual y anterior<br>**When** ingreso al dashboard<br>**Then** veo un resumen de variaciones relevantes basado únicamente en los datos disponibles. | EXP-01 |
+| TBU-03 | Experiencia inicial con datos de demostración | Como nuevo usuario, quiero explorar FoodFlow con datos de ejemplo para comprender su valor antes de registrar toda la información de mi restaurante. | **Given** que mi cuenta todavía no tiene datos<br>**When** inicio el recorrido de demostración<br>**Then** puedo explorar dashboard, inventario y reportes con información ficticia claramente identificada. | EXP-01 y Q-09 |
+| TBU-04 | Priorización de productos con bajo stock | Como responsable de inventario, quiero ver los productos críticos ordenados por nivel de urgencia para decidir qué insumos revisar primero. | **Given** que existen productos por debajo de su umbral<br>**When** consulto inventario<br>**Then** veo una lista priorizada con stock actual, umbral, unidad y señal de urgencia. | EXP-02 |
+| TBU-05 | Registro de reposición desde una alerta | Como responsable de inventario, quiero actualizar o registrar la reposición desde la alerta de bajo stock para resolver el problema con menos pasos. | **Given** que visualizo un producto crítico<br>**When** selecciono la acción de reposición<br>**Then** puedo registrar el nuevo stock y confirmar la actualización desde el mismo flujo. | EXP-02 |
+| TBU-06 | Comparación guiada de periodos | Como dueño de restaurante, quiero comparar dos periodos mediante indicadores y explicaciones consistentes para reconocer tendencias de ingresos, gastos y utilidad. | **Given** que existen datos de dos periodos<br>**When** selecciono un periodo de comparación<br>**Then** veo valores, diferencias, porcentajes y etiquetas que indican aumento o disminución. | EXP-04 |
+| TBU-07 | Comparación de planes por beneficio | Como dueño de restaurante, quiero comparar los planes según funciones, límites y problemas que resuelven para elegir la alternativa adecuada. | **Given** que ingreso a suscripciones<br>**When** comparo Free, Standard y Premium<br>**Then** veo precios, límites, beneficios diferenciales y el plan actual sin mensajes ambiguos. | EXP-03 |
+| TBU-08 | Prueba controlada de funciones pagadas | Como usuario del plan Free, quiero probar temporalmente funciones seleccionadas de un plan pagado para evaluar su utilidad antes de tomar una decisión. | **Given** que cumplo las condiciones de una prueba<br>**When** activo la prueba desde suscripciones<br>**Then** veo su duración, funciones habilitadas y fecha de finalización sin realizar un cobro automático. | EXP-03 |
+| TBU-09 | Registro respetuoso de eventos de uso | Como Product Owner, quiero medir interacciones clave de manera anónima para evaluar activación, adopción y recurrencia sin recopilar información sensible. | **Given** que el usuario otorgó el consentimiento requerido<br>**When** completa una acción instrumentada<br>**Then** se registra un único evento con propiedades no sensibles y un identificador seudónimo. | Todos los experimentos |
+| TBU-10 | Encuesta contextual de satisfacción | Como usuario, quiero responder una encuesta breve después de una tarea relevante para comunicar si la función fue clara y útil. | **Given** que completo una tarea seleccionada<br>**When** se presenta la encuesta opcional<br>**Then** puedo calificarla, agregar una observación y omitirla sin perder mi trabajo. | Todos los experimentos |
+
+Estas historias no sustituyen las historias actuales del producto. Representan posibles mejoras derivadas de las preguntas experimentales y deben ingresar al desarrollo solamente cuando la evidencia justifique su prioridad.
+
+### 8.3.2. To-Be Product Backlog
+
+El To-Be Product Backlog organiza las historias experimentales según riesgo, aprendizaje esperado, valor para el usuario y dependencia técnica. La prioridad inicial favorece las mejoras que permiten comprender el producto y recopilar evidencia antes de ampliar funciones comerciales.
+
+| Orden | ID | Título | Prioridad inicial | Story Points | Dependencia o justificación |
+|---:|---|---|---|---:|---|
+| 1 | TBU-09 | Registro respetuoso de eventos de uso | Alta | 8 | Proporciona datos para medir activación, adopción y recurrencia; requiere política de eventos y privacidad. |
+| 2 | TBU-01 | Explicación contextual de métricas | Alta | 3 | Responde directamente al riesgo de incomprensión del núcleo financiero. |
+| 3 | TBU-03 | Experiencia inicial con datos de demostración | Alta | 8 | Reduce la barrera de carga inicial y facilita probar el valor del producto. |
+| 4 | TBU-04 | Priorización de productos con bajo stock | Alta | 5 | Apoya una decisión operativa frecuente y puede reducir faltantes. |
+| 5 | TBU-06 | Comparación guiada de periodos | Alta | 5 | Mejora la interpretación de reportes y tendencias financieras. |
+| 6 | TBU-07 | Comparación de planes por beneficio | Alta | 3 | Es necesaria antes de evaluar con mayor precisión el valor de los planes pagados. |
+| 7 | TBU-02 | Resumen financiero accionable | Media | 8 | Depende de reglas claras para generar recomendaciones sin inducir decisiones incorrectas. |
+| 8 | TBU-05 | Registro de reposición desde una alerta | Media | 5 | Amplía el flujo de inventario después de confirmar que las alertas actuales son útiles. |
+| 9 | TBU-10 | Encuesta contextual de satisfacción | Media | 3 | Complementa el tracking con percepción cualitativa y debe evitar interrumpir tareas. |
+| 10 | TBU-08 | Prueba controlada de funciones pagadas | Media | 8 | Requiere reglas de elegibilidad, duración y reversión; debe validarse antes de integrar pagos. |
+
+Los Story Points son estimaciones relativas preliminares y no representan horas. El backlog debe volver a estimarse y priorizarse después de analizar los resultados de los experimentos, considerando además capacidad del equipo, dependencias, seguridad y efectos sobre el producto desplegado.
+
 
 # Conclusiones y recomendaciones
 
