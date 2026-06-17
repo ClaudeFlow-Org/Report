@@ -7387,6 +7387,241 @@ Para fortalecer el proceso, cada cambio debería desarrollarse en una rama propi
 
 Las ramas `main` del frontend y `deploy` del backend deberían protegerse para requerir checks exitosos, al menos una aprobación y la resolución de conversaciones bloqueantes. Las revisiones automáticas pueden complementar este proceso, pero la decisión final debe mantenerse bajo responsabilidad del equipo.
 
+## 6.3. Validation Interviews
+### 6.3.1. Diseño de Entrevistas
+### 6.3.2. Registro de Entrevistas
+### 6.3.3. Evaluaciones según heurísticas
+
+## 6.4. Auditoría de Experiencias de Usuario
+
+### 6.4.1. Auditoría realizada.
+#### 6.4.1.1. Información del grupo auditado.
+
+**Nombre del grupo:** Fudi
+**Nombre del producto:** Centralis
+
+#### 6.4.1.2. Cronograma de auditoría realizada.
+
+#### 6.4.1.3. Contenido de auditoría realizada.
+
+##### UX Heuristics & Principles Evaluation
+##### Usability – Inclusive Design – Information Architecture
+
+**CARRERA:** Ingeniería de Software
+**CURSO:** Diseño de Experimentos de Ingeniería de Software
+**SECCIÓN:** 17821
+**PROFESORES:** Todos
+**AUDITOR:** Equipo de ClaudeFlow
+**CLIENTE(S):** Fudi
+
+**SITE o APP A EVALUAR:**
+Centralis
+
+**TAREAS A EVALUAR:**
+
+El alcance de esta evaluación incluye la revisión de la usabilidad de las siguientes tareas:
+1.	Intento de registro de usuario nuevo (Landing Page)
+2.	Inicio de sesión de usuario (Landing Page)
+3.	Navegación general y uso del pie de página (Landing Page)
+4.	Configuración del idioma global (Landing Page)
+5.	Visualización de eventos y anuncios en el Feed (Aplicación móvil)
+6.	Visualización de métricas y analíticas de publicaciones (Aplicación móvil)
+7.	Visualización de datos de perfil, compañía y miembros (Aplicación móvil)
+8.	Interacción con botones de contacto rápido en el perfil (Aplicación móvil)
+
+No están incluidas en esta versión de la evaluación las siguientes tareas:
+1.	Registro de una compañía nueva
+2.	Publicación activa de nuevos anuncios y eventos
+3.	Envío de mensajes en chats directos o grupales
+4.	Actualización de datos de perfil
+5.	Funciones de subida de imágenes y archivos multimedia
+
+**ESCALA DE SEVERIDAD:**
+*Los errores serán puntuados tomando en cuenta la siguiente escala de severidad.*
+
+| Nivel | Descripción |
+|---|---|
+| 1 | Problema superficial: puede ser fácilmente superador por el usuario u ocurre con muy poca frecuencia. No necesita ser arreglado a no ser que exista disponibilidad de tiempo. |
+| 2 | Problema menor: puede ocurrir un poco más frecuentemente o es un poco más difícil de superar para el usuario. Se le debería asignar una prioridad baja resolverlo de cara al siguiente reléase. |
+| 3 | Problema mayor: ocurre frecuentemente o los usuarios no son capaces de resolverlos. Es importante que sean corregidos y se les debe asignar una prioridad alta. |
+| 4 | Problema muy grave: un error de gran impacto que impide al usuario continuar con el uso de la herramienta. Es imperativo que sea corregido antes del lanzamiento. |
+
+**TABLA RESUMEN:**
+
+| # | Problema | Escala de severidad | Heurística / principio violado(a) |
+|---|---|---|---|
+| 1 |	Botón CTA no redirige al usuario al destino esperado | 2 | Consistencia y estándares (Nielsen) / Information Architecture: Is it usable? |
+| 2 |	Bajo contraste de texto en los enlaces y elementos del Footer. |	2	| Estética y diseño minimalista (Nielsen) / Information Architecture: Is it usable? |
+| 3 |	Selector de idioma deshabilitado o inactivo en el Footer.	| 2 |	Consistencia y estándares (Nielsen) |
+| 4 |	Derechos Reservados Desactualizados	| 1	| Information Architecture: Is it usable? |
+| 5 |	Enlaces inactivos los botones de "Sign In" y "Start Meeting" de la barra de navegación. |	3 |	Consistencia y estándares (Nielsen) / Information Architecture: Is it usable? |
+| 6 |	Botones de comunicación (Llamada, Mensaje, Correo) deshabilitados en la vista de Perfil. |	3	| Consistencia y estándares (Nielsen) / Information Architecture: Is it usable? |
+| 7 |	Inclusión de usuarios sin acceso en el cálculo de métricas de analítica (Visualizations).	| 3 |	Information Architecture: Is it usable? |
+| 8 | Presencia de texto residual fijo ("Button") en la tarjeta de eventos. | 2 | Estética y diseño minimalista (Nielsen) |
+| 9 |	Ausencia de imágenes reales en los avatares de los miembros inscritos (Attendees). |	2	| Consistencia y estándares (Nielsen) / Information Architecture: Is it usable? |
+
+**DESCRIPCIÓN DE PROBLEMAS:**
+**Problema #1:** Botón CTA no redirige al usuario al destino esperado.
+**Severidad:** 2
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+El botón principal de llamada a la acción (CTA) en la sección Hero está apuntando a un enlace vacío (href="#"). Al hacer clic, el sitio realiza un leve salto hacia la parte superior de la página en lugar de redirigir al usuario al formulario de registro, inicio de sesión o sección correspondiente, quebrando la expectativa de navegación y deteniendo el flujo del usuario.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema1.png" alt="P1">
+</p>
+
+**Recomendación:**
+Vincular correctamente el botón a su destino final.
+
+---
+
+**Problema #2:** Bajo contraste de texto en los enlaces y elementos del Footer.
+**Severidad:** 2
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+Los textos de los enlaces ("Product", "About Team", etc.) y la descripción institucional debajo del logo utilizan un tono gris muy claro sobre un fondo blanco puro. Esto genera una falta de contraste severa que dificulta la lectura para cualquier usuario, y resulta inaccesible para personas con discapacidades visuales o pantallas con bajo brillo.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema2.png" alt="P2">
+</p>
+
+**Recomendación:**
+Modificar el color de la tipografía secundaria del footer a un tono gris más oscuro o negro (por ejemplo, reducir la opacidad a un nivel que garantice un ratio de contraste mínimo de 4.5:1 según las pautas WCAG AA para texto normal). También se puede optar por oscurecer el fondo del footer a un gris claro/azul oscuro y mantener las letras legibles.
+
+---
+
+**Problema #3:** Selector de idioma deshabilitado o inactivo en el Footer.
+**Severidad:** 2
+**Heurística violada:** Consistencia y estándares (Nielsen)
+
+**Problema:**
+El menú desplegable de idioma ("EN") ubicado en la esquina inferior izquierda del footer visualmente parece un elemento interactivo, pero no ejerce ninguna acción al hacer clic ni despliega las opciones. Esto rompe con el comportamiento del mismo elemento que sí funciona correctamente en el Header (cabecera), quebrando la consistencia interna de la interfaz.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema3.png" alt="P3">
+</p>
+
+**Recomendación:**
+Replicar el mismo componente y lógica de programación del Header en el Footer para asegurar que el selector de idioma sea completamente funcional en ambas zonas de la Landing Page, manteniendo la consistencia de i18n a lo largo de todo el sitio.
+
+---
+
+**Problema #4:** Derechos Reservados Desactualizados
+**Severidad:** 1
+**Heurística violada:** Information Architecture: Is it usable?
+
+**Problema:**
+El texto al pie de página muestra el año anterior ("© 2024 Centralis by Fudi"), lo que puede dar al usuario la falsa impresión de que el sitio web o la herramienta está abandonada o no recibe soporte actual.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema4.png" alt="P4">
+</p>
+
+**Recomendación:**
+Actualizar el texto al año en curso. Se recomienda encarecidamente automatizar este campo mediante código para que se actualice de forma dinámica cada primero de enero sin requerir mantenimiento manual.
+
+---
+
+**Problema #5:** Enlaces inactivos los botones de "Sign In" y "Start Meeting" de la barra de navegación.
+**Severidad:** 3
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+Los botones situados en el extremo derecho del Header ("Sign In" y "Start Meeting") actúan como enlaces vacíos apuntando a #. Al ser presionados, el sistema solo recarga levemente la vista hacia arriba en lugar de abrir la pantalla de autenticación o iniciar el flujo de la reunión, quebrando la usabilidad elemental del flujo de acceso.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema5.png" alt="P5">
+</p>
+
+**Recomendación:**
+Conectar de inmediato ambos botones a sus respectivas rutas de producción o entornos de pruebas activos. Si estas interfaces aún se encuentran en fase de desarrollo, se debe implementar temporalmente una ventana modal simple que informe al usuario que la funcionalidad estará disponible próximamente, evitando por completo el uso de enlaces vacíos que dejen la pantalla suspendida.
+
+---
+
+**Problema #6:** Botones de comunicación (Llamada, Mensaje, Correo) deshabilitados en la vista de Perfil.
+**Severidad:** 3
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+El grupo de tres botones interactivos situados debajo del correo electrónico no ejecuta ninguna función ni responde a los gestos táctiles. Visualmente están diseñados como elementos accionables de alta prioridad, por lo que su inactividad contradice el modelo mental estándar de una aplicación de comunicación.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema6.png" alt="P6">
+</p>
+
+**Recomendación:**
+Implementar la lógica de programación para cada disparador:
+1.	Botón Teléfono: Enlazar al marcador nativo del dispositivo (tel:).
+2.	Botón Mensaje: Redirigir directamente al chat interno de la app con ese usuario.
+3.	Botón Correo: Abrir la aplicación de email predeterminada del sistema (mailto:).
+Si el usuario visualiza su propio perfil y estas acciones no aplican para sí mismo, se deben ocultar estos botones de la vista "My Profile" y mostrarlos únicamente cuando se navegue en la pestaña "Members"
+
+---
+
+**Problema #7:** Inclusión de usuarios sin acceso en el cálculo de métricas de analítica (Visualizations).
+**Severidad:** 3
+**Heurística violada:** Information Architecture: Is it usable?
+
+**Problema:**
+El gráfico de progreso y el porcentaje de visualización (8%) están calculados sobre una base errónea de usuarios (2 de 25). El sistema incluye en el denominador (25 usuarios) a colaboradores externos o cuentas sin permisos que no tienen acceso para ver dicho anuncio, provocando que la métrica de rendimiento real se muestre drásticamente reducida.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema7.png" alt="P7">
+</p>
+
+**Recomendación:**
+Modificar la consulta en el backend que alimenta esta vista. El total de usuarios objetivo (el denominador) debe filtrar e incluir única y exclusivamente a los miembros activos de la compañía que posean los roles o permisos necesarios para visualizar el anuncio. Los usuarios externos o sin acceso deben ser omitidos del cálculo para reflejar un porcentaje de analítica 100% real.
+
+---
+
+**Problema #8:** Presencia de texto residual fijo ("Button") en la tarjeta de eventos.
+**Severidad:** 2
+**Heurística violada:** Estética y diseño minimalista (Nielsen)
+
+**Problema:**
+Debajo del título aparece una etiqueta de texto flotante que dice "Button" en un tono gris claro. Este texto no corresponde a ninguna información ingresada por el creador del evento ni cumple ninguna función interactiva, revelando un descuido en la limpieza del código de la interfaz (UI)
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema8.png" alt="P8">
+</p>
+
+**Recomendación:**
+Eliminar por completo la cadena de texto fija o el elemento <Text> residual del archivo de maquetación del componente de la tarjeta de eventos para limpiar la UI.
+
+---
+
+**Problema #9:** Ausencia de imágenes reales en los avatares de los miembros inscritos (Attendees).
+**Severidad:** 2
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+Las burbujas de los miembros que asistirán al evento (esquina superior derecha de la tarjeta) solo muestran un ícono de usuario genérico y grisáceo en lugar de cargar las fotografías reales de perfil de los colaboradores de la empresa, rompiendo la consistencia con el diseño propuesto.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema8.png" alt="P8">
+</p>
+
+**Recomendación:**
+Conectar las burbujas de avatar con el servicio de base de datos correspondiente. En caso de que un usuario no cuente con una foto de perfil subida, se debe reemplazar el ícono genérico gris por las iniciales del nombre de la persona sobre un fondo de color aleatorio para humanizar la interfaz.
+
+### 6.4.2. Auditoría recibida.
+#### 6.4.2.1. Información del grupo auditor.
+#### 6.4.2.2. Cronograma de auditoría recibida.
+#### 6.4.2.3. Contenido de auditoría recibida.
+#### 6.4.2.4. Resumen de modificaciones para subsanar hallazgos.
+
 # Capítulo VII: DevOps Practices
 
 ## 7.1. Continuous Integration
@@ -8139,6 +8374,27 @@ El To-Be Product Backlog organiza las historias experimentales según riesgo, ap
 
 Los Story Points son estimaciones relativas preliminares y no representan horas. El backlog debe volver a estimarse y priorizarse después de analizar los resultados de los experimentos, considerando además capacidad del equipo, dependencias, seguridad y efectos sobre el producto desplegado.
 
+### 8.3.3. Pipeline-supported, Experiment-Driven To-Be Software Platform Lifecycle
+#### 8.3.3.1. To-Be Sprint Backlogs
+#### 8.3.3.2. Implemented To-Be Landing Page Evidence
+#### 8.3.3.3. Implemented To-Be Frontend-Web Application Evidence
+#### 8.3.3.4. Implemented To-Be Native-Mobile Application Evidence
+#### 8.3.3.5. Implemented To-Be RESTful API and/or Serverless Backend Evidence
+#### 8.3.3.6. Team Collaboration Insights
+
+### 8.3.4. To-Be Validation Interviews
+#### 8.3.4.1. Diseño de Entrevistas.
+#### 8.3.4.2. Registro de Entrevistas.
+
+## 8.4. Experiment Aftermath & Analysis
+#### 8.4.1. Analysis and Interpretation of Results
+#### 8.4.2. Re-scored and Re-prioritized Question Backlog
+
+## 8.5. Continuous Learning
+### 8.5.1. Shareback Session Artifacts: Learning Workflow
+
+## 8.6. To-Be Software Platform Pre-launch
+### 8.6.1. About-the-Product Intro Video
 
 # Conclusiones y recomendaciones
 
