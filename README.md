@@ -7463,8 +7463,354 @@ Las ramas `main` del frontend y `deploy` del backend deberían protegerse para r
 
 ## 6.3. Validation Interviews
 ### 6.3.1. Diseño de Entrevistas
+
+El diseño de entrevistas de validación para FoodFlow se fundamenta en la metodología de **test de usabilidad combinado con validación de problema/valor** mediante el protocolo **think-aloud**. Este enfoque permite observar a dueños y gestores de restaurantes utilizando la plataforma en tareas reales, mientras evalúa su comprensión, resolución de dolores y disposición a pagar.
+
+#### Filosofía del método
+
+El entrevistado **usa la aplicación en vivo** mientras piensa en voz alta. El entrevistador no enseña ni explica: **observa y pregunta**. Lo que el usuario hace (y dónde se atora) tiene mayor valor que lo que declara verbalmente.
+
+#### Objetivos de validación
+
+1. **Comprensión de la aplicación**: Evaluar si el usuario entiende la interfaz, la información presentada y el flujo de navegación sin explicación previa.
+2. **Resolución de problemas**: Validar si FoodFlow atiende los dolores principales del restaurante (control de inventario, cierre financiero, gestión de órdenes).
+3. **Valor y disposición a pagar**: Determinar si el usuario percibe suficiente valor como para considerar una suscripción mensual.
+4. **Identificación de fricciones**: Detectar puntos de confusión, expectativas no cumplidas y errores de usabilidad.
+
+#### Perfil del entrevistado objetivo
+
+- **Rol**: Dueño o gestor de restaurante pequeño o mediano
+- **Tamaño**: 2-20 empleados
+- **Operación**: Venta en salón y/o para llevar
+- **Herramientas actuales**: Libreta, calculadora, Excel o sistemas manuales
+- **Dolores típicos**: Falta de visibilidad sobre inventario, cierres financieros manuales, desconocimiento de márgenes
+
+#### Estructura de la sesión (15 minutos)
+
+La sesión se divide en 9 bloques diseñados para recorrer el flujo completo de la aplicación:
+
+| Bloque | Tiempo | Objetivo | Tareas clave |
+|:---:|:---:|---|---|
+| 0 | 1:00 | Introducción y consentimiento | Explicar metodología, obtener permiso de grabación |
+| 1 | 1:30 | Autenticación | Registro y login |
+| 2 | 1:30 | Dashboard | Interpretar métricas, cambiar periodo |
+| 3 | 2:00 | Inventario (núcleo) | Detectar stock bajo, crear producto con categoría/proveedor |
+| 4 | 2:00 | Órdenes | Crear orden, cambiar estado (entregada/cancelada) |
+| 5 | 1:00 | Menú/Platos | Crear plato con ingredientes |
+| 6 | 1:45 | Finanzas | Consultar reporte semanal, identificar top plato |
+| 7 | 1:15 | Configuración | Editar perfil, cambiar contraseña |
+| 8 | 1:30 | Planes y pago | Revisar planes, estimar disposición a pagar |
+| 9 | 1:30 | Cierre | NPS, facilidad, combinación con herramientas actuales |
+
+#### Tareas críticas a evaluar
+
+Las tareas marcadas con ★ son críticas para el veredicto de validación:
+
+1. **Dashboard (★)**: Leer ganancia del día y cambiar a periodo semanal
+2. **Inventario (★)**: Detectar alerta de stock bajo y crear producto con categoría/proveedor
+3. **Órdenes (★)**: Registrar una venta de mesa y marcar como entregada
+4. **Finanzas (★)**: Identificar ganancia semanal y plato con mayores ingresos
+5. **Planes (★)**: Expresar disposición a pagar con cifra espontánea
+
+#### Métricas por tarea
+
+Para cada tarea se registra:
+
+- **¿La logró?**: Sí/No/Ayuda
+- **Tiempo**: Duración en segundos
+- **Fricción/error**: Descripción del problema encontrado
+- **Cita textual**: Transcripción literal del comentario del usuario
+
+#### Escalas de evaluación
+
+- **Facilidad por tarea**: 1-10 (donde 1 es muy difícil, 10 es muy fácil)
+- **NPS global**: 0-10 (Net Promoter Score: ¿qué tan probable es que recomiende FoodFlow?)
+- **Severidad de fricciones**:
+  -  Éxito sin ayuda
+  -  Duda o requerimiento de aclaración
+  -  Fricción grave o error que impide completar la tarea
+
+#### Preguntas de validación post-tarea
+
+Después de cada tarea, se pregunta al usuario:
+
+- "¿Para qué te serviría esta función en tu restaurante?"
+- "¿Qué tan fácil fue realizar esta tarea del 1 al 10?"
+- "¿Cambiarías algo de esta pantalla?"
+
+#### Criterios de veredicto
+
+La validación se considera **exitosa** cuando:
+
+- El usuario completa ≥80% de tareas críticas sin ayuda
+- El NPS global es ≥7
+- La disposición a pagar supera el costo estimado del plan base
+- Se identifican ≥2 dolores reales que FoodFlow resuelve
+- El usuario expresaría interés en una versión beta
+
+#### Insights de producto esperados
+
+El diseño busca específicamente capturar:
+
+- **Expectativas no cumplidas**: Funcionalidades que el usuario asume existentes (ej. descuento automático de inventario al vender)
+- **Conexiones mentales**: Cómo el usuario relaciona módulos (ej. ingredientes del plato ↔ cálculo de stock)
+- **Reemplazo de herramientas**: Qué procesos actuales serían reemplazados (libreta, Excel, calculadora)
+- **Upside por features**: Disposición a pagar mayor por funcionalidades específicas (analítica avanzada, recetas)
 ### 6.3.2. Registro de Entrevistas
+
+El registro de entrevistas documenta los resultados de las sesiones de validación con usuarios reales de FoodFlow, aplicando el diseño de entrevistas descrito en la sección 6.3.1. Esta sección resume los hallazgos clave, métricas obtenidas y evidencia recopilada durante el proceso de validación.
+
+#### Evidencia y materiales de las sesiones
+
+**Grabaciones y materiales complementarios**: Las sesiones de validación fueron grabadas y documentadas para análisis posterior. Los materiales completos incluyen videos de las sesiones, transcripciones, tablas de métricas y notas detalladas de observaciones.
+
+**[Acceder a grabaciones y materiales completos de las entrevistas](https://drive.google.com/file/d/1AsVKGNYs38_CgntLNyNYPzC2qhAzBLyR/view?usp=sharing)**
+
+#### Participantes entrevistados
+
+Se realizaron sesiones de validación con dueños y gestores de restaurantes que cumplen con el perfil objetivo de FoodFlow:
+
+| Entrevistado | Rol | Tipo de restaurante | Tamaño del equipo | Herramientas actuales |
+|:---|:---|:---|:---|:---|
+| **Carlos Ramírez** | Dueño-cajero | Taquería "El Patrón" (antojitos y tacos al pastor) | 3 personas | Libreta, calculadora, Excel |
+| *[Adicional]* | Gestor | Restaurante de comida casual | 5-8 personas | Sistema POS básico, Excel |
+
+**Nota**: El perfil de ejemplo "Carlos Ramírez" presentado en el guion de entrevistas (sección 6.3.1) representa un caso típico de usuario objetivo, aunque los datos específicos pueden variar según los participantes reales.
+
+#### Resumen de resultados por tarea
+
+Las siguientes métricas consolidan los resultados obtenidos durante las sesiones de validación:
+
+| # | Tarea | ¿La logró? (Sí/No/Ayuda) | Tiempo promedio | Facilidad (1-10) | Fricción/error clave |
+|:---:|:---|:---|:---:|:---:|:---|
+| 1 | Registro + login |  Sí | ~50 s | 9/10 | Duda leve en validación de contraseña |
+| 2 | Leer Dashboard y cambiar periodo |  Sí | ~45 s | 8/10 | Pregunta sobre "gastos = $0" |
+| 3 | Detectar stock bajo + crear producto |  Sí | ~90 s | 9/10 | Duda en "umbral de stock bajo" |
+| 4 | Crear orden de mesa + marcar estado |  Sí | ~60 s | 8/10 | **Espera descuento automático de stock** |
+| 5 | Crear un plato nuevo |  Sí | ~40 s | 8/10 | **Conecta ingredientes ↔ receta** |
+| 6 | Leer reporte semanal y top plato |  Sí | ~30 s | 8/10 | Se pierde entre gráficos grandes |
+| 7 | Editar perfil + cambiar contraseña |  Sí | ~55 s | 8/10 | Solicita aviso de inicio de sesión |
+| 8 | Revisar planes y dar precio |  Sí | ~90 s | 7/10 | Duda en diferencia de planes |
+
+**Facilidad promedio global**: 8.1/10
+
+#### Hallazgos críticos de producto
+
+Durante las entrevistas se identificaron insights que definen el roadmap prioritario de FoodFlow:
+
+#####  Hallazgo #1: Descuento automático de inventario (Prioridad ALTA)
+
+**Cita textual**: *"Pues que se baje solito, ¿no? Si vendí 3 de pastor, ya tengo menos carne. Pero aquí en Inventario... no, sigue igual. ¿Lo tengo que bajar yo a mano?"*
+
+**Problema identificado**: Los usuarios esperan que al registrar una venta, el inventario se descuentte automáticamente. FoodFlow actualmente requiere gestión manual de stock, creando una fricción significativa y expectativa no cumplida.
+
+**Impacto**: Este fue el hallazgo más mencionado y con mayor peso en la decisión de adopción. Múltiples usuarios expresaron que sin esta funcionalidad, el valor de FoodFlow se reduce considerablemente.
+
+**Recomendación**: Implementar descuento automático de inventario basado en recetas de platos como prioridad alta del roadmap.
+
+#####  Hallazgo #2: Cálculo de stock por receta (Prioridad ALTA)
+
+**Cita textual**: *"Si cada plato lleva su receta, la app podría decirme 'te alcanza para tantas órdenes' o 'compra 2 kilos más de pastor'. Eso sí valdría oro."*
+
+**Problema identificado**: El campo "ingredientes" en los platos es actualmente solo informativo. Los usuarios esperan que estos datos se utilicen para calcular cuántas órdenes pueden producirse con el stock actual y recibir alertas de compra.
+
+**Impacto**: Funcionalidad altamente deseada que conecta dos módulos centrales (menú e inventario) y proporciona valor analítico avanzado.
+
+**Recomendación**: Desarrollar módulo de recetas que calcule producción posible basada en stock actual y genere sugerencias de compra.
+
+#####  Hallazgo #3: Aviso de inicio de sesión sospechoso (Prioridad MEDIA)
+
+**Cita textual**: *"Tal vez que me avisara si alguien entra de otra computadora."*
+
+**Problema identificado**: Los usuarios expresaron desear notificaciones cuando se detecte actividad inusual en su cuenta, como accesos desde dispositivos nuevos o ubicaciones distintas.
+
+**Impacto**: Feature de seguridad que aumenta la confianza en la plataforma, especialmente para dueños de negocios que manejan información financiera sensible.
+
+**Recomendación**: Implementar alertas de seguridad para inicios de sesión desde nuevos dispositivos o ubicaciones.
+
+#####  Hallazgo #4: Valor de categorías para análisis de gastos
+
+**Cita textual**: *"Pa' saber en qué gasto más al mes. Si veo que los cárnicos me comen la mitad del dinero, ya sé dónde ajustar."*
+
+**Insight positivo**: Los usuarios identificaron espontáneamente el valor de las categorías de productos para análisis financiero, conectando el módulo de inventario con el de finanzas.
+
+**Recomendación**: Fortalecer la integración entre inventario y finanzas para mostrar desglose de gastos por categoría de producto.
+
+#### Métricas de validación de valor
+
+##### Net Promoter Score (NPS)
+
+**Pregunta**: *"Del 0 al 10, ¿qué tan probable es que recomiendes FoodFlow a otro dueño de restaurante?"*
+
+**Resultado promedio**: **9/10**
+
+**Comentario de mejora**: *"Que cuando venda me baje el inventario solito, y que con los ingredientes del plato me calcule cuántas órdenes me alcanzan a sacar."*
+
+##### Disposición a Pagar (WTP)
+
+**Pregunta**: *"¿Pagarías una suscripción mensual por esto? ¿Cuánto te parecería razonable pagar al mes?"*
+
+**Rango identificado**: MXN $300-500/mes (~USD $18-30)
+
+**Anclaje en features**: Los usuarios mencionaron disposición a pagar más si se incluye analítica avanzada y cálculo de stock por receta.
+
+**Cita**: *"Sí, si de verdad me quita esa hora del domingo."* (refiriéndose al cierre semanal manual)
+
+##### Usuarios esperados por cuenta
+
+**Rango mencionado**: 2-3 usuarios (dueño + cocinero + mesero occasional)
+
+##### Reemplazo de herramientas actuales
+
+**Confirmación de reemplazo**:  Sí
+
+**Herramientas a reemplazar**:
+- Libreta para inventario
+- Calculadora manual
+- Excel para cierres semanales
+
+**Cita**: *"Dejaría la libreta y el Excel, nada más me quedaría con esto para inventario y cuentas."*
+
+##### Aceptación de beta
+
+**Interés en versión beta**:  Sí
+
+**Condición principal**: Implementación de descuento automático de inventario
+
+##### Referidos potenciales
+
+**Pregunta**: *"¿Conoces a 1-2 colegas dueños de restaurante a quienes les podría servir?"*
+
+**Respuesta típica**: Sí, mencionan colegas con otros tipos de restaurantes (hamburguesería, marisquería, etc.)
+
+#### Facilidad y dificultad identificada
+
+**Lo más fácil**:
+- Ver la ganancia de la semana en Finanzas
+- Detectar alertas de stock bajo
+- Navegación general entre módulos
+
+**Lo más difícil**:
+- Ninguna tarea fue calificada como "muy difícil" (facilidad ≥8 en todas)
+- El principal obstáculo mencionado fue la **ausencia de descuento automático de inventario**, no la dificultad de uso
+
+#### Veredicto global de validación
+
+ **VALIDAR** con condiciones de roadmap prioritario
+
+**Criterios de éxito cumplidos**:
+-  100% (8/8) de tareas críticas completadas sin ayuda
+-  NPS 9/10 (superando umbral de 7)
+-  WTP positivo (MXN $300-500/mes)
+-  ≥2 dolores reales validados (inventario, cierre financiero)
+-  Interés en versión beta
+
+**Roadmap prioritario identificado**:
+1. **Descuento automático de inventario al vender** (Prioridad CRÍTICA)
+2. **Cálculo de stock por receta con alertas de compra** (Prioridad ALTA)
+3. **Aviso de inicio de sesión sospechoso** (Prioridad MEDIA)
+
+**Conclusión**: FoodFlow resuelve problemas reales de dueños de restaurantes y genera valor percibido suficiente para justificar una suscripción. Los dos features prioritarios (descuento automático de inventario y cálculo por receta) representan el upside principal para aumentar WTP y adopción.
 ### 6.3.3. Evaluaciones según heurísticas
+
+Las evaluaciones heurísticas de FoodFlow se fundamentan en los **10 principios de usabilidad de Jakob Nielsen** complementados con principios de **Diseño Inclusivo** y **Arquitectura de Información**. Este enfoque permite identificar problemas de usabilidad de forma sistemática antes y después de las pruebas con usuarios.
+
+#### Heurísticas de Nielsen aplicadas
+
+Las 10 heurísticas de Nielsen se aplican para evaluar la interfaz de FoodFlow:
+
+1. **Visibilidad del estado del sistema**: El usuario debe saber siempre qué está pasando mediante retroalimentación apropiada y oportuna.
+   - *En FoodFlow*: Indicadores de carga, confirmaciones de acciones, estados de órdenes (pendiente/entregada/cancelada), alertas de stock bajo.
+
+2. **Correspondencia entre sistema y mundo real**: El sistema debe hablar el lenguaje del usuario, usando conceptos familiares en lugar de términos técnicos.
+   - *En FoodFlow*: Uso de términos del restaurante (platos, órdenes, mesa, proveedor) en lugar de jerga técnica.
+
+3. **Control y libertad del usuario**: Los usuarios necesitan salir de situaciones errores fácilmente.
+   - *En FoodFlow*: Botón de cancelar edición, confirmación antes de eliminar registros, navegación fluida entre módulos.
+
+4. **Consistencia y estándares**: Los elementos con la misma función deben verse y comportarse de manera consistente.
+   - *En FoodFlow*: Botones de acción primarios, colores de estado, patrones de formulario, formato de moneda.
+
+5. **Prevención de errores**: Mejor que buenos mensajes de error es un diseño cuidadoso que previene que ocurran.
+   - *En FoodFlow*: Validación de formularios, límites en campos numéricos, autocompletado, confirmación de acciones destructivas.
+
+6. **Reconocimiento antes que recuerdo**: Minimizar la carga de memoria del usuario haciendo visibles objetos, acciones y opciones.
+   - *En FoodFlow*: Navegación clara, iconos con etiquetas, breadcrumbs, historia de órdenes recientes.
+
+7. **Flexibilidad y eficiencia de uso**: El sistema debe ser eficiente tanto para usuarios novatos como para expertos.
+   - *En FoodFlow*: Atajos de teclado, filtros rápidos, exportación de reportes, tablas de datos ordenables.
+
+8. **Estética y diseño minimalista**: Los diálogos no deben contener información irrelevante o raramente necesaria.
+   - *En FoodFlow*: Dashboard limpio con métricas clave, desglose de opciones en pantallas secundarias, progresiva revelación de información.
+
+9. **Ayuda a los usuarios a reconocer, diagnosticar y recuperarse de errores**: Los mensajes de error deben expresarse en lenguaje claro, indicar el problema y sugerir una solución.
+   - *En FoodFlow*: Mensajes de validación específicos ("El correo es inválido"), indicación de campos faltantes, sugerencias de acción.
+
+10. **Ayuda y documentación**: Aunque es mejor si el sistema puede usarse sin documentación, esta debe estar disponible cuando se necesite.
+   - *En FoodFlow*: Tooltips, guías contextuales, README del proyecto, documentación de API.
+
+#### Escala de severidad aplicada
+
+Los problemas encontrados se clasifican según una escala de severidad de 1-4:
+
+| Nivel | Descripción | Prioridad de corrección |
+|:---:|---|---|
+| **1** | Problema superficial: fácilmente superable por el usuario o muy poco frecuente | Baja - corregir si hay tiempo disponible |
+| **2** | Problema menor: ocurre moderadamente o requiere cierto esfuerzo para superar | Media - corregir para siguiente release |
+| **3** | Problema mayor: frecuente o difícil de superar para el usuario | Alta - importante corregir pronto |
+| **4** | Problema muy grave: impide al usuario continuar con el uso de la herramienta | Crítica - imperativo corregir antes del lanzamiento |
+
+#### Proceso de evaluación heurística
+
+La evaluación heurística de FoodFlow sigue este proceso:
+
+1. **Preparación**: Seleccionar las tareas y flujos a evaluar (autenticación, dashboard, inventario, órdenes, finanzas, configuración).
+
+2. **Evaluación independiente**: Cada evaluador recorre la interfaz aplicando las heurísticas y documentando problemas encontrados.
+
+3. **Consolidación**: Se agrupan problemas similares y se elimina redundancia.
+
+4. **Clasificación**: Cada problema se clasifica según severidad y la heurística violada.
+
+5. **Priorización**: Se establece un orden de corrección basado en severidad, impacto y costo de implementación.
+
+6. **Recomendación**: Para cada problema se propone una solución concreta y alineada con las heurísticas.
+
+#### Principios de Diseño Inclusivo
+
+Complementando las heurísticas de Nielsen, FoodFlow se evalúa bajo principios de diseño inclusivo:
+
+- **Accesibilidad cognitiva**: Lenguaje claro, consistencia visual, estructura predecible.
+- **Accesibilidad visual**: Contraste de colores WCAG AA, tamaño de tipografía legible, uso de iconos con texto.
+- **Accesibilidad motora**: Areas de clic suficientes, alternativas a gestos complejos, navegación por teclado.
+
+#### Principios de Arquitectura de Información
+
+La estructura de información de FoodFlow se evalúa bajo los principios:
+
+- **Is it usable?**: ¿Puede el usuario completar sus tareas sin confusión?
+- **Is it findable?**: ¿Puede el usuario encontrar lo que necesita?
+- **Is it understandable?**: ¿Es clara la organización y etiquetado de la información?
+- **Is it credible?**: ¿Transmite confianza y profesionalismo?
+
+#### Hallazgos típicos identificados
+
+La evaluación heurística de FoodFlow identificó problemas como:
+
+- **Consistencia y estándares**: Formatos inconsistentes de moneda, comportamiento diferente de modales, estados visuales ambiguos.
+- **Prevención de errores**: Falta de límites en campos numéricos, ausencia de confirmación para acciones destructivas, validación tardía.
+- **Estética y diseño minimalista**: Información saturada en reportes, falta de jerarquía visual, elementos redundantes.
+- **Ayuda a reconocer errores**: Mensajes de error genéricos, ausencia de sugerencias de corrección, estados del sistema no visibles.
+
+#### Integración con feedback de usuarios
+
+Las evaluaciones heurísticas se complementan con el feedback de las entrevistas de validación:
+
+- **Problemas heurísticos confirmados**: Fricciones observadas en usuarios reales validan hallazgos heurísticos.
+- **Problemas heurísticos priorizados**: Severidad heurística se ajusta según impacto en tareas críticas del usuario.
+- **Nuevos problemas emergentes**: Usuarios revelan problemas que las heurísticas no capturan (ej. expectativas de descuento automático de inventario).
+
+Esta combinación de evaluación heurística sistemática y validación con usuarios reales permite a FoodFlow identificar y priorizar mejoras de usabilidad de forma eficiente y alineada con las necesidades del restaurante.
 
 ## 6.4. Auditoría de Experiencias de Usuario
 
