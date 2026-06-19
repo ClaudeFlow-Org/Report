@@ -7402,6 +7402,14 @@ Las ramas `main` del frontend y `deploy` del backend deberían protegerse para r
 
 #### 6.4.1.2. Cronograma de auditoría realizada.
 
+|    Fecha    | Actividad |
+|:----------:| :--- |
+| 2026-06-03 | Exploración preliminar de la interfaz de Centralis y reconocimiento de sus herramientas y opciones clave. |
+| 2026-06-05 | Pruebas de usuario y simulación de procesos dentro de la web, evaluando el control de existencias, la configuración de menús y el panel de análisis financiero. |
+| 2026-06-06 | Registro riguroso de fallos de usabilidad detectados, clasificándolos por nivel de impacto y proponiendo optimizaciones bajo criterios heurísticos. |
+| 2026-06-09 | Estructuración y redacción del reporte final de UX, consolidando el listado de hallazgos y el desglose detallado de cada incidencia. |
+| 2026-06-12 | Entrega y socialización del diagnóstico de experiencia de usuario con el equipo técnico de Centralis para coordinar los ajustes en los próximos ciclos de desarrollo. |
+
 #### 6.4.1.3. Contenido de auditoría realizada.
 
 ##### UX Heuristics & Principles Evaluation
@@ -7617,9 +7625,140 @@ Las burbujas de los miembros que asistirán al evento (esquina superior derecha 
 Conectar las burbujas de avatar con el servicio de base de datos correspondiente. En caso de que un usuario no cuente con una foto de perfil subida, se debe reemplazar el ícono genérico gris por las iniciales del nombre de la persona sobre un fondo de color aleatorio para humanizar la interfaz.
 
 ### 6.4.2. Auditoría recibida.
+
 #### 6.4.2.1. Información del grupo auditor.
+
+**Nombre del grupo:** Fudi
+
 #### 6.4.2.2. Cronograma de auditoría recibida.
-#### 6.4.2.3. Contenido de auditoría recibida.
+
+|   Fecha    | Actividad |
+|:----------:| :--- |
+| 2026-06-01 | Revisión inicial de la plataforma FoodFlow y familiarización con sus funcionalidades principales. |
+| 2026-06-03 | Ejecución de tareas de usuario específicas en la aplicación web, enfocándose en los flujos de gestión de inventario, creación de platos y visualización de métricas financieras. |
+| 2026-06-05 | Documentación detallada de problemas de usabilidad encontrados, asignación de severidad y elaboración de recomendaciones de mejora basadas en principios heurísticos. |
+| 2026-06-07 | Preparación del informe de auditoría de experiencia de usuario, incluyendo la tabla resumen de problemas y la descripción detallada de cada uno. |
+| 2026-06-10 | Presentación del informe de auditoría a los desarrolladores de FoodFlow para su revisión y planificación de correcciones en futuras iteraciones del producto. |
+
+##### 6.4.2.3. Contenido de auditoría recibida.
+
+###### **UX Heuristics & Principles Evaluation**
+
+###### **Usability – Inclusive Design – Information Architecture**
+
+**CARRERA : Ingeniería de Software**
+**CURSO : Diseño de Experimentos de Ingeniería de Software SECCIÓN : 1ASI0732-2610-17821**
+**PROFESORES : Lennin Percy Cenas Vasquez**
+**AUDITOR : Raúl Bellido Salas** **CLIENTE(S) : ClaudeFlow / FoodFlow Users** ---
+
+**SITE o APP A EVALUAR:**
+
+[FoodFlow-Frontend](https://food-flow-frontend-ipmc.vercel.app/login) *(Aplicación Web de Gestión de Restaurantes)*
+
+**TAREAS A EVALUAR:**
+
+*El alcance de esta evaluación incluye la revisión de la usabilidad de las siguientes tareas:*
+
+1. Registro de usuario e inicio de sesión en la plataforma.
+2. Gestión de inventario de productos (creación, edición, eliminación y búsqueda de insumos).
+3. Configuración y gestión de platos (Dishes) y precios.
+4. Creación y actualización de pedidos/órdenes y control de sus estados en el restaurante.
+5. Visualización del rendimiento financiero y métricas comerciales en el Dashboard.
+6. Ajuste de perfil, cambio de contraseña y actualización de suscripción en el módulo de Settings.
+
+*No están incluidas en esta versión de la evaluación las siguientes tareas:*
+
+1. Integración en tiempo real de pasarelas de pago externas (p. ej. Stripe, PayPal).
+2. Reportes avanzados exportables en formato PDF o Excel.
+3. Notificaciones push o alertas instantáneas en tiempo real para cambios de estado de órdenes multi-dispositivo.
+
+---
+
+**ESCALA DE SEVERIDAD:**
+
+*Los errores serán puntuados tomando en cuenta la siguiente escala de severidad:*
+
+| Nivel | Descripción |
+| :---- | :---- |
+| 1 | Problema superficial: puede ser fácilmente superado por el usuario o ocurre con muy poca frecuencia. No necesita ser arreglado a no ser que exista disponibilidad de tiempo. |
+| 2 | Problema menor: puede ocurrir un poco más frecuentemente o es un poco más difícil de superar para el usuario. Se le debería asignar una prioridad baja de cara al siguiente release. |
+| 3 | Problema mayor: ocurre frecuentemente o los usuarios no son capaces de resolverlo. Es importante que sea corregido y se le debe asignar una prioridad alta. |
+| 4 | Problema muy grave: un error de gran impacto que impide al usuario continuar con el uso de la herramienta. Es imperativo que sea corregido antes del lanzamiento. |
+
+---
+
+**TABLA RESUMEN:**
+
+| \# | Problema | Escala de severidad | Heurística/Principio violada(o) |
+| :---: | ----- | ----- | :---- |
+| 1 | Hardcodeo del símbolo de moneda `$` en listados en lugar de usar el helper centralizado | 2 | Usability: Consistencia y estándares |
+| 2 | Elementos de imagen clave sin atributo descriptivo en `alt` (p. ej. Logo de marca en login) | 1 | Inclusive Design: Proporciona experiencias comparables |
+| 3 | Redirección abrupta y deslogueo automático al cambiar email sin suficiente aviso o contador | 2 | Usability: Visibilidad del estado del sistema |
+| 4 | Diálogos modales permiten cierre accidental perdiendo datos del formulario sin confirmación | 3 | Usability: Libertad y control del usuario |
+| 5 | Falta de límites superiores claros y advertencia visual en los campos numéricos de stock | 2 | Usability: Prevención de errores |
+| 6 | Inconsistencia de datos en la tarjeta de Órdenes entre el Dashboard y Finanzas | 3 | Usability: Consistencia y estándares |
+| 7 | Etiquetas numéricas del eje Y truncadas o mal alineadas en el gráfico de Finanzas | 2 | Usability: Diseño estético y minimalista |
+| 8 | Falta de botón para agregar un nuevo plato directamente en la vista de Menú/Platos | 2 | Usability: Flexibilidad y eficiencia de uso |
+
+---
+
+**DESCRIPCIÓN DE PROBLEMAS:**
+
+##### **PROBLEMA #1: Hardcodeo del símbolo de moneda `$` en listados de órdenes**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Consistencia y estándares  
+* **Problema:** En OrdersPage, el total acumulado de la orden muestra el símbolo de moneda de forma fija (`${row.totalAmount.toFixed(2)}`). Esto rompe la consistencia con el helper `formatCurrency` configurado en `src/utils` y utilizado en otras partes de la aplicación como `SettingsPage.tsx` para adaptarse a las configuraciones regionales del restaurante.
+* **Recomendación:** Reemplazar el hardcodeo de `$` por la invocación del método `formatCurrency(row.totalAmount)` para mantener el estándar global de la aplicación.
+
+---
+
+##### **PROBLEMA #2: Ausencia de descripción en logotipo de marca en autenticación**
+* **Severidad:** 1  
+* **Heurística violada:** Inclusive Design - Proporciona experiencias comparables  
+* **Problema:** En `LoginPage.tsx` y `RegisterPage.tsx`, el logotipo principal de la aplicación `foodflow-mark.png` contiene un atributo `alt=""` vacío. Para usuarios con lectores de pantalla, esto omite el branding fundamental del sitio.
+* **Recomendación:** Cambiar el atributo por `alt="FoodFlow Logo"` o `alt={t('app.name')}` para asegurar que sea accesible a todas las personas.
+
+---
+
+##### **PROBLEMA #3: Cierre de sesión y redirección abrupta al modificar correo electrónico**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Visibilidad del estado del sistema  
+* **Problema:** En `SettingsPage.tsx`, al cambiar el correo electrónico del perfil del usuario, el sistema muestra un mensaje rápido y redirige al login cerrando la sesión de forma inmediata usando un `setTimeout` de 3 segundos sin feedback visual de progreso. El usuario puede desconcertarse al ver que su sesión expira sin una advertencia o un temporizador interactivo.
+* **Recomendación:** Implementar un indicador de progreso visual o un cuadro de diálogo con confirmación donde se indique explícitamente "Cerrando sesión en X segundos..." para reducir la incertidumbre.
+
+---
+
+##### **PROBLEMA #4: Diálogos modales permiten cierre accidental al hacer click afuera sin confirmación de descarte**
+* **Severidad:** 3  
+* **Heurística violada:** Usability - Libertad y control del usuario  
+* **Problema:** En `ProductsPage.tsx` y en la adición de pedidos, si el usuario tiene información a medio llenar en los diálogos modales y hace clic fuera del modal o presiona "Cancelar" por error, los modales se cierran inmediatamente perdiendo todo el progreso del formulario sin preguntar si desea descartar los cambios.
+* **Recomendación:** Implementar una validación de confirmación (`ConfirmDialog` o comprobación de `isDirty` del formulario) si el usuario intenta cerrar el modal habiendo modificado datos.
+
+---
+
+##### **PROBLEMA #5: Ausencia de advertencias visuales de stock mínimo en listas de productos**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Prevención de errores / Diseño visual  
+* **Problema:** Aunque el sistema define un umbral de stock bajo (`lowStockThreshold`), la interfaz de administración de inventario no resalta visualmente en la tabla principal aquellos artículos que están por debajo de este límite, obligando al gestor a comparar manualmente los valores numéricos actuales contra el umbral.
+* **Recomendación:** Añadir un badge, color o icono de advertencia (como el icono `Warning` disponible en las importaciones) a las filas de la tabla de inventario cuando `stockLevel <= lowStockThreshold`.
+
+
+---
+
+##### **PROBLEMA #6: Truncamiento de etiquetas en el gráfico de barras de Finanzas**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Diseño estético y minimalista  
+* **Problema:** En la vista de `Finanzas`, dentro del bloque "Ingresos vs gastos por categoría", las etiquetas numéricas del eje Y (por ejemplo, `$600.00`, `$450.00`) aparecen cortadas y pegadas al límite izquierdo del contenedor del gráfico. Esto da una sensación de interfaz rota y dificulta la lectura rápida de los montos.
+* **Recomendación:** Ajustar las propiedades de la librería de gráficos utilizada (ej. Recharts o Chart.js), incrementando el margen izquierdo (`marginLeft` o el `width` del eje Y) para que los valores monetarios tengan suficiente espacio para renderizarse correctamente.
+
+---
+
+##### **PROBLEMA #7: Ausencia de botón de acción (CTA) en la vista de Menú / Platos**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Flexibilidad y eficiencia de uso  
+* **Problema:** Si el usuario se dirige directamente a la pestaña `Menú / Platos` con la intención de agregar un nuevo ítem, no encuentra un botón para realizar esta acción principal. Actualmente, el usuario está forzado a regresar a la vista del `Panel` para usar el atajo de "Acciones rápidas > Agregar plato", lo cual rompe el flujo lógico de la tarea.
+* **Recomendación:** Añadir un botón primario visible (ej. "+ Agregar plato" o "Nuevo") en la parte superior derecha de la vista `Menú / Platos`, preferiblemente a la misma altura de la barra de búsqueda.
+
 #### 6.4.2.4. Resumen de modificaciones para subsanar hallazgos.
 
 # Capítulo VII: DevOps Practices
