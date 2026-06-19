@@ -8244,11 +8244,9 @@ Esta sección utiliza la documentación existente, las historias de usuario, el 
 
 ### 8.1.1. As-Is Summary.
 
-FoodFlow se encuentra en una etapa de producto mínimo viable funcional. La solución está orientada a dueños de restaurantes pequeños y medianos que necesitan centralizar información financiera y operativa que actualmente pueden gestionar mediante cuadernos, hojas de cálculo, reportes aislados o sistemas POS con capacidades limitadas.
+FoodFlow es una plataforma web dirigida a dueños y administradores de restaurantes pequeños y medianos que necesitan reunir en un mismo entorno la información financiera y operativa de su negocio. El MVP integra una aplicación React con TypeScript, una API REST desarrollada con Java y Spring Boot, persistencia PostgreSQL en Supabase y despliegues en Vercel y Render. Además, GitHub Actions verifica automáticamente ambos repositorios mediante lint, pruebas, compilación y generación de artefactos.
 
-La plataforma dispone de una aplicación web desarrollada con React, TypeScript y Vite; un backend RESTful implementado con Java 17 y Spring Boot; una base de datos PostgreSQL alojada en Supabase; y servicios desplegados mediante Vercel y Render. Asimismo, GitHub Actions valida automáticamente el frontend y el backend mediante lint, pruebas, compilación y generación de artefactos.
-
-El producto implementado permite realizar las siguientes actividades:
+La versión actual ofrece las siguientes capacidades:
 
 | Área | Capacidad disponible en el MVP |
 |---|---|
@@ -8261,226 +8259,355 @@ El producto implementado permite realizar las siguientes actividades:
 | Cuenta | Administración del perfil, cambio de contraseña, idioma y tema visual. |
 | Suscripciones | Visualización y selección de planes Free, Standard y Premium con precios y beneficios definidos. |
 
-Aunque las funcionalidades principales se encuentran implementadas y verificadas técnicamente, todavía deben validarse con evidencia del segmento objetivo. En particular, no se ha demostrado que los propietarios interpreten correctamente el dashboard, que las alertas de inventario influyan en sus decisiones de compra o que exista disposición real a pagar por los planes Standard y Premium.
+La implementación técnica permite probar los principales recorridos, pero todavía existen zonas de incertidumbre que deben investigarse antes de considerarlas validadas.
 
-El módulo de suscripciones permite elegir y registrar un plan, pero no integra una pasarela de pago. Por ello, la selección de un plan dentro del MVP no debe interpretarse como una compra ni como evidencia de ingresos. Del mismo modo, el producto todavía no incorpora una herramienta de analítica de comportamiento que registre automáticamente eventos, frecuencia de uso, retención o conversión.
+**Problemas y riesgos por validar:**
 
-El estado actual permite realizar pruebas de usabilidad moderadas, entrevistas, tareas guiadas y evaluaciones de intención de uso empleando la aplicación desplegada y datos controlados. Estas actividades proporcionarán una línea base para decidir qué aspectos deben mantenerse, corregirse o priorizarse en la siguiente iteración.
+* **Interpretación del dashboard financiero:** La pantalla muestra ingresos, gastos, utilidad, variaciones y platos destacados, pero no se ha comprobado que un propietario sin formación contable pueda interpretar estos datos y convertirlos en una decisión sin asistencia.
+* **Alertas de inventario con acción limitada:** FoodFlow identifica productos por debajo de su umbral, aunque todavía se desconoce si la información mostrada permite priorizar correctamente una reposición o si el usuario necesita revisar datos adicionales.
+* **Comprensión de los reportes por periodo:** Los reportes diarios, semanales y mensuales reúnen comparaciones y categorías, pero su utilidad depende de que los usuarios reconozcan tendencias y no confundan los indicadores.
+* **Valor comercial de los planes:** El módulo permite seleccionar Free, Standard o Premium, pero no existe una pasarela de pago. Una selección dentro del MVP expresa preferencia y no constituye una compra ni demuestra disposición real a pagar.
+* **Carga inicial y ausencia de analítica conductual:** Para obtener valor, el restaurante debe registrar información suficiente. Además, aún no existe una herramienta de tracking que mida activación, recurrencia, adopción o conversión de manera automática.
+
+**Objetivos de mejora:**
+
+* **Claridad financiera:** Validar y mejorar la jerarquía, las etiquetas y las ayudas del dashboard para que los indicadores puedan interpretarse sin conocimientos contables avanzados.
+* **Inventario accionable:** Convertir la alerta de bajo stock en una guía de priorización y reposición, no únicamente en una señal visual.
+* **Reportes orientados a decisiones:** Presentar comparaciones de periodos que permitan reconocer cambios importantes en ventas, gastos y desempeño del menú.
+* **Propuesta SaaS comprensible:** Comunicar los beneficios y límites de cada plan mediante problemas concretos del restaurante antes de evaluar una integración de pagos.
+* **Aprendizaje medible y responsable:** Definir eventos anónimos y encuestas breves que permitan evaluar el uso sin recopilar información financiera o personal sensible.
+
+El estado actual permite realizar pruebas moderadas, entrevistas y tareas guiadas con datos ficticios. Esta evidencia servirá para mantener, ajustar, repriorizar o descartar las mejoras propuestas en las siguientes secciones.
 
 ### 8.1.2. Raw Material: Assumptions, Knowledge Gaps, Ideas, Claims.
 
-El material inicial de los experimentos proviene del Lean UX Problem Statement, las hipótesis del producto, las historias de usuario y las funciones presentes en el MVP. Los elementos se clasifican para distinguir aquello que el equipo cree, lo que todavía desconoce, las posibles respuestas de diseño y las afirmaciones que necesitan evidencia.
+El material bruto se clasifica para separar aquello que el equipo supone, la información que aún desconoce, las posibles intervenciones de producto y las afirmaciones que requieren evidencia.
 
-**Assumptions**
+#### Assumptions
 
-| ID | Tipo | Supuesto |
-|---|---|---|
-| A-01 | Usuario | Los dueños de restaurantes necesitan una visión centralizada de ingresos, gastos, utilidad, órdenes e inventario. |
-| A-02 | Usuario | Los propietarios sin conocimientos contables avanzados prefieren indicadores visuales y gráficos antes que tablas extensas o reportes dispersos. |
-| A-03 | Problema | El uso de registros manuales y herramientas desconectadas dificulta identificar pérdidas y tomar decisiones oportunas. |
-| A-04 | Solución | Un dashboard financiero permite comprender rápidamente la situación general del restaurante. |
-| A-05 | Solución | Los reportes diarios, semanales y mensuales ayudan a reconocer tendencias y comparar el desempeño del negocio. |
-| A-06 | Solución | Las alertas de bajo stock ayudan a priorizar compras y reducir órdenes no atendidas por falta de insumos. |
-| A-07 | Solución | Integrar menú, inventario, órdenes y finanzas reduce el tiempo empleado en revisar información. |
-| A-08 | Negocio | Los restaurantes pequeños y medianos percibirán suficiente valor para considerar un plan de pago. |
-| A-09 | Negocio | La especialización gastronómica diferencia a FoodFlow de una hoja de cálculo, un POS básico o un software contable genérico. |
-| A-10 | Adopción | Una interfaz sencilla y de baja curva de aprendizaje favorece el uso recurrente del producto. |
+1. **Necesidad de centralización:** Los propietarios necesitan consultar ingresos, gastos, utilidad, órdenes e inventario sin reunir información de varias herramientas.
+2. **Preferencia por información visual:** Los usuarios sin formación contable avanzada comprenden mejor tarjetas, comparaciones y gráficos que reportes extensos o dispersos.
+3. **Dashboard como punto de decisión:** Una vista financiera resumida puede ayudar a identificar rápidamente si el restaurante obtiene utilidad o pérdida.
+4. **Alertas que impulsan acciones:** Resaltar el stock crítico permite priorizar compras antes de que la falta de insumos afecte las órdenes.
+5. **Valor de la comparación temporal:** Los periodos diario, semanal y mensual ayudan a detectar cambios que no son evidentes en registros aislados.
+6. **Integración operativa:** Relacionar órdenes, menú, inventario y finanzas reduce el esfuerzo necesario para revisar el negocio.
+7. **Menor barrera mediante demostración:** Un recorrido con información ficticia puede mostrar el valor de FoodFlow antes de exigir la carga de datos reales.
+8. **Diferenciación por especialización:** Una solución diseñada para restaurantes genera mayor valor percibido que una hoja de cálculo o herramienta financiera genérica.
+9. **Viabilidad de planes pagados:** Una parte del segmento considerará Standard o Premium si comprende qué problema resuelve cada beneficio.
+10. **Uso responsable de analítica:** Los restaurantes aceptarán la medición de eventos anónimos si se explica su propósito y no se recopila información sensible.
 
-**Knowledge Gaps**
+#### Knowledge Gaps
 
-| ID | Conocimiento pendiente |
-|---|---|
-| KG-01 | ¿Qué indicador del dashboard resulta más útil para tomar una decisión real del restaurante? |
-| KG-02 | ¿Los usuarios comprenden la diferencia entre ingresos, gastos, utilidad y variación sin recibir explicación? |
-| KG-03 | ¿Con qué frecuencia necesitan consultar reportes diarios, semanales o mensuales? |
-| KG-04 | ¿Las alertas de bajo stock contienen información suficiente para decidir qué producto reponer? |
-| KG-05 | ¿Cuánto tiempo y cuántos errores requiere registrar una orden frente al método utilizado actualmente por el usuario? |
-| KG-06 | ¿Qué funciones son indispensables para que un propietario abandone hojas de cálculo o registros manuales? |
-| KG-07 | ¿Los beneficios de los planes Standard y Premium justifican sus precios para el segmento objetivo? |
-| KG-08 | ¿Qué objeción principal impide adoptar FoodFlow: precio, tiempo de configuración, confianza, complejidad o resistencia al cambio? |
-| KG-09 | ¿Qué información inicial necesita el usuario para que el dashboard y los reportes produzcan valor desde el primer uso? |
-| KG-10 | ¿La propuesta especializada en restaurantes se entiende claramente al observar la landing page y la aplicación? |
+1. **Interpretación financiera real:** Se desconoce si los usuarios distinguen ingresos, gastos, utilidad y variación sin explicación previa.
+2. **Indicador más accionable:** No se sabe qué métrica del dashboard conduce con mayor frecuencia a una decisión concreta.
+3. **Información necesaria para reponer:** Falta conocer si stock actual, umbral y unidad bastan para decidir qué producto comprar primero.
+4. **Frecuencia de revisión:** No se ha determinado si los restaurantes necesitan reportes diarios, semanales o mensuales con mayor frecuencia.
+5. **Comparación con el proceso actual:** Se desconoce cuánto tiempo ahorra FoodFlow frente a cuadernos, hojas de cálculo o sistemas separados.
+6. **Costo de la carga inicial:** No se sabe cuántos datos está dispuesto a registrar un usuario antes de percibir el primer beneficio.
+7. **Beneficios que justifican el precio:** Se desconoce qué funciones de Standard o Premium producen una intención de pago creíble.
+8. **Principal barrera de adopción:** Falta determinar si predomina el precio, la confianza, la complejidad, la configuración inicial o la resistencia al cambio.
+9. **Uso recurrente:** No existen datos que demuestren si los propietarios regresarían al dashboard y a los reportes en semanas diferentes.
+10. **Aceptación del tracking:** No se conoce qué nivel de medición consideran aceptable los usuarios ni qué explicación necesitan para otorgar consentimiento.
 
-**Ideas**
+#### Ideas
 
-| ID | Idea susceptible de experimentación |
-|---|---|
-| I-01 | Incorporar un recorrido inicial con datos de demostración para mostrar valor antes de que el usuario registre información propia. |
-| I-02 | Presentar recomendaciones simples junto a las métricas, por ejemplo, revisar una categoría de gastos que aumentó frente al periodo anterior. |
-| I-03 | Añadir una lista priorizada de productos con bajo stock y una acción para registrar su reposición. |
-| I-04 | Comparar distintas presentaciones del dashboard para identificar qué jerarquía de indicadores se comprende mejor. |
-| I-05 | Ofrecer un periodo de prueba de funciones Standard o Premium antes de solicitar una decisión de pago. |
-| I-06 | Explicar los planes mediante beneficios vinculados a problemas reales, como reducción de pérdidas, reportes avanzados y límites de operación. |
-| I-07 | Incorporar encuestas breves dentro de la aplicación después de completar tareas clave. |
-| I-08 | Registrar eventos de uso de dashboard, reportes, inventario, órdenes y suscripciones para medir adopción y recurrencia. |
+1. **Modo demostración:** Permitir que una cuenta nueva explore dashboard, inventario y reportes con datos ficticios claramente identificados.
+2. **Explicaciones contextuales:** Añadir definiciones breves y ejemplos de interpretación junto a las métricas financieras.
+3. **Resumen accionable:** Mostrar los cambios más relevantes del periodo y el área que debería revisarse primero.
+4. **Lista de reposición priorizada:** Ordenar los productos críticos por nivel de urgencia y facilitar su actualización desde la alerta.
+5. **Comparación guiada:** Presentar dos periodos con diferencias absolutas, porcentajes y etiquetas de aumento o disminución.
+6. **Planes explicados por problemas:** Relacionar cada plan con beneficios concretos, límites y necesidades de un restaurante.
+7. **Prueba temporal sin cobro:** Permitir el uso controlado de algunas funciones pagadas antes de solicitar una decisión comercial.
+8. **Encuestas contextuales:** Solicitar una valoración breve después de completar dashboard, reposición o consulta de reportes.
+9. **Tracking de eventos clave:** Medir de forma seudónima activación, consultas, acciones posteriores y recurrencia.
+10. **Onboarding progresivo:** Solicitar únicamente los datos necesarios para completar una primera tarea y posponer configuraciones secundarias.
 
-**Claims**
+#### Claims
 
-Las siguientes afirmaciones expresan resultados esperados, pero permanecen **sin validar** hasta que se ejecuten los experimentos correspondientes:
+Las siguientes afirmaciones representan resultados esperados y permanecerán **sin validar** hasta ejecutar los experimentos:
 
-| ID | Afirmación por validar |
-|---|---|
-| C-01 | FoodFlow permite que un dueño comprenda la situación financiera general de su restaurante en pocos minutos. |
-| C-02 | La centralización de información reduce el tiempo dedicado a revisar ingresos, gastos, órdenes e inventario. |
-| C-03 | Las alertas de bajo stock facilitan decisiones de reposición y contribuyen a reducir pérdidas operativas. |
-| C-04 | Los reportes por periodo permiten detectar tendencias que no son evidentes mediante registros manuales. |
-| C-05 | La visualización de platos destacados ayuda a tomar decisiones sobre menú, precios y compras. |
-| C-06 | La experiencia especializada en restaurantes genera mayor valor percibido que una herramienta financiera genérica. |
-| C-07 | Una parte significativa de los usuarios de prueba considerará contratar un plan pagado después de experimentar las funciones principales. |
+1. **Comprensión en pocos minutos:** FoodFlow permite conocer la situación financiera general sin asistencia especializada.
+2. **Decisiones basadas en periodos:** Los reportes ayudan a reconocer tendencias y proponer acciones sobre gastos, ventas o menú.
+3. **Reposición más oportuna:** Las alertas de bajo stock facilitan priorizar insumos y evitar faltantes operativos.
+4. **Menor esfuerzo de gestión:** Centralizar información reduce el tiempo dedicado a reunir datos de distintas fuentes.
+5. **Registro de órdenes comprensible:** El flujo permite registrar ventas sin errores críticos y alimenta correctamente los indicadores.
+6. **Especialización reconocible:** Los usuarios perciben a FoodFlow como una solución para restaurantes y no como una herramienta financiera genérica.
+7. **Valor en los planes:** Una parte significativa del segmento elegirá un plan pagado cuando comprenda sus beneficios diferenciales.
+8. **Analítica útil sin invadir privacidad:** Es posible obtener evidencia de uso mediante eventos mínimos que no contengan datos personales ni financieros identificables.
 
 ### 8.1.3. Experiment-Ready Questions.
 
-Las preguntas listas para experimentación se redactaron de manera que puedan responderse mediante comportamientos observables, resultados de tareas o respuestas de participantes, evitando depender únicamente de opiniones generales.
+Las preguntas se organizan según su naturaleza. Las **Belief-led Questions** ponen a prueba una creencia concreta del equipo; las **Exploratory Questions** investigan aspectos donde todavía no existe una explicación suficientemente formada. Esta separación evita forzar una hipótesis cuando primero es necesario comprender el comportamiento.
 
-1. ¿Puede un dueño de restaurante identificar correctamente si su negocio obtuvo utilidad o pérdida y señalar una acción a partir del dashboard sin recibir asistencia?
-2. ¿Los reportes diarios, semanales y mensuales permiten reconocer cambios relevantes en ingresos, gastos y rendimiento del restaurante?
-3. ¿Las alertas y umbrales de bajo stock permiten identificar rápidamente qué productos necesitan reposición?
-4. ¿El flujo de creación de una orden permite registrar platos, cantidades y total con rapidez y sin errores críticos?
-5. ¿La información de platos más vendidos y con mayores ingresos resulta útil para tomar decisiones sobre el menú?
-6. ¿Los usuarios perciben que FoodFlow reduce el esfuerzo de reunir información que antes se encontraba distribuida en distintas herramientas?
-7. ¿Los beneficios mostrados en los planes Standard y Premium generan suficiente valor percibido para considerar una suscripción pagada?
-8. ¿La propuesta de valor comunica claramente que FoodFlow es una solución especializada en la gestión financiera y operativa de restaurantes?
-9. ¿Qué barrera representa el mayor riesgo para la adopción: precio, carga inicial de datos, complejidad, confianza o resistencia a cambiar el proceso actual?
+#### Belief-led Questions
+
+| ID | Pregunta para experimentación | Creencia asociada | Área de FoodFlow |
+|---|---|---|---|
+| BLQ01 | ¿Al menos 4 de cada 5 dueños pueden identificar utilidad o pérdida y proponer una acción desde el dashboard en un máximo de tres minutos sin ayuda crítica? | Se cree que la jerarquía actual permite interpretar la situación financiera sin conocimientos contables avanzados. | Dashboard y comprensión financiera. |
+| BLQ02 | ¿Una explicación contextual de cada indicador reduce las solicitudes de ayuda y los errores de interpretación frente al dashboard actual? | Se cree que las definiciones breves resuelven dudas sin recargar visualmente la pantalla. | Ayuda contextual y usabilidad. |
+| BLQ03 | ¿Los usuarios identifican al menos el 80 % de los productos críticos mediante el stock y el umbral mostrados? | Se cree que las señales actuales permiten reconocer correctamente qué insumos requieren atención. | Inventario y alertas. |
+| BLQ04 | ¿Una lista ordenada por urgencia y una acción directa de reposición reducen el tiempo y los pasos necesarios para actualizar un producto? | Se cree que conectar la alerta con la reposición convierte información pasiva en una acción operativa. | Inventario y reposición. |
+| BLQ05 | ¿Al menos 4 de cada 5 participantes reconocen la tendencia principal, la categoría con mayor gasto y el plato con mayores ingresos al comparar dos periodos? | Se cree que los reportes actuales comunican cambios relevantes de forma comprensible. | Reportes financieros. |
+| BLQ06 | ¿Una comparación guiada con diferencias y etiquetas mejora la interpretación frente a una tabla de registros separados? | Se cree que mostrar el cambio de manera explícita reduce el esfuerzo de análisis. | Comparación temporal. |
+| BLQ07 | ¿Al menos 3 de cada 5 participantes eligen Standard o Premium después de utilizar las funciones principales y explican un beneficio concreto? | Se cree que el valor de la solución integrada puede justificar la preferencia por un plan pagado. | Suscripciones y modelo SaaS. |
+| BLQ08 | ¿Presentar los planes según problemas resueltos mejora la asociación entre precio y beneficio frente a una lista de funciones? | Se cree que el segmento decide por resultados operativos y no por características técnicas aisladas. | Comunicación comercial. |
+| BLQ09 | ¿Un modo demostración permite que una cuenta nueva identifique la propuesta principal antes de registrar información propia? | Se cree que la carga inicial de datos retrasa la percepción de valor y puede provocar abandono temprano. | Onboarding y activación. |
+| BLQ10 | ¿La creación de una orden puede completarse sin errores críticos y en menos tiempo que el método utilizado actualmente por el participante? | Se cree que el flujo integrado reduce el esfuerzo de registrar ventas. | Órdenes y operación. |
+| BLQ11 | ¿Los usuarios que consultan una alerta o reporte realizan posteriormente una acción relacionada dentro de FoodFlow? | Se cree que las visualizaciones generan valor únicamente cuando conducen a una decisión observable. | Activación y adopción. |
+| BLQ12 | ¿Los usuarios aceptan el registro de eventos seudónimos cuando se explica que no se recopilan nombres, montos ni información financiera identificable? | Se cree que la transparencia sobre privacidad permite medir el producto sin reducir la confianza. | Analítica y privacidad. |
+
+#### Exploratory Questions
+
+| ID | Pregunta exploratoria | Área de desconocimiento | Área de FoodFlow |
+|---|---|---|---|
+| EXQ01 | ¿Qué indicador del dashboard observa primero un dueño y qué decisión intenta tomar a partir de él? | Se desconoce la jerarquía mental que utiliza el segmento para evaluar el negocio. | Dashboard. |
+| EXQ02 | ¿Qué información adicional necesita un responsable de inventario antes de decidir una compra: consumo, proveedor, costo, fecha o cantidad sugerida? | No se sabe si los campos actuales bastan para una reposición real. | Inventario. |
+| EXQ03 | ¿Con qué frecuencia se revisan los resultados del restaurante y quién realiza esa tarea? | Se desconoce el periodo y rol más relevantes para los reportes. | Finanzas y roles. |
+| EXQ04 | ¿Qué datos está dispuesto a registrar un usuario antes de considerar que la configuración inicial requiere demasiado esfuerzo? | No se conoce el límite aceptable de carga inicial. | Onboarding. |
+| EXQ05 | ¿Qué funciones son indispensables para abandonar hojas de cálculo, cuadernos o herramientas separadas? | Se desconoce qué combinación produce una migración real del proceso actual. | Adopción. |
+| EXQ06 | ¿Cuál es la principal objeción frente a un plan pagado: precio, confianza, límites, falta de pagos integrados o valor insuficiente? | No se conoce la causa dominante de rechazo comercial. | Suscripciones. |
+| EXQ07 | ¿Qué información de platos destacados se utiliza para cambiar precio, receta, promoción o compra de insumos? | Se desconoce qué decisión concreta surge de las métricas del menú. | Menú y reportes. |
+| EXQ08 | ¿Qué explicación y controles necesita un restaurante para considerar aceptable la analítica de uso? | No se conoce el nivel de transparencia y consentimiento esperado por el segmento. | Privacidad. |
+
+#### Aplicación de la técnica 5W+H
+
+La técnica de las cinco preguntas `Who`, `What`, `Where`, `When`, `Why` y `How` se aplica sobre dos comportamientos centrales para revelar premisas que no aparecen al formular una sola pregunta general.
+
+##### Aplicación 1: dificultad para interpretar la situación financiera
+
+**Comportamiento por investigar:** un usuario visualiza el dashboard, pero puede no identificar correctamente si el restaurante obtuvo utilidad o pérdida ni qué acción debería tomar.
+
+| Dimensión | Pregunta generada | Premisa revelada |
+|---|---|---|
+| **Who** | ¿Quién interpreta con mayor dificultad el dashboard: el dueño, el administrador o el responsable financiero? | El problema puede depender del rol y no únicamente del diseño. |
+| **What** | ¿Qué indicador produce más errores: ingresos, gastos, utilidad o variación porcentual? | Una métrica específica puede requerir mejor etiqueta o explicación. |
+| **Where** | ¿En qué elemento busca primero la respuesta: tarjetas, gráficos, órdenes o platos destacados? | La jerarquía visual puede no coincidir con la jerarquía mental del usuario. |
+| **When** | ¿La interpretación cambia al revisar un día, una semana o un mes? | Algunos periodos pueden contener información insuficiente o demasiado agregada. |
+| **Why** | ¿Por qué una variación se interpreta como positiva o negativa? | El color, signo o texto puede inducir una lectura equivocada. |
+| **How** | ¿Cómo comprueba actualmente el dueño si el negocio tuvo un buen resultado? | El proceso actual permite definir una comparación realista para FoodFlow. |
+
+##### Aplicación 2: decisión de reposición ante stock bajo
+
+**Comportamiento por investigar:** el usuario reconoce una alerta de inventario, pero puede no saber qué producto atender primero ni cuánto reponer.
+
+| Dimensión | Pregunta generada | Premisa revelada |
+|---|---|---|
+| **Who** | ¿Quién decide la reposición y quién registra finalmente la compra o actualización? | La alerta puede necesitar soportar más de un rol dentro del restaurante. |
+| **What** | ¿Qué dato determina la prioridad: diferencia frente al umbral, costo, consumo o proveedor? | Ordenar solo por stock puede no representar la urgencia real. |
+| **Where** | ¿La decisión se toma dentro del restaurante, en almacén o durante una compra? | El dispositivo y el contexto de uso pueden afectar el diseño requerido. |
+| **When** | ¿La reposición se revisa al inicio del día, después de cada orden o en periodos fijos? | La frecuencia define cuándo debe mostrarse o notificarse la alerta. |
+| **Why** | ¿Por qué un producto marcado como crítico podría no comprarse inmediatamente? | Presupuesto, disponibilidad o consumo previsto pueden modificar la prioridad. |
+| **How** | ¿Cómo registra actualmente el responsable que un producto ya fue repuesto? | La acción posterior permite diseñar un flujo que cierre la alerta correctamente. |
 
 ### 8.1.4. Question Backlog.
 
-Las preguntas se priorizan considerando el impacto que su respuesta tendría sobre la propuesta de valor, el nivel de incertidumbre actual y el esfuerzo requerido para obtener evidencia. La prioridad alta corresponde a supuestos capaces de invalidar el núcleo del producto o su modelo de negocio.
+El backlog ordena las preguntas mediante cuatro criterios puntuados de 1 a 3:
 
-| Orden | ID | Pregunta resumida | Impacto | Incertidumbre | Prioridad | Método inicial propuesto |
-|---:|---|---|---|---|---|---|
-| 1 | Q-01 | ¿El dashboard permite comprender la salud financiera y decidir una acción sin ayuda? | Alto | Alta | Alta | Prueba de usabilidad moderada con tareas y datos controlados. |
-| 2 | Q-07 | ¿Existe valor percibido y disposición a considerar los planes Standard o Premium? | Alto | Alta | Alta | Entrevista de valor y prueba de intención de selección de plan. |
-| 3 | Q-09 | ¿Cuál es la principal barrera para adoptar FoodFlow? | Alto | Alta | Alta | Entrevistas de problema con dueños de restaurantes. |
-| 4 | Q-03 | ¿Las alertas de bajo stock apoyan correctamente la reposición? | Alto | Media | Alta | Tarea guiada de identificación y priorización de compras. |
-| 5 | Q-02 | ¿Los reportes por periodo permiten reconocer tendencias relevantes? | Alto | Media | Alta | Prueba de interpretación de reportes y comparación de periodos. |
-| 6 | Q-06 | ¿La centralización reduce el esfuerzo percibido frente al proceso actual? | Alto | Media | Media | Comparación de tareas y entrevista posterior. |
-| 7 | Q-04 | ¿La creación de órdenes es rápida y evita errores críticos? | Medio | Media | Media | Prueba de usabilidad con medición de tiempo, éxito y errores. |
-| 8 | Q-08 | ¿Se comprende la especialización gastronómica de la propuesta? | Medio | Media | Media | Prueba de cinco segundos y entrevista sobre la landing page. |
-| 9 | Q-05 | ¿La información de platos destacados impulsa decisiones sobre el menú? | Medio | Alta | Media | Escenario de decisión con datos de ventas simulados. |
+* **Certeza:** nivel de evidencia que ya posee el equipo; una puntuación alta indica mayor incertidumbre y necesidad de investigar.
+* **Riesgo:** posibilidad de que una respuesta desfavorable invalide una parte importante de la propuesta.
+* **Impacto:** magnitud del efecto esperado sobre utilidad, adopción o viabilidad comercial.
+* **Interés:** valor de aprendizaje para orientar decisiones próximas del producto.
 
-El backlog es dinámico. Después de ejecutar cada experimento, la pregunta debe cerrarse, reformularse o volver a priorizarse según el aprendizaje obtenido. Las preguntas con evidencia insuficiente permanecen en el backlog y no deben presentarse como validadas.
+El puntaje máximo es 12. Las preguntas con mayor total se investigan primero porque combinan incertidumbre con consecuencias relevantes.
+
+| Orden | ID | Pregunta resumida | Tipo | Certeza | Riesgo | Impacto | Interés | Total |
+|---:|---|---|---|---:|---:|---:|---:|---:|
+| 1 | BLQ01 | ¿El dashboard permite interpretar utilidad o pérdida y decidir una acción sin ayuda? | Belief-led | 3 | 3 | 3 | 3 | **12** |
+| 2 | BLQ07 | ¿Los planes Standard o Premium generan suficiente valor percibido? | Belief-led | 3 | 3 | 3 | 3 | **12** |
+| 3 | BLQ03 | ¿Las alertas permiten identificar al menos el 80 % del stock crítico? | Belief-led | 3 | 3 | 3 | 3 | **12** |
+| 4 | BLQ05 | ¿Los reportes permiten interpretar correctamente las tendencias del negocio? | Belief-led | 3 | 3 | 3 | 3 | **12** |
+| 5 | EXQ06 | ¿Cuál es la principal objeción frente a un plan pagado? | Exploratory | 3 | 3 | 3 | 2 | **11** |
+| 6 | BLQ09 | ¿Un modo demostración reduce la barrera de carga inicial? | Belief-led | 3 | 2 | 3 | 3 | **11** |
+| 7 | EXQ01 | ¿Qué indicador observa primero el dueño y qué decisión intenta tomar? | Exploratory | 3 | 2 | 3 | 3 | **11** |
+| 8 | BLQ04 | ¿La priorización y reposición directa reducen pasos y tiempo? | Belief-led | 2 | 2 | 3 | 3 | **10** |
+| 9 | BLQ06 | ¿Una comparación guiada mejora la interpretación de periodos? | Belief-led | 2 | 2 | 3 | 3 | **10** |
+| 10 | EXQ04 | ¿Cuánta información inicial está dispuesto a registrar el usuario? | Exploratory | 3 | 2 | 3 | 2 | **10** |
+| 11 | BLQ10 | ¿El registro de órdenes reduce tiempo y errores frente al proceso actual? | Belief-led | 2 | 2 | 3 | 2 | **9** |
+| 12 | BLQ11 | ¿Consultar información conduce a una acción posterior observable? | Belief-led | 3 | 2 | 2 | 2 | **9** |
+| 13 | EXQ02 | ¿Qué información adicional se necesita para decidir una reposición? | Exploratory | 2 | 2 | 2 | 3 | **9** |
+| 14 | BLQ12 | ¿Los usuarios aceptan eventos seudónimos con una explicación transparente? | Belief-led | 3 | 2 | 2 | 2 | **9** |
+| 15 | EXQ07 | ¿Qué decisiones surgen de la información de platos destacados? | Exploratory | 3 | 1 | 2 | 2 | **8** |
+
+Los cuatro primeros elementos se convierten en las tarjetas iniciales. Después de cada ejecución, el backlog deberá recalcularse con la evidencia disponible: una pregunta puede cerrarse, reformularse, dividirse o regresar con una prioridad distinta.
 
 ### 8.1.5. Experiment Cards.
 
-Las tarjetas siguientes definen los primeros experimentos sugeridos. Cada una relaciona una pregunta prioritaria con un procedimiento observable y un criterio previo de decisión. Los porcentajes representan condiciones de planificación, no resultados alcanzados.
+Las tarjetas estructuran la investigación antes de ejecutarla. El lado frontal explica la pregunta, la razón y la prueba mínima; el lado posterior establece las medidas, condiciones, escala y criterio de éxito. Esta definición evita adaptar el criterio después de conocer los resultados.
 
-**Experiment Card EXP-01: Comprensión del dashboard financiero**
+#### Experiment Card 1: Comprensión del dashboard financiero
 
-| Campo | Definición |
+**Lado frontal**
+
+| Campo | Descripción |
 |---|---|
-| Question | ¿El dashboard permite comprender la salud financiera del restaurante y decidir una acción sin ayuda? |
-| Why | La comprensión del dashboard constituye el núcleo de la propuesta de valor de FoodFlow. Si los usuarios no interpretan sus indicadores, la centralización de datos no produce una mejora real. |
-| Participants | Dueños o administradores de restaurantes pequeños y medianos que revisen información financiera u operativa. |
-| What | Entregar una cuenta con datos controlados y solicitar que el participante identifique ingresos, gastos, utilidad, variación y una acción recomendada para el negocio. El moderador no debe explicar previamente los indicadores. |
-| Hypothesis | Al menos 4 de cada 5 participantes identificarán correctamente si existe utilidad o pérdida y propondrán una decisión coherente en un máximo de tres minutos, sin asistencia crítica. |
-| Evidence | Tasa de finalización, respuestas correctas, tiempo de tarea, solicitudes de ayuda y observaciones del participante. |
-| Decision | Mantener la estructura si se cumple el criterio; ajustar etiquetas, jerarquía o explicaciones si la comprensión es parcial; rediseñar si la mayoría interpreta incorrectamente los datos. |
+| Pregunta | ¿El dashboard permite interpretar la salud financiera y decidir una acción sin ayuda? (`BLQ01`) |
+| Por qué | La interpretación financiera constituye el núcleo de la propuesta de FoodFlow. Si los usuarios no comprenden los indicadores, centralizar datos no genera una mejora real. |
+| Hipótesis | Si un dueño utiliza el dashboard con datos controlados, al menos 4 de cada 5 participantes identificarán utilidad o pérdida y propondrán una acción coherente en un máximo de tres minutos sin ayuda crítica. |
+| Qué: Simplest Useful Thing | Utilizar el dashboard desplegado con una cuenta que contenga ingresos, gastos, utilidad, variaciones, órdenes y platos destacados preparados para la sesión. |
 
-**Experiment Card EXP-02: Utilidad de las alertas de inventario**
+**Lado posterior**
 
-| Campo | Definición |
+| Campo | Descripción |
 |---|---|
-| Question | ¿Las alertas de bajo stock permiten identificar y priorizar los productos que deben reponerse? |
-| Why | El control de inventario es una de las funciones que debería reducir pérdidas y evitar la falta de insumos. |
-| Participants | Dueños, administradores o responsables de inventario de negocios gastronómicos. |
-| What | Presentar un inventario con diferentes niveles de stock y solicitar que el participante identifique los productos críticos, explique el orden de reposición y actualice un producto. |
-| Hypothesis | Al menos el 80 % de los productos críticos será identificado correctamente y 4 de cada 5 participantes completarán la tarea sin ayuda crítica. |
-| Evidence | Productos identificados, orden de prioridad, tiempo, errores y comentarios sobre la información que falta para decidir una compra. |
-| Decision | Mantener la alerta si guía correctamente la reposición; mejorar el contraste o la información mostrada si existen omisiones; reconsiderar el mecanismo si no apoya la decisión. |
+| Medidas | Tarea completada, interpretación correcta, tiempo, errores, solicitudes de ayuda y acción propuesta. |
+| Condiciones | La condición A presenta los mismos datos como una tabla básica; la condición B utiliza el dashboard actual. El moderador no explica los indicadores. |
+| Escala | Primera ronda con 5 participantes del segmento objetivo; sesiones moderadas de 15 a 20 minutos. |
+| Criterio de éxito | La condición se considera favorable si 4 de cada 5 participantes responden correctamente y completan la interpretación en un máximo de tres minutos sin ayuda crítica. |
 
-**Experiment Card EXP-03: Valor percibido de los planes pagados**
+#### Experiment Card 2: Utilidad de las alertas de inventario
 
-| Campo | Definición |
+**Lado frontal**
+
+| Campo | Descripción |
 |---|---|
-| Question | ¿Los beneficios de Standard y Premium generan suficiente valor para considerar una suscripción pagada? |
-| Why | El modelo SaaS depende de que una parte del segmento perciba beneficios superiores al plan gratuito. La selección técnica de un plan no demuestra intención real de pago. |
-| Participants | Dueños de restaurantes pequeños y medianos que hayan completado previamente tareas de dashboard, inventario y reportes. |
-| What | Mostrar los límites y beneficios reales de Free, Standard y Premium. Solicitar que el participante elija un plan, explique su decisión y responda qué beneficio justificaría pagar y qué objeción se lo impediría. No se realizará un cobro real. |
-| Hypothesis | Al menos 3 de cada 5 participantes elegirán Standard o Premium como opción preferida y podrán mencionar un beneficio concreto que justifique su elección. |
-| Evidence | Plan seleccionado, razón de elección, intención declarada, beneficio principal, objeciones y precio considerado aceptable. |
-| Decision | Conservar la propuesta si se reconoce valor pagado; modificar beneficios o comunicación si existe interés sin claridad; revisar segmentación y precios si predomina Free por falta de valor. |
+| Pregunta | ¿Las alertas permiten identificar y priorizar correctamente los productos que deben reponerse? (`BLQ03`) |
+| Por qué | La alerta solo produce valor cuando el responsable reconoce el riesgo y puede decidir qué insumo atender primero. |
+| Hipótesis | Si se presentan productos con distintos niveles y umbrales, los usuarios identificarán al menos el 80 % de los casos críticos y 4 de cada 5 completarán la priorización sin ayuda crítica. |
+| Qué: Simplest Useful Thing | Preparar un inventario controlado con productos normales, cercanos al umbral y críticos, y solicitar identificación, orden de reposición y actualización de un producto. |
 
-**Experiment Card EXP-04: Interpretación de reportes por periodo**
+**Lado posterior**
 
-| Campo | Definición |
+| Campo | Descripción |
 |---|---|
-| Question | ¿Los reportes diarios, semanales y mensuales permiten reconocer tendencias relevantes para el negocio? |
-| Why | Los reportes deben convertir datos operativos en información útil para decidir sobre gastos, ventas y menú. |
-| Participants | Dueños o administradores que realicen revisiones periódicas del rendimiento de un restaurante. |
-| What | Presentar datos de dos periodos y solicitar que el participante identifique qué cambió, qué categoría concentra el gasto y qué plato genera mayores ingresos. |
-| Hypothesis | Al menos 4 de cada 5 participantes identificarán correctamente la tendencia principal y dos datos relevantes sin apoyo del moderador. |
-| Evidence | Respuestas correctas, tiempo de interpretación, errores, periodo preferido y decisiones propuestas. |
-| Decision | Mantener la visualización si facilita conclusiones correctas; simplificar gráficos y etiquetas si existen dudas; revisar el modelo de reporte si los datos no conducen a decisiones. |
+| Medidas | Porcentaje de críticos identificados, orden de prioridad, tiempo, ayudas, errores e información adicional solicitada. |
+| Condiciones | La condición A muestra una lista sin resaltado; la condición B utiliza stock, umbral e indicadores visuales de FoodFlow. Los productos y cantidades son idénticos. |
+| Escala | Primera ronda con 5 dueños, administradores o responsables de inventario; sesiones de aproximadamente 15 minutos. |
+| Criterio de éxito | La alerta es favorable si se identifica al menos el 80 % de los productos críticos y 4 de cada 5 participantes priorizan sin ayuda crítica. |
 
-Estas tarjetas constituyen el punto de partida para la fase `8.2. Experiment Design`, donde se detallarán las hipótesis nulas y alternativas, las métricas de dominio, las medidas, las condiciones y las escalas de decisión antes de ejecutar los experimentos.
+#### Experiment Card 3: Valor percibido de los planes pagados
+
+**Lado frontal**
+
+| Campo | Descripción |
+|---|---|
+| Pregunta | ¿Los beneficios de Standard y Premium generan suficiente valor para considerar una suscripción pagada? (`BLQ07`) |
+| Por qué | La sostenibilidad del modelo SaaS depende de que los beneficios pagados resuelvan problemas que el segmento considere importantes. Seleccionar un plan en el MVP no demuestra una compra. |
+| Hipótesis | Después de utilizar dashboard, inventario y reportes, al menos 3 de cada 5 participantes elegirán Standard o Premium y relacionarán su elección con un beneficio concreto. |
+| Qué: Simplest Useful Thing | Mostrar los planes existentes con sus límites y beneficios; solicitar una elección razonada, la principal objeción y el rango de precio considerado aceptable, sin ejecutar un cobro. |
+
+**Lado posterior**
+
+| Campo | Descripción |
+|---|---|
+| Medidas | Plan seleccionado, beneficio mencionado, objeción principal, intención declarada y rango de precio aceptable. |
+| Condiciones | La condición A presenta funciones y precios; la condición B agrupa los mismos beneficios según problemas resueltos. No se ofrecen descuentos ficticios ni se solicitan datos bancarios. |
+| Escala | Primera ronda con 5 dueños que hayan completado antes las tareas funcionales; entrevista de 15 minutos. |
+| Criterio de éxito | La propuesta es favorable si 3 de cada 5 prefieren un plan pagado y al menos 4 pueden explicar un beneficio diferencial. La intención declarada no se reportará como ingreso ni conversión real. |
+
+#### Experiment Card 4: Interpretación de reportes por periodo
+
+**Lado frontal**
+
+| Campo | Descripción |
+|---|---|
+| Pregunta | ¿Los reportes permiten reconocer tendencias relevantes y proponer una decisión para el restaurante? (`BLQ05`) |
+| Por qué | Los reportes deben transformar registros operativos en información útil sobre ventas, gastos y menú, no limitarse a presentar valores. |
+| Hipótesis | Al comparar dos periodos, al menos 4 de cada 5 participantes identificarán la tendencia principal, la categoría con mayor gasto y el plato con mayores ingresos sin ayuda crítica. |
+| Qué: Simplest Useful Thing | Preparar dos periodos con diferencias controladas y solicitar que el participante explique qué cambió, cuál es el dato más importante y qué acción tomaría. |
+
+**Lado posterior**
+
+| Campo | Descripción |
+|---|---|
+| Medidas | Respuestas correctas, tiempo, ayudas, periodo consultado, elementos confusos y decisión propuesta. |
+| Condiciones | La condición A muestra registros separados; la condición B utiliza la comparación visual de FoodFlow. Se conservan los mismos importes, categorías y preguntas. |
+| Escala | Primera ronda con 5 dueños o administradores que revisen periódicamente el rendimiento; sesiones de 15 minutos. |
+| Criterio de éxito | La visualización es favorable si 4 de cada 5 identifican los tres datos principales y proponen una acción coherente sin ayuda crítica. |
+
+Estas tarjetas sirven como entrada para el diseño experimental. Los resultados deberán registrarse posteriormente con identificadores anónimos y no podrán sustituirse por expectativas del equipo.
 
 ## 8.2. Experiment Design
 
-El diseño experimental establece de antemano qué se quiere comprobar, qué datos se recopilarán y cómo se tomará una decisión. Esta definición previa reduce interpretaciones subjetivas posteriores y evita modificar los criterios únicamente para hacer que los resultados coincidan con las expectativas del equipo.
+El diseño experimental define cómo se responderán las preguntas priorizadas y mantiene la trazabilidad entre creencias, evidencia y decisiones. Antes de cada sesión se establecen la hipótesis, las medidas, las condiciones, la escala y el criterio que permitirá mantener, ajustar o descartar una propuesta.
 
-Los experimentos se plantean como evaluaciones formativas con participantes del segmento objetivo. Las cantidades y porcentajes incluidos son criterios de decisión propuestos; no representan resultados obtenidos. Para una primera iteración se considera una muestra mínima de cinco participantes por experimento, suficiente para detectar problemas frecuentes de comprensión y usabilidad, pero no para realizar generalizaciones estadísticas sobre todos los restaurantes.
+Los cuatro experimentos se plantean como evaluaciones formativas con participantes del segmento objetivo. La primera ronda utiliza cinco participantes por experimento para detectar patrones frecuentes de comprensión y usabilidad. Esta escala no ofrece significación estadística ni permite generalizar los resultados a todos los restaurantes; los porcentajes incluidos son umbrales de decisión previamente definidos, no resultados alcanzados.
 
 ### 8.2.1. Hypotheses.
 
-Cada experimento cuenta con una hipótesis alternativa, que representa el comportamiento esperado, y una hipótesis nula, que representa la ausencia de evidencia suficiente a favor de la propuesta.
+Las hipótesis transforman las preguntas del backlog en afirmaciones contrastables. La hipótesis de trabajo expresa el comportamiento esperado y la hipótesis nula representa la ausencia de evidencia suficiente a favor de la propuesta.
 
-| ID | Experimento | Hipótesis alternativa | Hipótesis nula |
-|---|---|---|---|
-| H-01 | Comprensión del dashboard | Si un dueño utiliza el dashboard con datos controlados, al menos 4 de cada 5 participantes identificarán correctamente si existe utilidad o pérdida y propondrán una acción coherente en un máximo de tres minutos sin ayuda crítica. | Menos de 4 de cada 5 participantes completarán correctamente la interpretación o necesitarán ayuda crítica, por lo que la presentación actual no proporcionará evidencia suficiente de comprensión autónoma. |
-| H-02 | Alertas de inventario | Si se muestran productos con distintos niveles y umbrales de stock, los participantes identificarán al menos el 80 % de los productos críticos y 4 de cada 5 completarán la priorización sin ayuda crítica. | Los participantes identificarán menos del 80 % de los productos críticos o la mayoría necesitará ayuda, por lo que las alertas actuales no apoyarán suficientemente la reposición. |
-| H-03 | Valor de planes pagados | Después de utilizar dashboard, inventario y reportes, al menos 3 de cada 5 participantes elegirán Standard o Premium como opción preferida y asociarán su elección con un beneficio concreto. | Menos de 3 de cada 5 participantes preferirán un plan pagado o no podrán relacionar el precio con un beneficio concreto, por lo que la propuesta comercial deberá revisarse. |
-| H-04 | Interpretación de reportes | Si se presentan reportes de dos periodos, al menos 4 de cada 5 participantes identificarán la tendencia principal, la categoría con mayor gasto y el plato con mayores ingresos sin ayuda. | Menos de 4 de cada 5 participantes interpretarán correctamente los datos principales, indicando que los reportes requieren cambios de jerarquía, etiquetas o visualización. |
+| ID | Pregunta asociada | Hipótesis de trabajo | Hipótesis nula | Medida esperada |
+|---|---|---|---|---|
+| H-01 | BLQ01 | Si un dueño utiliza el dashboard con datos controlados, al menos 4 de cada 5 participantes identificarán si existe utilidad o pérdida y propondrán una acción coherente en un máximo de tres minutos sin ayuda crítica. | Menos de 4 de cada 5 interpretarán correctamente el resultado o necesitarán ayuda crítica, por lo que la presentación actual no demostrará comprensión autónoma. | Tasa de interpretación mínima de 80 % y tiempo máximo de tres minutos. |
+| H-02 | BLQ03 | Si se muestran productos con distintos niveles y umbrales, se identificará al menos el 80 % de los casos críticos y 4 de cada 5 participantes completarán la priorización sin ayuda crítica. | Se identificará menos del 80 % de los productos críticos o la mayoría necesitará ayuda, por lo que la alerta no apoyará suficientemente la reposición. | Identificación mínima de 80 % y éxito autónomo de 4 de 5 participantes. |
+| H-03 | BLQ07 | Después de utilizar dashboard, inventario y reportes, al menos 3 de cada 5 participantes elegirán Standard o Premium y asociarán su elección con un beneficio concreto. | Menos de 3 de cada 5 preferirán un plan pagado o no relacionarán el precio con un beneficio, por lo que la propuesta comercial deberá revisarse. | Preferencia pagada mínima de 60 % y explicación de un beneficio concreto. |
+| H-04 | BLQ05 | Al comparar dos periodos, al menos 4 de cada 5 participantes identificarán la tendencia principal, la categoría con mayor gasto y el plato con mayores ingresos sin ayuda crítica. | Menos de 4 de cada 5 interpretarán los datos principales, indicando que los reportes requieren cambios de jerarquía, etiquetas o visualización. | Tasa de interpretación mínima de 80 % para los tres datos solicitados. |
 
-Las hipótesis H-01, H-02 y H-04 evalúan principalmente utilidad y comprensión. La H-03 evalúa valor percibido e intención declarada, pero no permite afirmar que exista una conversión comercial real porque el MVP no procesa pagos.
+H-01, H-02 y H-04 evalúan utilidad y comprensión mediante comportamiento observable. H-03 estudia valor percibido e intención declarada; no demuestra conversión comercial porque el MVP no procesa pagos reales.
 
 ### 8.2.2. Domain Business Metrics
 
-Las métricas de dominio conectan los experimentos con el funcionamiento de un restaurante y con el modelo SaaS de FoodFlow. Algunas pueden medirse durante pruebas moderadas, mientras que otras requieren instrumentación y uso longitudinal del producto.
+El catálogo de métricas conecta cada experimento con la utilidad operativa y la viabilidad del modelo SaaS. Solo se incluyen mediciones capaces de orientar una decisión; se evitan indicadores de vanidad como el número total de visitas sin una acción relacionada.
 
-| Métrica | Definición | Cálculo propuesto | Relación con el negocio |
+| Métrica de negocio | Fórmula u origen | Técnica de recolección | Meta inicial |
 |---|---|---|---|
-| Tasa de interpretación financiera | Participantes que interpretan correctamente la situación financiera. | Interpretaciones correctas / participantes × 100 | Indica si el dashboard ayuda a tomar decisiones basadas en datos. |
-| Tiempo para obtener una conclusión | Tiempo entre el inicio de la tarea y la identificación de utilidad o pérdida. | Suma de tiempos / tareas completadas | Aproxima el esfuerzo requerido para comprender el negocio. |
-| Tasa de identificación de stock crítico | Productos críticos identificados correctamente. | Productos críticos identificados / productos críticos presentados × 100 | Evalúa la capacidad para anticipar reposiciones y evitar faltantes. |
-| Tasa de finalización de órdenes | Órdenes registradas sin errores críticos. | Órdenes completadas / intentos de creación × 100 | Representa la facilidad para registrar ventas que alimentan las métricas financieras. |
-| Tasa de interpretación de reportes | Participantes que reconocen correctamente tendencias y datos clave. | Interpretaciones correctas / participantes × 100 | Evalúa si los reportes apoyan decisiones sobre gastos, compras y menú. |
-| Preferencia por plan pagado | Participantes que eligen Standard o Premium en el escenario de evaluación. | Preferencias pagadas / participantes × 100 | Proporciona una señal inicial sobre el valor percibido del modelo SaaS. |
-| Intención declarada de pago | Participantes que indican que considerarían pagar bajo condiciones concretas. | Intenciones positivas / participantes × 100 | Permite explorar viabilidad comercial, sin sustituir una compra real. |
-| Activación del producto | Restaurantes que completan las acciones mínimas para obtener valor inicial. | Restaurantes que registran datos y consultan un reporte / registros válidos × 100 | Mide cuántos usuarios llegan a experimentar la propuesta principal. |
-| Uso recurrente del dashboard | Restaurantes activos que consultan el dashboard en diferentes días. | Usuarios con visitas recurrentes / usuarios activos × 100 | Se relaciona con adopción y posible retención. |
-| Adopción de reportes | Usuarios activos que consultan al menos un reporte por periodo. | Usuarios que consultan reportes / usuarios activos × 100 | Indica si el análisis financiero se incorpora al trabajo habitual. |
+| Tasa de interpretación financiera | Participantes que interpretan correctamente / total de participantes × 100. | Hoja de observación durante la tarea de dashboard. | Alcanzar al menos 80 %. |
+| Tiempo para obtener una conclusión | Suma del tiempo de interpretación / tareas completadas. | Cronómetro desde la presentación de la tarea hasta la respuesta. | Mantenerse en tres minutos o menos. |
+| Tasa de identificación de stock crítico | Productos críticos identificados / productos críticos presentados × 100. | Lista de respuestas y comparación con el escenario preparado. | Alcanzar al menos 80 %. |
+| Tasa de interpretación de reportes | Participantes que identifican los tres datos solicitados / total × 100. | Cuestionario posterior a la comparación de periodos. | Alcanzar al menos 80 %. |
+| Preferencia por plan pagado | Participantes que eligen Standard o Premium / total × 100. | Entrevista de valor posterior al uso del MVP. | Alcanzar al menos 60 % como señal exploratoria. |
+| Activación operativa | Usuarios que consultan información y completan una acción relacionada / usuarios que iniciaron el recorrido × 100. | Eventos de tracking propuestos para una etapa posterior. | Establecer una línea base antes de definir una meta definitiva. |
 
-Para la ejecución inmediata de los cuatro experimentos se utilizarán las primeras siete métricas. Activación, recurrencia y adopción requieren un periodo de observación y un sistema de tracking que todavía no está implementado.
+Las primeras cinco métricas pueden obtenerse mediante las pruebas moderadas. La activación operativa requiere implementar el plan de tracking de la sección 8.2.8; por tanto, no se reportará como resultado hasta disponer de datos longitudinales.
 
 ### 8.2.3. Measures.
 
-Las medidas definen los datos específicos que el moderador debe registrar durante cada sesión. Se combinarán datos cuantitativos con observaciones cualitativas para comprender no solo si una tarea terminó, sino también por qué presentó dificultades.
+FoodFlow utiliza el enfoque **OMTM (One Metric That Matters)** para asignar una medida principal a cada experimento. La decisión se complementa con una **Guardrail Metric**, destinada a comprobar que una mejora aparente no deteriore otra parte relevante de la experiencia.
 
-| Experimento | Medidas cuantitativas | Medidas cualitativas | Instrumento de registro |
-|---|---|---|---|
-| EXP-01 Dashboard | Tarea completada, respuestas correctas, tiempo total, número de ayudas y errores críticos. | Explicación de los indicadores, dudas, información buscada y acción propuesta. | Hoja de observación, cronómetro y entrevista posterior. |
-| EXP-02 Inventario | Porcentaje de productos críticos identificados, tiempo, ayudas y actualización completada. | Criterio de priorización, información faltante y percepción de claridad de la alerta. | Escenario controlado, lista de productos y hoja de observación. |
-| EXP-03 Suscripciones | Plan elegido, preferencia por plan pagado y rango de precio aceptable. | Beneficio valorado, objeción principal, motivo de elección y condiciones para pagar. | Guion de entrevista y ficha individual de respuestas. |
-| EXP-04 Reportes | Datos identificados correctamente, tiempo, ayudas y periodo seleccionado. | Interpretación de tendencias, decisión propuesta y elementos visuales confusos. | Reportes con datos controlados, cuestionario y hoja de observación. |
+| Experimento | Medida principal (OMTM) | Propósito | Medida de protección | Propósito |
+|---|---|---|---|---|
+| EXP-01: Dashboard | Tasa de interpretación financiera. | Determinar si el usuario comprende el resultado del negocio sin asistencia. | Tiempo para obtener una conclusión. | Evitar considerar favorable una respuesta correcta obtenida mediante esfuerzo excesivo. |
+| EXP-02: Inventario | Tasa de identificación de stock crítico. | Comprobar si la alerta permite reconocer los productos que requieren atención. | Errores de priorización. | Detectar si el resaltado conduce a atender primero un producto incorrecto. |
+| EXP-03: Suscripciones | Preferencia por plan pagado. | Explorar si Standard o Premium comunican valor superior a Free. | Claridad del beneficio seleccionado. | Evitar interpretar una elección sin justificación como intención comercial válida. |
+| EXP-04: Reportes | Tasa de interpretación de reportes. | Medir si se reconocen tendencias y datos relevantes entre periodos. | Número de ayudas críticas. | Comprobar que la interpretación se realiza de manera autónoma. |
 
-Se considerará **ayuda crítica** cualquier intervención del moderador que revele dónde encontrar la respuesta, explique el significado de una métrica o indique el siguiente paso necesario para completar la tarea. Las preguntas neutrales, como solicitar al participante que piense en voz alta, no se contabilizarán como ayuda crítica.
+Además de estas medidas se registrarán comentarios, dudas, pasos, objeciones y decisiones propuestas. Se considera **ayuda crítica** cualquier intervención que revele dónde está una respuesta, explique una métrica o indique el siguiente paso. Pedir al participante que piense en voz alta no cuenta como ayuda crítica.
 
 ### 8.2.4. Conditions.
 
-Para mantener condiciones comparables, los participantes recibirán el mismo contexto, datos y orden básico de tareas. Cuando se utilice una condición de referencia, esta representa el proceso actual del participante o una presentación sin las ayudas específicas evaluadas.
+Cada prueba contempla dos estados comparables. La **condición de control (A)** representa una presentación básica o el flujo sin la ayuda específica; la **condición experimental (B)** incorpora el elemento de FoodFlow que se desea evaluar. Los datos, consignas y límites de tiempo se mantienen constantes para reducir explicaciones alternativas.
 
-| Experimento | Condición experimental | Condición de referencia o control | Variables que deben mantenerse constantes |
-|---|---|---|---|
-| EXP-01 Dashboard | Dashboard de FoodFlow con tarjetas, variaciones, órdenes y platos destacados. | Explicación del proceso actual utilizado por el participante para conocer la situación del restaurante. | Mismos datos, consigna, tiempo máximo y ausencia de explicación previa. |
-| EXP-02 Inventario | Tabla de FoodFlow con stock, umbral e indicadores visuales de bajo stock. | Lista equivalente de productos sin resaltar automáticamente los niveles críticos. | Mismos productos, cantidades, costos y escenario de reposición. |
-| EXP-03 Suscripciones | Planes Free, Standard y Premium con precios y beneficios actuales. | Pregunta inicial sobre el gasto y herramientas que el participante utiliza actualmente, antes de mostrar los planes. | Mismo orden de presentación, sin descuentos ficticios ni presión de compra. |
-| EXP-04 Reportes | Reportes de FoodFlow con comparación de periodos, gastos por categoría y platos destacados. | Datos equivalentes presentados como registros separados o tabla básica. | Mismos valores, periodos, preguntas y tiempo máximo. |
+#### Experimento 1: comprensión del dashboard (H-01)
 
-Las sesiones deben realizarse en un equipo con conexión estable y una cuenta preparada con datos ficticios. No se utilizarán credenciales personales, información financiera real ni datos identificables del restaurante. En EXP-03 no se solicitarán tarjetas ni se realizará cobro alguno.
+**Condición de control:** Los ingresos, gastos, utilidad, órdenes y platos destacados se presentan en una tabla básica sin jerarquía visual ni variaciones resaltadas.
+
+**Condición experimental:** Los mismos valores se presentan en el dashboard de FoodFlow mediante tarjetas, variaciones, gráficos y secciones de actividad.
+
+#### Experimento 2: alertas de inventario (H-02)
+
+**Condición de control:** Se entrega una lista de productos con stock y umbral, sin colores, alertas ni orden automático de criticidad.
+
+**Condición experimental:** Los mismos productos aparecen en FoodFlow con indicadores visuales de bajo stock y la información utilizada por el módulo de inventario.
+
+#### Experimento 3: valor de los planes (H-03)
+
+**Condición de control:** Free, Standard y Premium se presentan como una lista de funciones, límites y precios.
+
+**Condición experimental:** Los mismos planes se organizan según problemas resueltos y beneficios operativos, sin cambiar precios ni añadir descuentos ficticios.
+
+#### Experimento 4: interpretación de reportes (H-04)
+
+**Condición de control:** Los datos de dos periodos se muestran como registros separados que el participante debe comparar manualmente.
+
+**Condición experimental:** Los mismos valores se presentan mediante reportes de FoodFlow con diferencias, categorías de gasto y platos destacados.
+
+Todas las sesiones emplearán una cuenta preparada con información ficticia y un equipo con conexión estable. No se utilizarán credenciales personales, montos reales ni datos identificables del restaurante. En EXP-03 no se solicitará una tarjeta ni se efectuará cobro alguno.
 
 ### 8.2.5. Scale Calculations and Decisions.
 
-La escala se define para una muestra inicial de cinco participantes. Cada participante representa 20 puntos porcentuales; por ello, los resultados se interpretarán como señales formativas y no como estimaciones estadísticas definitivas.
+La escala se define considerando el nivel de certeza que puede alcanzarse con los recursos del proyecto y la precisión necesaria para tomar una decisión inicial.
+
+#### 1. Certeza
+
+La primera ronda tiene un propósito formativo: descubrir errores recurrentes, dudas y patrones de uso. No se aplicará un nivel de significación ni poder estadístico porque la muestra y el volumen de tráfico actuales no permiten una prueba inferencial confiable. En consecuencia, los hallazgos se describirán como evidencia inicial y no como una validación representativa de todos los restaurantes.
+
+#### 2. Precisión
+
+Cada experimento utilizará criterios observables definidos antes de las sesiones. Con cinco participantes, cada persona representa 20 puntos porcentuales; por eso se emplean umbrales como 4 de 5 u 80 %. Un resultado intermedio se clasificará como evidencia parcial y dará lugar a otra iteración, no a una conclusión forzada.
+
+#### 3. Escala y reglas de decisión
+
+Se trabajará con cinco participantes por experimento, priorizando dueños, administradores o responsables operativos de restaurantes pequeños y medianos. Si los resultados son contradictorios o aparecen diferencias importantes entre roles, se realizará una segunda ronda antes de convertir el aprendizaje en una decisión de producto.
 
 | Hipótesis | Factor principal | Desfavorable | Parcial / requiere mejora | Favorable | Decisión asociada |
 |---|---|---|---|---|---|
@@ -8492,11 +8619,13 @@ La escala se define para una muestra inicial de cinco participantes. Cada partic
 | H-03 Suscripciones | Participantes que mencionan un beneficio concreto | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Mejorar la comunicación si no se entiende el valor diferencial. |
 | H-04 Reportes | Participantes que interpretan correctamente los datos clave | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Rediseñar, simplificar o mantener los reportes. |
 
-La decisión final no dependerá únicamente del porcentaje. Un error crítico repetido, como confundir gastos con utilidad o seleccionar un producto incorrecto para reposición, deberá analizarse aunque la tasa general alcance el rango favorable.
+La decisión final no dependerá únicamente del porcentaje. Un error crítico repetido, como confundir gastos con utilidad o priorizar un producto incorrecto, deberá analizarse aunque la tasa general alcance el rango favorable. Para una futura prueba cuantitativa con tráfico real se deberá calcular una muestra independiente a partir de la conversión base, el efecto mínimo detectable, el nivel de significación y el poder estadístico.
 
 ### 8.2.6. Methods Selection.
 
-Se seleccionaron métodos de bajo riesgo y compatibles con el estado actual del MVP. No es necesario modificar el código para ejecutar la primera ronda, ya que los datos pueden recopilarse mediante observación y formularios externos.
+La selección de métodos distingue qué se desea aprender de la técnica utilizada para obtener la evidencia. Bajo el principio **Simplest Useful Thing**, la primera ronda aprovecha el MVP desplegado, escenarios preparados y formularios externos, evitando construir una infraestructura experimental compleja antes de comprobar que las preguntas son relevantes.
+
+#### 1. Técnicas operativas seleccionadas
 
 | Método | Aplicación | Ventaja | Limitación |
 |---|---|---|---|
@@ -8507,7 +8636,11 @@ Se seleccionaron métodos de bajo riesgo y compatibles con el estado actual del 
 | Encuesta breve posterior | Facilidad percibida, claridad y utilidad | Facilita comparar respuestas entre participantes. | Una muestra pequeña no permite generalización estadística. |
 | Comparación con el proceso actual | Contraste entre FoodFlow y registros manuales o herramientas existentes | Permite entender si la solución reduce esfuerzo o fragmentación. | Los procesos actuales pueden variar entre restaurantes. |
 
-El procedimiento general será el siguiente:
+#### 2. Regla de no superposición
+
+Un participante no comparará simultáneamente dos variantes que modifiquen el mismo flujo. Por ejemplo, durante EXP-01 no se añadirá una explicación contextual que pertenezca a otro experimento, porque sería imposible determinar si la comprensión proviene del dashboard o de la ayuda. El orden de las condiciones se alternará cuando sea posible para reducir el efecto de aprendizaje.
+
+#### 3. Procedimiento general
 
 1. Explicar el propósito académico y solicitar consentimiento para registrar respuestas y observaciones.
 2. Recopilar únicamente información general del perfil y del proceso de gestión actual.
@@ -8517,90 +8650,239 @@ El procedimiento general será el siguiente:
 6. Anonimizar los resultados mediante identificadores como `P01`, `P02` y `P03`.
 7. Consolidar la información sin alterar los criterios definidos en esta sección.
 
+#### 4. Consideraciones éticas
+
+* **Datos ficticios:** Las cuentas de prueba no contendrán información financiera, personal ni comercial real.
+* **Participación voluntaria:** El participante podrá omitir preguntas o finalizar la sesión sin consecuencias.
+* **Transparencia comercial:** EXP-03 no procesará pagos ni presentará una preferencia como compra confirmada.
+* **Privacidad:** Las notas se identificarán mediante códigos y no incluirán contraseñas, tokens, correos ni nombres del restaurante.
+* **No manipulación:** No se modificarán precios entre participantes ni se ocultará información para inducir una elección.
+
 ### 8.2.7. Data Analytics: Goals, KPIs and Metrics Selection.
 
-El plan de analítica busca relacionar el comportamiento de uso con objetivos de producto y negocio. Los KPIs propuestos deben implementarse progresivamente; por ahora funcionan como especificación para futuras mediciones.
+La estrategia de analítica relaciona tres niveles: la meta de negocio, el KPI que demuestra avance y la métrica concreta que debe recopilarse. Los indicadores conductuales se encuentran planificados y solo podrán utilizarse después de implementar el tracking descrito en 8.2.8.
 
-| Objetivo | KPI principal | Métricas de apoyo | Interpretación esperada |
+#### Criterios de selección
+
+1. **Economía de rastreo:** La medición debe obtenerse mediante un evento o instrumento mínimo, evitando recopilar datos que no conduzcan a una decisión.
+2. **Sensibilidad al cambio:** La métrica debe reaccionar a la diferencia entre control y experimento; se descartan visitas o clics generales que podrían permanecer iguales aunque la propuesta falle.
+3. **Privacidad:** La medición no debe requerir nombres, correos, montos detallados ni información identificable del restaurante.
+
+| Meta de negocio | KPI estratégico | Métrica seleccionada | Justificación de economía y sensibilidad |
 |---|---|---|---|
-| Lograr que el usuario comprenda rápidamente la situación del restaurante | Tasa de interpretación financiera | Tiempo de interpretación, ayudas y errores críticos | Una tasa alta con poco tiempo indica que el dashboard comunica valor de forma clara. |
-| Ayudar a prevenir problemas de inventario | Tasa de identificación de stock crítico | Alertas consultadas, productos actualizados y tiempo de reposición | Permite saber si la alerta conduce a una acción operativa. |
-| Facilitar el análisis periódico | Tasa de interpretación y adopción de reportes | Periodos consultados, frecuencia y decisiones propuestas | Indica si los reportes se incorporan a la revisión del negocio. |
-| Validar el valor del modelo SaaS | Preferencia e intención declarada por plan pagado | Plan elegido, beneficio principal, objeción y rango de precio | Sirve como señal inicial para ajustar planes antes de integrar pagos. |
-| Reducir la dependencia de herramientas dispersas | Activación y recurrencia | Tareas principales completadas, visitas al dashboard y módulos usados | Permite observar si FoodFlow se convierte en un punto central de gestión. |
+| Permitir que un dueño comprenda rápidamente la situación del restaurante. | Comprensión autónoma del dashboard. | Tasa de interpretación financiera y tiempo para obtener una conclusión. | Se registra con una hoja y cronómetro; responde directamente si la visualización comunica correctamente, sin instrumentación adicional. |
+| Anticipar faltantes de insumos y orientar la reposición. | Identificación correcta de productos críticos. | Tasa de identificación de stock crítico y errores de priorización. | Utiliza el escenario preparado y distingue entre ver una alerta y comprender qué acción corresponde. |
+| Convertir los reportes en apoyo para decisiones periódicas. | Interpretación correcta de tendencias. | Tasa de interpretación de reportes y número de ayudas críticas. | Mide la comprensión de cambios reales y evita confundir una simple apertura del reporte con adopción útil. |
+| Explorar la viabilidad del modelo SaaS. | Preferencia razonada por un plan pagado. | Plan seleccionado, beneficio asociado y objeción principal. | Una entrevista breve aporta el motivo de la elección; no se presenta la intención declarada como compra real. |
+| Lograr que FoodFlow se convierta en un punto central de gestión. | Activación operativa y recurrencia. | Consulta de información seguida de una acción y retorno en semanas diferentes. | Combina eventos mínimos para evitar considerar una visita aislada como éxito del producto. |
 
-La métrica guía propuesta para una etapa posterior es el **porcentaje de restaurantes activados que consultan información financiera y realizan al menos una acción operativa en semanas diferentes**. Esta combinación evita considerar como éxito una simple visita y busca representar uso real del ciclo integrado de FoodFlow.
+La métrica guía para una etapa posterior será el **porcentaje de restaurantes activados que consultan información financiera y completan al menos una acción operativa en semanas diferentes**. Esta definición conecta comprensión, acción y recurrencia en lugar de medir únicamente tráfico.
+
 
 ### 8.2.8. Web and Mobile Tracking Plan.
 
-FoodFlow dispone actualmente de una aplicación web responsive, pero no cuenta con una aplicación móvil nativa implementada. Por ello, el plan inmediato corresponde al entorno web. Si posteriormente se desarrolla una aplicación móvil, deberá reutilizar los nombres y propiedades de eventos para mantener comparabilidad entre plataformas.
+FoodFlow cuenta con una aplicación web responsive y no dispone de una aplicación móvil nativa. En consecuencia, el plan inmediato se concentra en la web. Una futura aplicación móvil deberá reutilizar los mismos nombres y propiedades para conservar la comparabilidad.
 
-El tracking descrito a continuación es una propuesta pendiente de implementación. No se afirma que Google Analytics, Mixpanel u otra plataforma de analítica esté instalada actualmente.
+El tracking descrito es una **especificación pendiente de implementación**. No se afirma que Google Analytics, Mixpanel u otra plataforma esté instalada actualmente. La herramienta deberá seleccionarse según costo, privacidad, facilidad de integración y capacidad de exportación.
 
-| Evento propuesto | Momento de registro | Propiedades mínimas no sensibles | KPI relacionado |
+#### 1. Implementación inicial
+
+La primera etapa instrumentará únicamente los eventos necesarios para establecer una línea base y observar los recorridos relacionados con los cuatro experimentos.
+
+* **Métricas de uso:** registros, sesiones, visualización del dashboard, consultas de reportes y acceso a planes.
+* **Interacciones operativas:** alertas consultadas, productos actualizados y órdenes creadas.
+* **Feedback:** valoraciones opcionales posteriores a tareas seleccionadas.
+
+| Evento propuesto | Experimento o meta | Propiedades mínimas no sensibles | Disparador |
 |---|---|---|---|
-| `account_registered` | Registro completado correctamente | `anonymous_user_id`, `timestamp`, `platform` | Registros y activación. |
-| `login_succeeded` | Inicio de sesión exitoso | `anonymous_user_id`, `timestamp`, `platform` | Usuarios activos y recurrencia. |
-| `dashboard_viewed` | Carga correcta del dashboard | `anonymous_user_id`, `period`, `timestamp` | Uso recurrente del dashboard. |
-| `dashboard_period_changed` | Cambio entre periodo diario, semanal o mensual | `from_period`, `to_period` | Preferencia de periodos. |
-| `low_stock_alert_viewed` | Visualización de productos con stock crítico | `critical_product_count` | Uso de alertas de inventario. |
-| `inventory_product_updated` | Actualización exitosa de un producto | `changed_fields_count`, `was_low_stock` | Acción posterior a una alerta. |
-| `order_created` | Orden registrada correctamente | `line_item_count`, `order_type` | Finalización de órdenes y activación. |
-| `financial_report_viewed` | Reporte cargado correctamente | `period`, `has_comparison` | Adopción de reportes. |
-| `subscription_plans_viewed` | Visualización de los planes disponibles | `current_plan` | Alcance del embudo de suscripción. |
-| `subscription_plan_selected` | Selección confirmada de un plan | `current_plan`, `selected_plan` | Preferencia por plan; no equivale a pago. |
-| `feedback_submitted` | Envío de una encuesta breve | `context`, `rating` | Satisfacción y aprendizaje cualitativo. |
+| `experiment_variant_assigned` | Comparación A/B | `experiment_id`, `variant`, `anonymous_user_id` | Al asignar una condición de control o experimental. |
+| `account_registered` | Activación | `anonymous_user_id`, `platform` | Al completar correctamente el registro. |
+| `dashboard_viewed` | EXP-01 | `anonymous_user_id`, `period`, `variant` | Al cargar correctamente el dashboard. |
+| `dashboard_period_changed` | EXP-01 y EXP-04 | `from_period`, `to_period`, `variant` | Al cambiar el periodo consultado. |
+| `low_stock_alert_viewed` | EXP-02 | `critical_product_count`, `variant` | Al visualizar productos clasificados como críticos. |
+| `inventory_product_updated` | EXP-02 | `changed_fields_count`, `was_low_stock`, `variant` | Al actualizar correctamente un producto. |
+| `order_created` | Activación operativa | `line_item_count`, `order_type` | Al registrar una orden sin error. |
+| `financial_report_viewed` | EXP-04 | `period`, `has_comparison`, `variant` | Al cargar un reporte financiero. |
+| `subscription_plans_viewed` | EXP-03 | `current_plan`, `variant` | Al mostrar los planes disponibles. |
+| `subscription_plan_selected` | EXP-03 | `current_plan`, `selected_plan`, `variant` | Al confirmar una selección; no representa pago. |
+| `feedback_submitted` | Todos | `experiment_id`, `context`, `rating` | Al enviar voluntariamente una encuesta breve. |
 
-**Reglas de privacidad y calidad de datos**
+#### 2. Seguimiento continuo
 
-- No registrar nombres, correos, contraseñas, tokens JWT ni texto libre que pueda contener datos personales.
-- No enviar importes detallados, nombres de platos, proveedores o información financiera identificable a la herramienta de analítica.
-- Utilizar identificadores anónimos o seudónimos y documentar el periodo de retención.
-- Solicitar consentimiento cuando corresponda y explicar el propósito del seguimiento.
-- Mantener nombres de eventos y propiedades consistentes entre frontend, backend y futuras plataformas.
-- Validar que un evento se registre una sola vez por acción y que los entornos de desarrollo no contaminen los datos de producción.
+Después de verificar la implementación, los eventos se revisarán durante periodos completos que incluyan días laborables y fin de semana. El análisis distinguirá variante, plan y recurrencia, pero no expondrá la identidad del restaurante.
 
-La implementación futura puede realizarse con una herramienta de analítica web o con eventos propios enviados al backend. La selección tecnológica debe considerar costo, privacidad, facilidad de integración y capacidad de exportar datos para análisis.
+* **Segmentación:** Comparar control y experimento mediante `experiment_id` y `variant`; separar planes solo cuando exista una muestra suficiente.
+* **Recurrencia:** Observar retornos en semanas diferentes para evitar confundir una sesión inicial con adopción sostenida.
+* **Guardrails:** Revisar errores, abandonos y acciones posteriores antes de escalar cualquier variante.
+* **Decisión:** Mantener, rediseñar o retirar una propuesta únicamente después de cumplir la escala definida y revisar la evidencia cualitativa.
+
+#### Reglas de privacidad y calidad
+
+* No registrar nombres, correos, contraseñas, tokens JWT ni texto libre que pueda incluir datos personales.
+* No enviar importes detallados, nombres de platos, proveedores o información financiera identificable.
+* Utilizar identificadores anónimos o seudónimos y documentar el periodo de retención.
+* Solicitar consentimiento cuando corresponda y explicar el propósito de la medición.
+* Validar que cada evento se registre una sola vez y que desarrollo o pruebas no contaminen producción.
+* Mantener un diccionario de eventos consistente entre frontend, backend y futuras plataformas.
 
 ## 8.3. Experimentation
 
-La fase de experimentación conecta los aprendizajes esperados con la evolución del producto. Debido a que los experimentos todavía no han sido ejecutados, las siguientes historias y prioridades representan una propuesta **To-Be preliminar**. Después de obtener resultados, el equipo deberá confirmar, modificar, descartar o repriorizar cada elemento.
+La fase de experimentación traduce el aprendizaje esperado en artefactos accionables. A partir de las cuatro apuestas priorizadas se proponen mejoras para comprensión financiera, inventario, reportes y suscripciones, además de capacidades transversales de medición. Como las pruebas todavía no se han ejecutado, las historias y prioridades siguientes forman un escenario **To-Be preliminar** y deberán confirmarse, modificarse o descartarse con evidencia.
 
 ### 8.3.1. To-Be User Stories.
 
-| ID | Título | User Story | Criterios de aceptación | Experimento relacionado |
-|---|---|---|---|---|
-| TBU-01 | Explicación contextual de métricas | Como dueño de restaurante, quiero consultar una explicación breve de cada indicador financiero para interpretar correctamente ingresos, gastos, utilidad y variación. | **Given** que visualizo una métrica del dashboard o reporte<br>**When** solicito ayuda contextual<br>**Then** veo una definición clara, su forma de cálculo y una interpretación básica sin abandonar la pantalla. | EXP-01 y EXP-04 |
-| TBU-02 | Resumen financiero accionable | Como dueño de restaurante, quiero recibir un resumen de los cambios más relevantes del periodo para identificar rápidamente qué aspecto del negocio debo revisar. | **Given** que existen datos del periodo actual y anterior<br>**When** ingreso al dashboard<br>**Then** veo un resumen de variaciones relevantes basado únicamente en los datos disponibles. | EXP-01 |
-| TBU-03 | Experiencia inicial con datos de demostración | Como nuevo usuario, quiero explorar FoodFlow con datos de ejemplo para comprender su valor antes de registrar toda la información de mi restaurante. | **Given** que mi cuenta todavía no tiene datos<br>**When** inicio el recorrido de demostración<br>**Then** puedo explorar dashboard, inventario y reportes con información ficticia claramente identificada. | EXP-01 y Q-09 |
-| TBU-04 | Priorización de productos con bajo stock | Como responsable de inventario, quiero ver los productos críticos ordenados por nivel de urgencia para decidir qué insumos revisar primero. | **Given** que existen productos por debajo de su umbral<br>**When** consulto inventario<br>**Then** veo una lista priorizada con stock actual, umbral, unidad y señal de urgencia. | EXP-02 |
-| TBU-05 | Registro de reposición desde una alerta | Como responsable de inventario, quiero actualizar o registrar la reposición desde la alerta de bajo stock para resolver el problema con menos pasos. | **Given** que visualizo un producto crítico<br>**When** selecciono la acción de reposición<br>**Then** puedo registrar el nuevo stock y confirmar la actualización desde el mismo flujo. | EXP-02 |
-| TBU-06 | Comparación guiada de periodos | Como dueño de restaurante, quiero comparar dos periodos mediante indicadores y explicaciones consistentes para reconocer tendencias de ingresos, gastos y utilidad. | **Given** que existen datos de dos periodos<br>**When** selecciono un periodo de comparación<br>**Then** veo valores, diferencias, porcentajes y etiquetas que indican aumento o disminución. | EXP-04 |
-| TBU-07 | Comparación de planes por beneficio | Como dueño de restaurante, quiero comparar los planes según funciones, límites y problemas que resuelven para elegir la alternativa adecuada. | **Given** que ingreso a suscripciones<br>**When** comparo Free, Standard y Premium<br>**Then** veo precios, límites, beneficios diferenciales y el plan actual sin mensajes ambiguos. | EXP-03 |
-| TBU-08 | Prueba controlada de funciones pagadas | Como usuario del plan Free, quiero probar temporalmente funciones seleccionadas de un plan pagado para evaluar su utilidad antes de tomar una decisión. | **Given** que cumplo las condiciones de una prueba<br>**When** activo la prueba desde suscripciones<br>**Then** veo su duración, funciones habilitadas y fecha de finalización sin realizar un cobro automático. | EXP-03 |
-| TBU-09 | Registro respetuoso de eventos de uso | Como Product Owner, quiero medir interacciones clave de manera anónima para evaluar activación, adopción y recurrencia sin recopilar información sensible. | **Given** que el usuario otorgó el consentimiento requerido<br>**When** completa una acción instrumentada<br>**Then** se registra un único evento con propiedades no sensibles y un identificador seudónimo. | Todos los experimentos |
-| TBU-10 | Encuesta contextual de satisfacción | Como usuario, quiero responder una encuesta breve después de una tarea relevante para comunicar si la función fue clara y útil. | **Given** que completo una tarea seleccionada<br>**When** se presenta la encuesta opcional<br>**Then** puedo calificarla, agregar una observación y omitirla sin perder mi trabajo. | Todos los experimentos |
+Las historias continúan la numeración existente a partir de `US33` y se agrupan en cinco nuevas épicas. Cada una conserva la formulación de usuario y criterios de aceptación en formato Given-When-Then.
 
-Estas historias no sustituyen las historias actuales del producto. Representan posibles mejoras derivadas de las preguntas experimentales y deben ingresar al desarrollo solamente cuando la evidencia justifique su prioridad.
+#### EP08: Comprensión y activación financiera
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US33 |
+| **User** | Dueño o administrador de restaurante |
+| **Priority** | 1 - Must Have |
+| **Epic** | EP08: Comprensión y activación financiera |
+| **Title** | Consultar explicaciones contextuales de las métricas |
+| **Description** | Como dueño de restaurante, quiero consultar una explicación breve de cada indicador para interpretar correctamente ingresos, gastos, utilidad y variación. |
+| **Acceptance Criteria - Escenario 1** | **Given** que visualizo una métrica del dashboard o reporte,<br>**When** solicito ayuda contextual,<br>**Then** veo una definición clara y su forma de cálculo sin abandonar la pantalla. |
+| **Acceptance Criteria - Escenario 2** | **Given** que cierro la explicación,<br>**When** continúo revisando el dashboard,<br>**Then** conservo el periodo y los datos que estaba consultando. |
+| **Experiment origin** | EXP-01 y EXP-04. |
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US34 |
+| **User** | Dueño o administrador de restaurante |
+| **Priority** | 2 - Should Have |
+| **Epic** | EP08: Comprensión y activación financiera |
+| **Title** | Visualizar un resumen financiero accionable |
+| **Description** | Como dueño de restaurante, quiero conocer los cambios más relevantes del periodo para identificar rápidamente qué aspecto del negocio debo revisar. |
+| **Acceptance Criteria - Escenario 1** | **Given** que existen datos del periodo actual y anterior,<br>**When** ingreso al dashboard,<br>**Then** veo un resumen de las variaciones más relevantes basado únicamente en los datos disponibles. |
+| **Acceptance Criteria - Escenario 2** | **Given** que no existe información suficiente para comparar,<br>**When** se carga el resumen,<br>**Then** el sistema informa que todavía no puede generar una conclusión y no inventa recomendaciones. |
+| **Experiment origin** | EXP-01. |
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US35 |
+| **User** | Nuevo usuario de FoodFlow |
+| **Priority** | 1 - Must Have |
+| **Epic** | EP08: Comprensión y activación financiera |
+| **Title** | Explorar FoodFlow con datos de demostración |
+| **Description** | Como nuevo usuario, quiero recorrer FoodFlow con datos ficticios para comprender su utilidad antes de registrar la información de mi restaurante. |
+| **Acceptance Criteria - Escenario 1** | **Given** que mi cuenta aún no tiene datos,<br>**When** inicio el modo demostración,<br>**Then** puedo explorar dashboard, inventario y reportes con información marcada como ficticia. |
+| **Acceptance Criteria - Escenario 2** | **Given** que estoy en el modo demostración,<br>**When** decido configurar mi restaurante,<br>**Then** puedo salir del recorrido sin mezclar los datos ficticios con los registros reales. |
+| **Experiment origin** | BLQ09 y EXQ04. |
+
+#### EP09: Inventario accionable
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US36 |
+| **User** | Responsable de inventario |
+| **Priority** | 1 - Must Have |
+| **Epic** | EP09: Inventario accionable |
+| **Title** | Priorizar productos con bajo stock |
+| **Description** | Como responsable de inventario, quiero ver los productos críticos ordenados por urgencia para decidir qué insumos revisar primero. |
+| **Acceptance Criteria - Escenario 1** | **Given** que existen productos por debajo de su umbral,<br>**When** consulto inventario,<br>**Then** veo una lista priorizada con stock actual, umbral, unidad y señal de urgencia. |
+| **Acceptance Criteria - Escenario 2** | **Given** que no existen productos críticos,<br>**When** ingreso al inventario,<br>**Then** el sistema indica que no hay alertas activas y mantiene visible la lista general. |
+| **Experiment origin** | EXP-02. |
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US37 |
+| **User** | Responsable de inventario |
+| **Priority** | 2 - Should Have |
+| **Epic** | EP09: Inventario accionable |
+| **Title** | Registrar una reposición desde la alerta |
+| **Description** | Como responsable de inventario, quiero actualizar el stock desde la alerta para resolver el faltante con menos pasos. |
+| **Acceptance Criteria - Escenario 1** | **Given** que visualizo un producto crítico,<br>**When** selecciono la acción de reposición e ingreso la cantidad recibida,<br>**Then** el sistema actualiza el stock y recalcula su estado. |
+| **Acceptance Criteria - Escenario 2** | **Given** que ingreso una cantidad inválida,<br>**When** intento confirmar la reposición,<br>**Then** el sistema evita el cambio y explica cómo corregir el dato. |
+| **Experiment origin** | BLQ04 y EXP-02. |
+
+#### EP10: Reportes orientados a decisiones
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US38 |
+| **User** | Dueño o administrador de restaurante |
+| **Priority** | 1 - Must Have |
+| **Epic** | EP10: Reportes orientados a decisiones |
+| **Title** | Comparar periodos mediante indicadores guiados |
+| **Description** | Como dueño de restaurante, quiero comparar dos periodos con diferencias claras para reconocer tendencias de ingresos, gastos y utilidad. |
+| **Acceptance Criteria - Escenario 1** | **Given** que existen datos de dos periodos,<br>**When** selecciono la comparación,<br>**Then** veo valores, diferencias, porcentajes y etiquetas que indican aumento o disminución. |
+| **Acceptance Criteria - Escenario 2** | **Given** que el periodo anterior no tiene datos suficientes,<br>**When** solicito la comparación,<br>**Then** el sistema muestra el dato disponible y explica por qué no calcula una variación. |
+| **Experiment origin** | EXP-04 y BLQ06. |
+
+#### EP11: Validación de la propuesta SaaS
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US39 |
+| **User** | Dueño de restaurante |
+| **Priority** | 1 - Must Have |
+| **Epic** | EP11: Validación de la propuesta SaaS |
+| **Title** | Comparar planes según beneficios y problemas resueltos |
+| **Description** | Como dueño de restaurante, quiero comparar funciones, límites y beneficios para elegir el plan que se ajuste a mis necesidades. |
+| **Acceptance Criteria - Escenario 1** | **Given** que ingreso a suscripciones,<br>**When** comparo Free, Standard y Premium,<br>**Then** veo precios, límites, diferencias y el problema operativo que atiende cada beneficio. |
+| **Acceptance Criteria - Escenario 2** | **Given** que ya tengo un plan activo,<br>**When** reviso la comparación,<br>**Then** el sistema identifica mi plan actual y explica qué cambiaría al seleccionar otro. |
+| **Experiment origin** | EXP-03 y BLQ08. |
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US40 |
+| **User** | Usuario del plan Free |
+| **Priority** | 2 - Should Have |
+| **Epic** | EP11: Validación de la propuesta SaaS |
+| **Title** | Probar temporalmente funciones de un plan pagado |
+| **Description** | Como usuario de Free, quiero probar funciones seleccionadas de Standard o Premium para evaluar su utilidad antes de tomar una decisión. |
+| **Acceptance Criteria - Escenario 1** | **Given** que cumplo las condiciones de una prueba,<br>**When** la activo desde suscripciones,<br>**Then** veo su duración, funciones habilitadas y fecha de finalización sin cobro automático. |
+| **Acceptance Criteria - Escenario 2** | **Given** que finaliza la prueba,<br>**When** vuelvo a usar FoodFlow,<br>**Then** las funciones retornan a los límites de Free sin eliminar mis datos. |
+| **Experiment origin** | EXP-03 y EXQ06. |
+
+#### EP12: Experimentación y analítica responsable
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US41 |
+| **User** | Product Owner |
+| **Priority** | 1 - Must Have |
+| **Epic** | EP12: Experimentación y analítica responsable |
+| **Title** | Registrar eventos de uso no sensibles |
+| **Description** | Como Product Owner, quiero medir interacciones clave de forma seudónima para evaluar activación, adopción y recurrencia sin recopilar información sensible. |
+| **Acceptance Criteria - Escenario 1** | **Given** que se obtuvo el consentimiento requerido,<br>**When** el usuario completa una acción instrumentada,<br>**Then** se registra un solo evento con propiedades permitidas y un identificador seudónimo. |
+| **Acceptance Criteria - Escenario 2** | **Given** que el usuario no autoriza una medición opcional,<br>**When** utiliza la aplicación,<br>**Then** puede completar sus tareas sin que se envíen esos eventos. |
+| **Experiment origin** | Plan de tracking 8.2.8 y BLQ12. |
+
+| Campo | Valor |
+|---|---|
+| **Story ID** | US42 |
+| **User** | Usuario de FoodFlow |
+| **Priority** | 2 - Should Have |
+| **Epic** | EP12: Experimentación y analítica responsable |
+| **Title** | Responder una encuesta contextual opcional |
+| **Description** | Como usuario, quiero valorar brevemente una tarea para comunicar si la función fue clara y útil. |
+| **Acceptance Criteria - Escenario 1** | **Given** que completo una tarea seleccionada,<br>**When** aparece la encuesta opcional,<br>**Then** puedo calificar la experiencia y enviar una observación sin compartir información sensible. |
+| **Acceptance Criteria - Escenario 2** | **Given** que no deseo responder,<br>**When** omito la encuesta,<br>**Then** continúo usando FoodFlow sin perder mi trabajo ni recibir un bloqueo. |
+| **Experiment origin** | Todos los experimentos. |
+
+Estas historias no sustituyen automáticamente las historias actuales. Solo deberán ingresar a un Sprint cuando el aprendizaje del experimento correspondiente justifique su valor y prioridad.
 
 ### 8.3.2. To-Be Product Backlog
 
-El To-Be Product Backlog organiza las historias experimentales según riesgo, aprendizaje esperado, valor para el usuario y dependencia técnica. La prioridad inicial favorece las mejoras que permiten comprender el producto y recopilar evidencia antes de ampliar funciones comerciales.
+El backlog To-Be consolida las historias derivadas de los experimentos y las ordena según el puntaje del Question Backlog, el valor de aprendizaje y las dependencias técnicas. Primero se priorizan las capacidades que permiten medir y comprender el núcleo del producto; después se ubican las ampliaciones que requieren mayor validación comercial u operativa.
 
-| Orden | ID | Título | Prioridad inicial | Story Points | Dependencia o justificación |
-|---:|---|---|---|---:|---|
-| 1 | TBU-09 | Registro respetuoso de eventos de uso | Alta | 8 | Proporciona datos para medir activación, adopción y recurrencia; requiere política de eventos y privacidad. |
-| 2 | TBU-01 | Explicación contextual de métricas | Alta | 3 | Responde directamente al riesgo de incomprensión del núcleo financiero. |
-| 3 | TBU-03 | Experiencia inicial con datos de demostración | Alta | 8 | Reduce la barrera de carga inicial y facilita probar el valor del producto. |
-| 4 | TBU-04 | Priorización de productos con bajo stock | Alta | 5 | Apoya una decisión operativa frecuente y puede reducir faltantes. |
-| 5 | TBU-06 | Comparación guiada de periodos | Alta | 5 | Mejora la interpretación de reportes y tendencias financieras. |
-| 6 | TBU-07 | Comparación de planes por beneficio | Alta | 3 | Es necesaria antes de evaluar con mayor precisión el valor de los planes pagados. |
-| 7 | TBU-02 | Resumen financiero accionable | Media | 8 | Depende de reglas claras para generar recomendaciones sin inducir decisiones incorrectas. |
-| 8 | TBU-05 | Registro de reposición desde una alerta | Media | 5 | Amplía el flujo de inventario después de confirmar que las alertas actuales son útiles. |
-| 9 | TBU-10 | Encuesta contextual de satisfacción | Media | 3 | Complementa el tracking con percepción cualitativa y debe evitar interrumpir tareas. |
-| 10 | TBU-08 | Prueba controlada de funciones pagadas | Media | 8 | Requiere reglas de elegibilidad, duración y reversión; debe validarse antes de integrar pagos. |
+| # Orden | User Story ID | Título | Descripción | Story Points (1/2/3/5/8) |
+|---:|---|---|---|---:|
+| 1 | US41 | Registrar eventos de uso no sensibles | Medir activación, adopción y recurrencia con eventos seudónimos y propiedades permitidas. | 8 |
+| 2 | US33 | Consultar explicaciones contextuales de las métricas | Explicar indicadores financieros sin sacar al usuario del dashboard o reporte. | 3 |
+| 3 | US35 | Explorar FoodFlow con datos de demostración | Mostrar la propuesta de valor antes de solicitar la carga completa de información. | 8 |
+| 4 | US36 | Priorizar productos con bajo stock | Ordenar los productos críticos y presentar la información necesaria para decidir. | 5 |
+| 5 | US38 | Comparar periodos mediante indicadores guiados | Mostrar diferencias, porcentajes y etiquetas que faciliten reconocer tendencias. | 5 |
+| 6 | US39 | Comparar planes según beneficios y problemas resueltos | Relacionar precios y límites con necesidades concretas del restaurante. | 3 |
+| 7 | US34 | Visualizar un resumen financiero accionable | Destacar cambios relevantes sin generar conclusiones cuando faltan datos. | 8 |
+| 8 | US37 | Registrar una reposición desde la alerta | Actualizar el stock crítico dentro del mismo recorrido de inventario. | 5 |
+| 9 | US42 | Responder una encuesta contextual opcional | Complementar la analítica con percepción cualitativa sin bloquear la tarea. | 3 |
+| 10 | US40 | Probar temporalmente funciones de un plan pagado | Permitir una evaluación controlada sin cobro automático ni pérdida de datos. | 8 |
 
-Los Story Points son estimaciones relativas preliminares y no representan horas. El backlog debe volver a estimarse y priorizarse después de analizar los resultados de los experimentos, considerando además capacidad del equipo, dependencias, seguridad y efectos sobre el producto desplegado.
+Los Story Points son estimaciones relativas preliminares y no representan horas. El orden deberá revisarse después de ejecutar los experimentos: una historia puede avanzar, cambiar de alcance o retirarse si la evidencia no respalda la hipótesis que la originó.
 
 ### 8.3.3. Pipeline-supported, Experiment-Driven To-Be Software Platform Lifecycle
 #### 8.3.3.1. To-Be Sprint Backlogs
