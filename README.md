@@ -7835,6 +7835,21 @@ Conectar las burbujas de avatar con el servicio de base de datos correspondiente
 
 #### 6.4.2.4. Resumen de modificaciones para subsanar hallazgos.
 
+Con base en la auditoría recibida por el grupo Fudi, el equipo identificó acciones correctivas orientadas a mejorar la consistencia visual, la accesibilidad, la prevención de errores y la eficiencia de los flujos principales de FoodFlow. Las modificaciones se priorizaron considerando la severidad asignada por el auditor, dando mayor atención a los problemas que podían afectar la continuidad de tareas o la interpretación correcta de la información del sistema.
+
+| # | Hallazgo identificado | Severidad | Modificación para subsanar el hallazgo | Resultado esperado |
+|:---:|---|:---:|---|---|
+| 1 | Hardcodeo del símbolo de moneda `$` en listados de órdenes. | 2 | Reemplazar el formateo manual de montos en `OrdersPage` por el helper centralizado `formatCurrency(row.totalAmount)`. | Mantener consistencia regional y visual en todos los montos mostrados por la aplicación. |
+| 2 | Logotipo de marca sin descripción accesible en pantallas de autenticación. | 1 | Actualizar el atributo `alt` del logo en `LoginPage` y `RegisterPage` con una descripción significativa, como `FoodFlow Logo` o el nombre de la aplicación. | Mejorar la experiencia de usuarios con lectores de pantalla y reforzar la identificación del producto. |
+| 3 | Redirección abrupta y cierre de sesión al modificar el correo electrónico. | 2 | Incorporar un mensaje explícito de cierre de sesión, idealmente con contador o indicador visual antes de redirigir al login. | Reducir la incertidumbre del usuario y hacer visible el estado del sistema durante el cambio de correo. |
+| 4 | Modales que se cierran accidentalmente y descartan datos sin confirmación. | 3 | Agregar una validación de cambios pendientes (`isDirty`) y un cuadro de confirmación antes de cerrar formularios de productos u órdenes con información ingresada. | Evitar pérdida accidental de datos y dar mayor control al usuario sobre sus acciones. |
+| 5 | Falta de límites claros y advertencias visuales en campos y listas de stock. | 2 | Añadir límites o validaciones en campos numéricos de inventario e incorporar badges, colores o iconos cuando `stockLevel <= lowStockThreshold`. | Prevenir errores de registro y facilitar la detección rápida de productos con stock crítico. |
+| 6 | Inconsistencia de datos entre la tarjeta de órdenes del Dashboard y la vista de Finanzas. | 3 | Unificar la fuente de cálculo de métricas de órdenes para que Dashboard y Finanzas consuman los mismos criterios, filtros y periodo seleccionado. | Garantizar coherencia en los indicadores y evitar interpretaciones contradictorias de la operación del restaurante. |
+| 7 | Etiquetas numéricas truncadas o mal alineadas en el gráfico de Finanzas. | 2 | Ajustar los márgenes del gráfico y el ancho del eje Y para que los valores monetarios se rendericen completamente. | Mejorar la legibilidad de los reportes financieros y evitar una percepción de interfaz rota. |
+| 8 | Ausencia de botón para agregar platos desde la vista Menú / Platos. | 2 | Añadir un botón primario visible, como `+ Agregar plato`, en la parte superior de la vista de Menú / Platos. | Reducir pasos innecesarios y permitir que el usuario complete la tarea desde el módulo correspondiente. |
+
+En conjunto, estas modificaciones fortalecen la usabilidad de FoodFlow al reducir fricciones en tareas frecuentes, mejorar la claridad de la información financiera y hacer más accesibles los flujos de autenticación, inventario, órdenes, finanzas y gestión de platos.
+
 # Capítulo VII: DevOps Practices
 
 ## 7.1. Continuous Integration
@@ -8629,6 +8644,10 @@ Los Story Points son estimaciones relativas preliminares y no representan horas.
 
 8. El uso de frontend en Vercel, backend en Render, base de datos en Supabase y control de versiones en GitHub permitió construir un flujo de despliegue moderno, separado y fácil de mantener.
 
+9. La auditoría de experiencia de usuario permitió identificar oportunidades concretas de mejora en accesibilidad, consistencia visual, prevención de errores y eficiencia de uso. Estos hallazgos demuestran que la validación externa aporta una perspectiva valiosa para fortalecer la calidad del producto antes de avanzar hacia una versión más estable.
+
+10. La incorporación de un enfoque de experimentación y medición permite que FoodFlow evolucione con base en evidencia, no solo en supuestos iniciales. Definir hipótesis, métricas, eventos de seguimiento y preguntas de investigación ayuda a priorizar mejoras que generen valor real para los restaurantes usuarios.
+
 ## Recomendaciones
 
 1. Se recomienda continuar validando FoodFlow con dueños de restaurantes reales, priorizando pruebas de usabilidad sobre los módulos principales del MVP. Esto permitirá identificar si el dashboard, los reportes, el inventario, el menú y las órdenes son comprendidos fácilmente por usuarios con distintos niveles de experiencia tecnológica.
@@ -8646,6 +8665,10 @@ Los Story Points son estimaciones relativas preliminares y no representan horas.
 7. Mejorar el monitoreo en producción incorporando alertas automáticas para errores del backend, caídas del servicio y degradación de rendimiento.
 
 8. Continuar ampliando pruebas funcionales para cubrir escenarios negativos, errores de red, permisos, datos vacíos y casos límite en órdenes, inventario y reportes financieros.
+
+9. Priorizar la corrección de los hallazgos de usabilidad con severidad media y alta, especialmente aquellos relacionados con pérdida de datos en modales, inconsistencias de métricas y claridad visual en reportes financieros. Esto permitirá mejorar la confianza del usuario y reducir errores durante tareas críticas.
+
+10. Implementar progresivamente un plan de analítica de producto que registre eventos clave de forma anónima y respetuosa de la privacidad. Esta información debe utilizarse para evaluar activación, recurrencia, comprensión de métricas y adopción de funcionalidades antes de tomar decisiones de desarrollo o monetización.
 
 # Bibliografía
 
