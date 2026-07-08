@@ -130,6 +130,12 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
     - [4.7.2. Class Dictionary](#472-class-dictionary)
   - [4.8 Database Design](#48-database-design)
     - [4.8.1 Relational Database Diagram](#481-relational-database-diagram)
+      - [4.8.1.1. Bounded Context: Identity](#4811-bounded-context-identity)
+      - [4.8.1.2. Bounded Context: Billing](#4812-bounded-context-billing)
+      - [4.8.1.3. Bounded Context: Catalog](#4813-bounded-context-catalog)
+      - [4.8.1.4. Bounded Context: Inventory](#4814-bounded-context-inventory)
+      - [4.8.1.5. Bounded Context: Sales](#4815-bounded-context-sales)
+      - [4.8.1.6. Bounded Context: Finance](#4816-bounded-context-finance)
 - [Capítulo V: Product Implementation](#capítulo-v-product-implementation)
   - [5.1. Software Configuration Management.](#51-software-configuration-management)
     - [5.1.1. Software Development Environment Configuration.](#511-software-development-environment-configuration)
@@ -8608,7 +8614,7 @@ La iteración To-Be implementada responde a esas fricciones sin salir del alcanc
 5. **La disponibilidad por insumos reduce errores operativos:** Si FoodFlow indica cuántas órdenes son posibles o cuándo un plato no está disponible, se reducirá la probabilidad de vender platos sin stock suficiente.
 
 
-### 8.1.3. Experiment-Ready Questions.
+La técnica de las cinco preguntas `Who`, `What`, `Where`, `When`, `Why` y `How` se aplica sobre dos comportamientos centrales para revelar premisas que no aparecen al formular una sola pregunta general.
 
 Las preguntas listas para experimentar se organizan en dos tipos. Las preguntas **belief-led** parten de una creencia concreta sobre el impacto de las nuevas funcionalidades. Las preguntas **exploratorias** buscan comprender comportamientos aún no confirmados en restaurantes reales.
 
@@ -8842,6 +8848,14 @@ Cada experimento debe aislar su pregunta principal. El experimento de descuento 
 #### 4. Consideraciones éticas
 
 Las pruebas se realizarán con datos ficticios de restaurante y no requerirán información financiera real del participante. En caso de utilizar ejemplos de costos, estos serán simulados o proporcionados voluntariamente por el usuario. No se solicitarán credenciales personales fuera del entorno de prueba. La información recopilada será usada únicamente para mejorar la comprensión del flujo de inventario, recetas y rentabilidad estimada.
+
+#### 4. Consideraciones éticas
+
+* **Datos ficticios:** Las cuentas de prueba no contendrán información financiera, personal ni comercial real.
+* **Participación voluntaria:** El participante podrá omitir preguntas o finalizar la sesión sin consecuencias.
+* **Transparencia comercial:** EXP-03 no procesará pagos ni presentará una preferencia como compra confirmada.
+* **Privacidad:** Las notas se identificarán mediante códigos y no incluirán contraseñas, tokens, correos ni nombres del restaurante.
+* **No manipulación:** No se modificarán precios entre participantes ni se ocultará información para inducir una elección.
 
 ### 8.2.7. Data Analytics: Goals, KPIs and Metrics Selection.
 
