@@ -8945,9 +8945,37 @@ Desde el backend, la lógica se apoya en los contextos de Catalog, Inventory y S
 | TB-10 | Analítica | Definir eventos web para medir uso de recetas, descuento automático y ganancia estimada. | Planeado |
 
 #### 8.3.3.2. Implemented To-Be Landing Page Evidence
+
+Enlace a la Landing Page desplegada: [https://claudeflow-org.github.io/FoodFlow-LandingPage/](https://claudeflow-org.github.io/FoodFlow-LandingPage/)
+<p align="center">
+  <img src="assets\FoodFlowDeployedLandingPage.png" alt="FoodFlow">
+</p>
+
 #### 8.3.3.3. Implemented To-Be Frontend-Web Application Evidence
+
+Enlace del Frontend desplegado: [https://foodflowfrontend.vercel.app/](https://foodflowfrontend.vercel.app/)
+<p align="center">
+  <img src="assets/FoodFlowDeployedFrontend.png" alt="FoodFlow">
+</p>
+
 #### 8.3.3.4. Implemented To-Be RESTful API and/or Serverless Backend Evidence
+
+Enlace del Backend desplegado: [https://foodflow-backend-y3lj.onrender.com/swagger-ui/index.html](https://foodflow-backend-y3lj.onrender.com/swagger-ui/index.html)
+<p align="center">
+  <img src="assets/FoodFlowDeployedBackend.png" alt="FoodFlow">
+</p>
+
 #### 8.3.3.5. Team Collaboration Insights
+
+Frontend:
+<p align="center">
+  <img src="assets\TeamCollaborationFrontend.jpg" alt="FoodFlow TC Frontend">
+</p>
+
+Backend:
+<p align="center">
+  <img src="assets\TeamCollaborationBackend.png" alt="FoodFlow TC Backend">
+</p>
 
 ### 8.3.4. To-Be Validation Interviews
 
