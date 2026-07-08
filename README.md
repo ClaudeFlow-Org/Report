@@ -9072,37 +9072,7 @@ Las entrevistas se realizarán con datos ficticios o ejemplos proporcionados vol
 
 El registro de entrevistas To-Be se preparará como una matriz de evidencia para la siguiente ronda de validación. En esta etapa no se reportan resultados concluyentes de usuarios nuevos, ya que el propósito de la sección es definir cómo se documentarán las sesiones centradas en las funcionalidades implementadas.
 
-**Formato de registro por participante:**
-
-| Campo | Descripción |
-|---|---|
-| Código de participante | Identificador anónimo, por ejemplo, TBV-01. |
-| Rol | Dueño, administrador, encargado de cocina o gestor del restaurante. |
-| Tipo de restaurante | Rubro gastronómico del negocio. |
-| Herramientas actuales | Libreta, Excel, calculadora, POS u otro método. |
-| Escenario probado | Receta, descuento automático, ganancia estimada o flujo completo. |
-| Tareas completadas | Número de tareas críticas completadas sin ayuda. |
-| Fricciones observadas | Errores, dudas, confusiones o momentos de detención. |
-| Cita relevante | Comentario textual del participante, si aporta evidencia clara. |
-| Veredicto | Validar, ajustar o descartar la interpretación actual de la funcionalidad. |
-
-**Matriz de resultados a completar después de las sesiones:**
-
-| Participante | Receta vinculada a inventario | Descuento al entregar orden | Ganancia estimada al fijar precio | Confusión principal | Valor percibido |
-|---|---|---|---|---|---|
-| TBV-01 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
-| TBV-02 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
-| TBV-03 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
-| TBV-04 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
-| TBV-05 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
-
-**Evidencia a recopilar:**
-
-1. Notas de observación sobre el flujo producto -> receta -> orden -> descuento de inventario.
-2. Capturas de pantalla del plato con receta y del inventario antes y después de entregar la orden.
-3. Comentarios del usuario sobre si el descuento automático reduce trabajo manual.
-4. Comentarios del usuario sobre si la ganancia estimada le ayuda a definir precios.
-5. Errores o dudas relacionados con unidades, costos o disponibilidad de platos.
+link: https://drive.google.com/file/d/12ieoDR6Lv3UTyxtLDFXZV4LJb7NJCG-j/view?usp=sharing
 
 El análisis posterior deberá comparar estas respuestas con los hallazgos de las entrevistas anteriores. En particular, se buscará confirmar si la nueva versión de FoodFlow responde al insight principal de los usuarios: vender un plato debe actualizar el inventario sin obligar al dueño a hacer el ajuste manualmente.
 
