@@ -41,6 +41,8 @@
 | Versión | Fecha | Autores | Descripción de la modificación |
 | :--- | :--- | :--- | :--- |
 | 1.0 (AV1) | 30/04/26 | - Borja Molina, Gabriel Sebastián<br>- Lang Nassi, Werner Khalil<br>- Rodriguez Rodriguez, Luis Piero<br>- Román Pajuelo, Luis Gustavo<br>- Suárez Romero, Santiago Manuel | **Capítulos I, II, III, IV y V** |
+| 2.0 (TB1) | 13/05/26 | - Borja Molina, Gabriel Sebastián<br>- Lang Nassi, Werner Khalil<br>- Rodriguez Rodriguez, Luis Piero<br>- Román Pajuelo, Luis Gustavo<br>- Suárez Romero, Santiago Manuel | **Capítulos VI Y VII** |
+| 3.0 (AV2) | 18/06/26 | - Borja Molina, Gabriel Sebastián<br>- Lang Nassi, Werner Khalil<br>- Rodriguez Rodriguez, Luis Piero<br>- Román Pajuelo, Luis Gustavo<br>- Suárez Romero, Santiago Manuel | **Capítulos VI, VII y VIII** |
 
 ---
 
@@ -48,12 +50,18 @@
 
 Para el desarrollo de este informe se utilizó GitHub como plataforma de colaboración y control de versiones. A continuación, se presentan algunos insights sobre la colaboración del equipo durante la elaboración del informe:
 
+<p align="center">
+  <img src="assets/Contributors.png" alt="FoodFlow">
+</p>
+
+<p align="center">
+  <img src="assets/Collaboration.png" alt="FoodFlow2">
+</p>
+
 ---
 
 # Contenido
 
-- [Registro de versiones del informe](#registro-de-versiones-del-informe)
-- [Project Report Collaboration Insights](#project-report-collaboration-insights)
 - [Student Outcome](#student-outcome)
 - [Capítulo I: Introducción](#capítulo-i-introducción)
   - [1.1 Startup Profile](#11-startup-profile)
@@ -68,17 +76,16 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
       - [1.2.1.5. Why](#1215-why)
       - [1.2.1.6. How](#1216-how)
       - [1.2.1.7. How much](#1217-how-much)
-        - [1.2.1.7.1 Estadísticas que sustentan la problemática](#12171-estadísticas-que-sustentan-la-problemática)
     - [1.2.2. Lean UX Process](#122-lean-ux-process)
       - [1.2.2.1. Lean UX Problem Statement](#1221-lean-ux-problem-statement)
       - [1.2.2.2. Lean UX Assumptions](#1222-lean-ux-assumptions)
       - [1.2.2.3. Lean UX Hypothesis Statements](#1223-lean-ux-hypothesis-statements)
       - [1.2.2.4. Minimum Viable Product](#1224-minimum-viable-product)
-      - [1.2.2.5. Lean UX Canvas](#1224-lean-ux-canvas)
+      - [1.2.2.5. Lean UX Canvas](#1225-lean-ux-canvas)
   - [1.3. Segmento Objetivo](#13-segmento-objetivo)
-- [Capítulo II: Requirements \& Analysis](#capítulo-ii-requirements--analysis)
+- [Capítulo II: Requirements & Analysis](#capítulo-ii-requirements--analysis)
   - [2.1 Competidores](#21-competidores)
-    - [2.1.1. Análisis competitivo](#211-análisis-competitivo)
+    - [2.1.1. Análisis competitivo.](#211-análisis-competitivo)
     - [2.1.2. Estrategias y Tácticas Competitivas de FoodFlow](#212-estrategias-y-tácticas-competitivas-de-foodflow)
   - [2.2 Entrevistas](#22-entrevistas)
     - [2.2.1. Diseño de entrevistas](#221-diseño-de-entrevistas)
@@ -94,14 +101,11 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
 - [Capítulo III: Requirements Specification](#capítulo-iii-requirements-specification)
   - [3.1 To-Be Scenario Mapping](#31-to-be-scenario-mapping)
   - [3.2 User Stories](#32-user-stories)
-    - [3.2.1 Épicas del Proyecto](#321-épicas-del-proyecto)
-    - [3.2.2 User Stories Detalladas](#322-user-stories-detalladas)
   - [3.3 Product Backlog](#33-product-backlog)
   - [3.4 Impact Map](#34-impact-map)
 - [Capítulo IV: Product Design](#capítulo-iv-product-design)
   - [4.1 Style Guidelines](#41-style-guidelines)
     - [4.1.1. General Style Guidelines](#411-general-style-guidelines)
-    - [4.1.2. Web Style Guidelines](#412-web-style-guidelines)
   - [4.2 Information Architecture](#42-information-architecture)
     - [4.2.1 Organization Systems](#421-organization-systems)
     - [4.2.2 Labeling Systems](#422-labeling-systems)
@@ -121,45 +125,50 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
     - [4.6.1 Software Architecture Context Diagram](#461-software-architecture-context-diagram)
     - [4.6.2 Software Architecture Container Diagrams.](#462-software-architecture-container-diagrams)
     - [4.6.3 Software Architecture Components Diagrams.](#463-software-architecture-components-diagrams)
-      - [4.6.3.1 Bounded Context: Identity](#4631-bounded-context-identity)
-      - [4.6.3.2 Bounded Context: Billing](#4632-bounded-context-billing)
-      - [4.6.3.3 Bounded Context: Catalog](#4633-bounded-context-catalog)
-      - [4.6.3.4 Bounded Context: Inventory](#4634-bounded-context-inventory)
-      - [4.6.3.5 Bounded Context: Sales](#4635-bounded-context-sales)
-      - [4.6.3.6 Bounded Context: Finance](#4636-bounded-context-finance)
-  - [4.7 Software Object-Oriented Design](#47-software-object-oriented-design)
-    - [4.7.1 Class Diagrams](#471-class-diagrams)
-    - [4.7.1.1 Bounded Context: Identity](#4711-bounded-context-identity)
-    - [4.7.1.2 Bounded Context: Catalog](#4712-bounded-context-catalog)
-    - [4.7.1.3 Bounded Context: Inventory](#4713-bounded-context-inventory)
-    - [4.7.1.4 Bounded Context: Sales](#4714-bounded-context-sales)
-    - [4.7.1.5 Bounded Context: Finance](#4715-bounded-context-finance)
-    - [4.7.1.6 Bounded Context: Billing](#4716-bounded-context-billing)
-    - [4.7.2 Class Dictionary](#472-class-dictionary)
+  - [4.7. Software Object-Oriented Design](#47-software-object-oriented-design)
+    - [4.7.1. Class Diagrams](#471-class-diagrams)
+    - [4.7.2. Class Dictionary](#472-class-dictionary)
   - [4.8 Database Design](#48-database-design)
     - [4.8.1 Relational Database Diagram](#481-relational-database-diagram)
 - [Capítulo V: Product Implementation](#capítulo-v-product-implementation)
   - [5.1. Software Configuration Management.](#51-software-configuration-management)
     - [5.1.1. Software Development Environment Configuration.](#511-software-development-environment-configuration)
     - [5.1.2. Source Code Management.](#512-source-code-management)
-    - [5.1.3. Source Code Style Guide \& Conventions.](#513-source-code-style-guide--conventions)
-    - [5.1.4. Software Deployment Configuration.](#514-software-deployment-configuration)
-  - [5.2. Product Implementation \& Deployment.](#52-product-implementation--deployment)
+    - [5.1.3. Source Code Style Guide & Conventions.](#513-source-code-style-guide--conventions)
+  - [5.2. Product Implementation & Deployment.](#52-product-implementation--deployment)
     - [5.2.1. Sprint Backlogs.](#521-sprint-backlogs)
     - [5.2.2. Implemented Landing Page Evidence](#522-implemented-landing-page-evidence)
     - [5.2.3. Implemented Frontend-Web Application Evidence](#523-implemented-frontend-web-application-evidence)
     - [5.2.4. Acuerdo de Servicio - SaaS](#524-acuerdo-de-servicio---saas)
-    - [5.2.5. Implemented Native-Mobile Application Evidence](#525-implemented-native-mobile-application-evidence)
-    - [5.2.6. Implemented RESTful API and/or Serverless Backend Evidence](#526-implemented-restful-api-andor-serverless-backend-evidence)
-    - [5.2.7. RESTful API documentation](#527-restful-api-documentation)
-    - [5.2.8. Team Collaboration Insights](#528-team-collaboration-insights)
+    - [5.2.5. Implemented RESTful API and/or Serverless Backend Evidence](#525-implemented-restful-api-andor-serverless-backend-evidence)
+    - [5.2.6. RESTful API documentation](#526-restful-api-documentation)
+    - [5.2.7. Team Collaboration Insights](#527-team-collaboration-insights)
   - [5.3. Video About-the-Product](#53-video-about-the-product)
 - [Capítulo VI: Product Verification & Validation](#capítulo-vi-product-verification--validation)
   - [6.1. Testing Suites & Validation](#61-testing-suites--validation)
-    - [6.1.1. Core Entities Unit Tests](#611-core-entities-unit-tests)
-    - [6.1.2. Core Integration Tests](#612-core-integration-tests)
-    - [6.1.3. Core Behavior-Driven Development](#613-core-behavior-driven-development)
-    - [6.1.4. Core System Tests](#614-core-system-tests)
+  - [6.1.1. Core Entities Unit Tests](#611-core-entities-unit-tests)
+  - [6.1.2. Core Integration Tests](#612-core-integration-tests)
+  - [6.1.3. Core Behavior-Driven Development](#613-core-behavior-driven-development)
+  - [6.1.4. Core System Tests](#614-core-system-tests)
+  - [6.2. Static testing & Verification](#62-static-testing--verification)
+    - [6.2.1. Static Code Analysis](#621-static-code-analysis)
+      - [6.2.1.1. Coding standard & Code conventions.](#6211-coding-standard--code-conventions)
+      - [6.2.1.2. Code Quality & Code Security.](#6212-code-quality--code-security)
+    - [6.2.2. Reviews](#622-reviews)
+  - [6.3. Validation Interviews](#63-validation-interviews)
+    - [6.3.1. Diseño de Entrevistas](#631-diseño-de-entrevistas)
+    - [6.3.2. Registro de Entrevistas](#632-registro-de-entrevistas)
+    - [6.3.3. Evaluaciones según heurísticas](#633-evaluaciones-según-heurísticas)
+  - [6.4. Auditoría de Experiencias de Usuario](#64-auditoría-de-experiencias-de-usuario)
+    - [6.4.1. Auditoría realizada.](#641-auditoría-realizada)
+      - [6.4.1.1. Información del grupo auditado.](#6411-información-del-grupo-auditado)
+      - [6.4.1.2. Cronograma de auditoría realizada.](#6412-cronograma-de-auditoría-realizada)
+      - [6.4.1.3. Contenido de auditoría realizada.](#6413-contenido-de-auditoría-realizada)
+    - [6.4.2. Auditoría recibida.](#642-auditoría-recibida)
+      - [6.4.2.1. Información del grupo auditor.](#6421-información-del-grupo-auditor)
+      - [6.4.2.2. Cronograma de auditoría recibida.](#6422-cronograma-de-auditoría-recibida)
+      - [6.4.2.3. Contenido de auditoría recibida.](#6423-contenido-de-auditoría-recibida)
+      - [6.4.2.4. Resumen de modificaciones para subsanar hallazgos.](#6424-resumen-de-modificaciones-para-subsanar-hallazgos)
 - [Capítulo VII: DevOps Practices](#capítulo-vii-devops-practices)
   - [7.1. Continuous Integration](#71-continuous-integration)
     - [7.1.1. Tools and Practices](#711-tools-and-practices)
@@ -170,6 +179,45 @@ Para el desarrollo de este informe se utilizó GitHub como plataforma de colabor
   - [7.3. Continuous Deployment](#73-continuous-deployment)
     - [7.3.1. Tools and Practices](#731-tools-and-practices)
     - [7.3.2. Production Deployment Pipeline Components](#732-production-deployment-pipeline-components)
+  - [7.4. Continuous Monitoring](#74-continuous-monitoring)
+    - [7.4.1. Tools and Practices](#741-tools-and-practices)
+    - [7.4.2. Monitoring Pipeline Components](#742-monitoring-pipeline-components)
+    - [7.4.3. Alerting Pipeline Components](#743-alerting-pipeline-components)
+    - [7.4.4. Notification Pipeline Components](#744-notification-pipeline-components)
+- [Capítulo VIII: Experiment-Driven Development](#capítulo-viii-experiment-driven-development)
+  - [8.1. Experiment Planning](#81-experiment-planning)
+    - [8.1.1. As-Is Summary.](#811-as-is-summary)
+    - [8.1.2. Raw Material: Assumptions, Knowledge Gaps, Ideas, Claims.](#812-raw-material-assumptions-knowledge-gaps-ideas-claims)
+    - [8.1.3. Experiment-Ready Questions.](#813-experiment-ready-questions)
+    - [8.1.4. Question Backlog.](#814-question-backlog)
+    - [8.1.5. Experiment Cards.](#815-experiment-cards)
+  - [8.2. Experiment Design](#82-experiment-design)
+    - [8.2.1. Hypotheses.](#821-hypotheses)
+    - [8.2.2. Domain Business Metrics](#822-domain-business-metrics)
+    - [8.2.3. Measures.](#823-measures)
+    - [8.2.4. Conditions.](#824-conditions)
+    - [8.2.5. Scale Calculations and Decisions.](#825-scale-calculations-and-decisions)
+    - [8.2.6. Methods Selection.](#826-methods-selection)
+    - [8.2.7. Data Analytics: Goals, KPIs and Metrics Selection.](#827-data-analytics-goals-kpis-and-metrics-selection)
+    - [8.2.8. Web and Mobile Tracking Plan.](#828-web-and-mobile-tracking-plan)
+  - [8.3. Experimentation](#83-experimentation)
+    - [8.3.1. To-Be User Stories.](#831-to-be-user-stories)
+    - [8.3.3. Pipeline-supported, Experiment-Driven To-Be Software Platform Lifecycle](#833-pipeline-supported-experiment-driven-to-be-software-platform-lifecycle)
+      - [8.3.3.1. To-Be Sprint Backlogs](#8331-to-be-sprint-backlogs)
+      - [8.3.3.2. Implemented To-Be Landing Page Evidence](#8332-implemented-to-be-landing-page-evidence)
+      - [8.3.3.3. Implemented To-Be Frontend-Web Application Evidence](#8333-implemented-to-be-frontend-web-application-evidence)
+      - [8.3.3.4. Implemented To-Be RESTful API and/or Serverless Backend Evidence](#8334-implemented-to-be-restful-api-andor-serverless-backend-evidence)
+      - [8.3.3.5. Team Collaboration Insights](#8335-team-collaboration-insights)
+    - [8.3.4. To-Be Validation Interviews](#834-to-be-validation-interviews)
+      - [8.3.4.1. Diseño de Entrevistas.](#8341-diseño-de-entrevistas)
+      - [8.3.4.2. Registro de Entrevistas.](#8342-registro-de-entrevistas)
+  - [8.4. Experiment Aftermath & Analysis](#84-experiment-aftermath--analysis)
+    - [8.4.1. Analysis and Interpretation of Results](#841-analysis-and-interpretation-of-results)
+    - [8.4.2. Re-scored and Re-prioritized Question Backlog](#842-re-scored-and-re-prioritized-question-backlog)
+  - [8.5. Continuous Learning](#85-continuous-learning)
+    - [8.5.1. Shareback Session Artifacts: Learning Workflow](#851-shareback-session-artifacts-learning-workflow)
+  - [8.6. To-Be Software Platform Pre-launch](#86-to-be-software-platform-pre-launch)
+    - [8.6.1. About-the-Product Intro Video](#861-about-the-product-intro-video)
 - [Conclusiones y recomendaciones](#conclusiones-y-recomendaciones)
   - [Conclusiones](#conclusiones)
   - [Recomendaciones](#recomendaciones)
@@ -182,8 +230,8 @@ El curso contribuye al cumplimiento del Student Outcome ABET: ABET – EAC - Stu
 
 | Criterio específico | Acciones realizadas | Conclusiones |
 |---------------------|---------------------|--------------|
-| 4.c.1 Reconoce responsabilidad ética y profesional en situaciones de ingeniería de software | **Borja Molina, Gabriel Sebastián:** Redacté la introducción y añadí notas sobre manejo responsable de datos. También realicé diagramas de exploración de Bounded Contexts y Event Storming.<br>**Lang Nassi, Werner Khalil:** Conduje entrevistas garantizando consentimiento y anonimato, y limpié las transcripciones respetando la privacidad de participantes.<br>**Rodriguez Rodriguez, Luis Piero:** Definí user stories y criterios de aceptación incluyendo requerimientos de accesibilidad y validaciones para reducir sesgos en los datos.<br>**Román Pajuelo, Luis Gustavo:** Modelé los bounded contexts y establecí límites claros de responsabilidad y acceso a datos para preservar integridad y confidencialidad.<br>**Suárez Romero, Santiago Manuel:** Documenté la configuración de desarrollo y políticas de control de versiones, incluyendo recomendaciones de buenas prácticas profesionales y seguridad básica. | El equipo reforzó su compromiso con la ética y la responsabilidad en el desarrollo técnico, integrando prácticas que garantizan la protección de la información, el consentimiento informado y la correcta anonimización en el manejo de datos. Asimismo, se comprendió la importancia de diseñar requisitos inclusivos que prevengan sesgos y aseguren la accesibilidad, estableciendo límites claros de responsabilidad para mitigar riesgos de exposición de datos y adoptando estándares en la gestión de configuración y despliegue que elevan la trazabilidad y la rendición de cuentas en cada etapa del proyecto. |
-| 4.c.2 Emite juicios informados considerando el impacto de las soluciones de ingeniería de software en contextos globales, económicos, ambientales y sociales | **Borja Molina, Gabriel Sebastián:** Analicé antecedentes del mercado y estimé supuestos económicos del producto, incorporando criterios de sostenibilidad financiera.<br>**Lang Nassi, Werner Khalil:** Evalué impactos sociales detectados en entrevistas y propuse mitigaciones operativas para minimizar carga administrativa en pequeños restaurantes.<br>**Rodriguez Rodriguez, Luis Piero:** Elaboré el backlog y prioricé historias que favorecen eficiencia de inventario (reducción de desperdicio) y mejoras medioambientales.<br>Román Pajuelo, Luis Gustavo: Diseñé la arquitectura de información y componentes para reducir redudancias y consumo innecesario de recursos computacionales.<br>**Suárez Romero, Santiago Manuel:** Documenté opciones de despliegue y configuración que optimizan costos y huella energética (uso de recursos, cadencias de actualización). | El equipo consolidó una visión integral en la que las decisiones técnicas y de diseño no solo responden a la eficiencia operativa y el rendimiento, sino que están intrínsecamente ligadas a la viabilidad económica y la responsabilidad ambiental. A lo largo del primer avance, se comprendió la importancia de priorizar funcionalidades y optimizar procesos para reducir el desperdicio de recursos y los costos de infraestructura, al mismo tiempo que se implementaron prácticas de despliegue equilibradas y medidas de mitigación orientadas a generar un impacto positivo y accesible para usuarios con recursos limitados. |
+| 4.c.1 Reconoce responsabilidad ética y profesional en situaciones de ingeniería de software | **Borja Molina, Gabriel Sebastián (AV1):** Redacté la introducción y añadí notas sobre manejo responsable de datos. También realicé diagramas de exploración de Bounded Contexts y Event Storming.<br>**Borja Molina, Gabriel Sebastián (TB1):** Implementé y ejecuté las pruebas unitarias para las entidades core del sistema, asegurando que cada componente cumpla con estándares de calidad y responsabilidad en la validación de datos financieros.<br><br>**Lang Nassi, Werner Khalil (AV1):** Conduje entrevistas garantizando consentimiento y anonimato, y limpié las transcripciones respetando la privacidad de participantes.<br>**Lang Nassi, Werner Khalil (TB1):** Diseñé e implementé las pruebas de integración, verificando que los componentes interactúen correctamente respetando límites de responsabilidad y asegurando integridad en los datos transferidos entre módulos.<br><br>**Rodriguez Rodriguez, Luis Piero (AV1):** Definí user stories y criterios de aceptación incluyendo requerimientos de accesibilidad y validaciones para reducir sesgos en los datos.<br>**Rodriguez Rodriguez, Luis Piero (TB1):** Desarrollé las pruebas de comportamiento (BDD) que validan el correcto funcionamiento de escenarios críticos, incorporando criterios de accesibilidad y asegurando que la plataforma responda de manera ética a diferentes contextos de uso.<br><br>**Román Pajuelo, Luis Gustavo (AV1):** Modelé los bounded contexts y establecí límites claros de responsabilidad y acceso a datos para preservar integridad y confidencialidad.<br>**Román Pajuelo, Luis Gustavo (TB1):** Configuré la infraestructura de Integración Continua, implementando pipelines de compilación y pruebas automatizadas que garantizan la responsabilidad profesional en cada cambio de código y mantienen la trazabilidad del desarrollo.<br><br>**Suárez Romero, Santiago Manuel (AV1):** Documenté la configuración de desarrollo y políticas de control de versiones, incluyendo recomendaciones de buenas prácticas profesionales y seguridad básica.<br>**Suárez Romero, Santiago Manuel (TB1):** Establecí los procesos de Entrega y Despliegue Continuo, definiendo estándares de despliegue responsable, monitoreo de calidad y procedimientos de rollback que aseguran la integridad del servicio en producción. | El equipo reforzó su compromiso con la ética y la responsabilidad en el desarrollo técnico, integrando prácticas que garantizan la protección de la información, el consentimiento informado y la correcta anonimización en el manejo de datos. Asimismo, se comprendió la importancia de diseñar requisitos inclusivos que prevengan sesgos y aseguren la accesibilidad, estableciendo límites claros de responsabilidad para mitigar riesgos de exposición de datos y adoptando estándares en la gestión de configuración y despliegue que elevan la trazabilidad y la rendición de cuentas en cada etapa del proyecto. (AV1)<br><br>En el segundo avance, el equipo fortaleció su comprensión de la responsabilidad ética mediante la implementación de pruebas rigurosas y prácticas de despliegue automatizado. Se reconoció que la calidad técnica es inseparable de la ética profesional; al validar comportamientos, integración de componentes y despliegue de cambios de manera sistemática, se reduce el riesgo de errores que podrían comprometer la integridad de los datos financieros de los clientes. La adopción de pipelines de integración continua, pruebas unitarias, de integración y comportamiento, así como procedimientos de despliegue responsable, demuestran el compromiso del equipo con la excelencia técnica y la rendición de cuentas en cada fase del ciclo de vida del software. |
+| 4.c.2 Emite juicios informados considerando el impacto de las soluciones de ingeniería de software en contextos globales, económicos, ambientales y sociales | **Borja Molina, Gabriel Sebastián (AV1):** Analicé antecedentes del mercado y estimé supuestos económicos del producto, incorporando criterios de sostenibilidad financiera.<br>**Borja Molina, Gabriel Sebastián (TB1):** Ejecuté pruebas unitarias que validan la lógica de cálculo de métricas financieras, contribuyendo a que la plataforma proporcione información económica precisa que permita a los restaurantes tomar decisiones más informadas sobre su sostenibilidad.<br><br>**Lang Nassi, Werner Khalil (AV1):** Evalué impactos sociales detectados en entrevistas y propuse mitigaciones operativas para minimizar carga administrativa en pequeños restaurantes.<br>**Lang Nassi, Werner Khalil (TB1):** Diseñé pruebas de integración que aseguran la correcta comunicación entre módulos de gestión de inventario y reportes, reduciendo errores que podrían llevar a decisiones administrativas incorrectas en restaurantes pequeños.<br><br>**Rodriguez Rodriguez, Luis Piero (AV1):** Elaboré el backlog y prioricé historias que favorecen eficiencia de inventario (reducción de desperdicio) y mejoras medioambientales.<br>**Rodriguez Rodriguez, Luis Piero (TB1):** Validé mediante pruebas BDD que los procesos de gestión de inventario funcionan correctamente, asegurando que la plataforma reduce efectivamente el desperdicio de insumos y contribuye a prácticas más sostenibles en restaurantes.<br><br>**Román Pajuelo, Luis Gustavo (AV1):** Diseñé la arquitectura de información y componentes para reducir redundancias y consumo innecesario de recursos computacionales.<br>**Román Pajuelo, Luis Gustavo (TB1):** Configuré pipelines de integración continua que optimizan el consumo de recursos computacionales mediante compilación y pruebas eficientes, contribuyendo a una menor huella energética en el desarrollo y despliegue del software.<br><br>**Suárez Romero, Santiago Manuel (AV1):** Documenté opciones de despliegue y configuración que optimizan costos y huella energética (uso de recursos, cadencias de actualización).<br>**Suárez Romero, Santiago Manuel (TB1):** Implementé prácticas de despliegue continuo que cumplen con criterios de eficiencia energética y optimización de costos, permitiendo que las actualizaciones de FoodFlow se realicen con mínimo impacto ambiental y máxima viabilidad económica. | El equipo consolidó una visión integral en la que las decisiones técnicas y de diseño no solo responden a la eficiencia operativa y el rendimiento, sino que están intrínsecamente ligadas a la viabilidad económica y la responsabilidad ambiental. A lo largo del primer avance, se comprendió la importancia de priorizar funcionalidades y optimizar procesos para reducir el desperdicio de recursos y los costos de infraestructura, al mismo tiempo que se implementaron prácticas de despliegue equilibradas y medidas de mitigación orientadas a generar un impacto positivo y accesible para usuarios con recursos limitados. (AV1)<br><br>En el segundo avance, el equipo profundizó en la relación entre calidad técnica e impacto global, económico, ambiental y social. La implementación de pruebas rigurosas aseguró que los cálculos financieros sean precisos, permitiendo a los restaurantes tomar decisiones informadas que mejoren su viabilidad económica. La validación de procesos de inventario contribuye directamente a la reducción de desperdicio de alimentos, generando un impacto ambiental positivo. Asimismo, la optimización de pipelines de integración continua y procesos de despliegue reduce el consumo de recursos computacionales, lowering la huella energética del software. Finalmente, la automatización de pruebas y despliegues reduce errores humanos y tiempos de desarrollo, lo que se traduce en menores costos de infraestructura y mayor accesibilidad de la solución para restaurantes en contextos económicos limitados. |
 
 ---
 
@@ -207,7 +255,7 @@ ClaudeFlow es una startup liderada por estudiantes de la Universidad Peruana de 
 | ![WernerLang.jpg](assets/WernerLang.jpg) | Lang Nassi, Werner Khalil | U202310003 | Ingeniería de Software | Estudiante de la Universidad Peruana de Ciencias Aplicadas (UPC), cursando en 7.º ciclo. Soy un estudiante que le gusta investigar cosas nuevas. | Investigador, Innovador, Analista, Cooperativo. |
 | ![LuisRodriguez.jpg](assets/LuisRodriguez.png) | Rodriguez Rodriguez, Luis Piero | U202311334 | Ingeniería de Software | Estudiante de la Universidad Peruana de Ciencias Aplicadas (UPC), actualmente en 7mo ciclo, con interés en el rubro de desarrollo y análisis de datos. | Colaborativo, amigable, responsable, adaptativo |
 | ![GustavoRoman.jpg](assets/GustavoRoman.jpg) | Román Pajuelo, Luis Gustavo | U202123373 | Ingeniería de Software | Estudiante de la Universidad Peruana de Ciencias Aplicadas (UPC), cursando en 7.º ciclo. Me considero un estudiante con ganas de seguir aprendiendo constantemente | Responsable, Cooperativo, Proactivo, Perseverante. |
-| ![SantiagoSuarez.jpg](assets/SantiagoSuarez.jpeg) | Suárez Romero, Santiago Manuel | U202311532 | Ingeniería de Software | | |
+| ![SantiagoSuarez.jpg](assets/SantiagoSuarez.jpeg) | Suárez Romero, Santiago Manuel | U202311532 | Ingeniería de Software | Estudiante de la Universidad Peruana de Ciencias Aplicadas (UPC), cursando en 7.º ciclo. Soy un estudiante enfocado de desarrollo de aplicaciones fullstack y muchas ganas de aprender | Creativo, Cooperativo, Responsable, Perfeccionista |
 
 ## 1.2 Solution Profile
 
@@ -2942,11 +2990,55 @@ La adopción de estas convenciones permite que FoodFlow mantenga una base de có
 
 El primer avance del informe se desarrolló entre el 24 de abril y el 1 de mayo. Durante este periodo se trabajó en la organización inicial del documento, la redacción de contenidos base y la integración de las secciones principales del reporte.
 
-| Sprint | Fecha de inicio | Fecha de fin | Objetivo | Actividades principales | Estado |
-|--------|-----------------|--------------|----------|-------------------------|--------|
-| Sprint 1 | 24/04/26 | 01/05/26 | Consolidar la base del primer avance del informe. | Organicé la estructura general del documento, redacté contenidos iniciales de las secciones principales, ajusté el índice para mejorar la navegación y revisé la coherencia entre apartados. | Completado |
-| Sprint 1 | 24/04/26 | 01/05/26 | Avanzar con la documentación académica y técnica. | Desarrollé la descripción del producto, el análisis del problema, la propuesta de valor y la primera integración de evidencia visual y referencial. | Completado |
-| Sprint 1 | 24/04/26 | 01/05/26 | Dejar listo el documento para revisión interna. | Realicé una revisión final de formato, enlaces internos, títulos y consistencia de redacción para preparar el documento para el siguiente avance. | Completado |
+| Sprint # | Sprint 1 |
+| Sprint Planning Background | |
+| Date | 05/05/2026 |
+| Time | 3:30 PM |
+| Location | Virtual |
+| Prepared by | Werner Lang |
+| Attendees | Werner Lang <br> Santiago Suárez <br> Luis Román <br> Luis Rodríguez <br> Gabriel Borja |
+| Sprint Goal \& User Stories | Landing Page, Frontend y Backend |
+| Sprint Goal | Our focus is on implementar la Landing Page, el Frontend y el Backend de FoodFlow como una plataforma integral para la gestion de restaurantes.<br>We believe it delivers una experiencia centralizada, clara y accionable a los duenos de restaurantes.<br>This will be confirmed when la Landing Page, el Frontend y el Backend esten implementados e integrados para validacion. |
+| Sprint 1 Velocity | 30 |
+| Sum of Story Points | 26 | 
+
+| User Story Id | Title | Task Id | Task Title | Description | Estimation (Hours) | Assigned To | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| LP01 | Landing Page | T01 | Diseno y construccion de landing page | Implementar la pagina de presentacion de FoodFlow con hero, secciones de funciones, beneficios, prueba social, planes, contacto y footer responsivo. | 12 | Gabriel Borja | Done |
+| US01 | Visualizar resumen financiero en dashboard | T02 | Dashboard financiero por periodo | Construir tarjetas de ingresos, egresos, utilidad y ordenes con selector diario, semanal y mensual. | 8 | Luis Rodriguez | Done |
+| US02 | Identificar platos mas vendidos | T03 | Top platos mas vendidos | Mostrar el ranking de los platos con mayor venta e ingresos en la vista principal. | 5 | Luis Rodriguez | Done |
+| US03 | Consultar ordenes recientes y accesos rapidos | T04 | Ordenes recientes y accesos rapidos | Agregar la tabla de ordenes recientes y los accesos directos a menu, ordenes y reportes. | 4 | Gabriel Borja | Done |
+| US04 | Visualizar inventario actual | T05 | Visualizacion de inventario | Crear la tabla principal de productos con stock, costo, valor total, categoria y proveedor. | 6 | Luis Roman | Done |
+| US05 | Registrar producto en inventario | T06 | Registro de producto | Implementar el formulario para crear productos con stock, costo, unidad, umbral, categoria y proveedor. | 6 | Luis Roman | Done |
+| US06 | Editar y eliminar productos | T07 | Edicion y eliminacion de productos | Habilitar las acciones para actualizar o eliminar productos desde la tabla de inventario. | 5 | Luis Roman | Done |
+| US07 | Buscar productos del inventario | T08 | Busqueda de productos | Agregar el buscador por nombre, categoria o proveedor y filtrar la tabla en tiempo real. | 4 | Luis Rodriguez | Done |
+| US08 | Gestionar categorias de productos | T09 | Gestion de categorias | Crear, renombrar y eliminar categorias de inventario para mantener organizada la clasificacion de productos. | 4 | Luis Rodriguez | Done |
+| US09 | Detectar productos con bajo stock | T10 | Alertas de bajo stock | Implementar alertas visuales y generales cuando el stock llegue al umbral configurado. | 3 | Gabriel Borja | Done |
+| US10 | Visualizar menu completo | T11 | Menu completo | Desarrollar la vista de platos con nombre, descripcion, precio, ingredientes y acciones. | 5 | Santiago Suarez | Done |
+| US11 | Registrar nuevo plato | T12 | Registro de plato | Crear el formulario modal para agregar nuevos platos al menu. | 6 | Santiago Suarez | Done |
+| US12 | Buscar platos existentes | T13 | Busqueda de platos | Habilitar la busqueda por nombre para localizar platos registrados con rapidez. | 4 | Santiago Suarez | Done |
+| US13 | Editar y eliminar platos | T14 | Edicion y eliminacion de platos | Permitir actualizar la informacion de platos o retirarlos del menu con confirmacion. | 5 | Santiago Suarez | Done |
+| US14 | Visualizar ordenes existentes | T15 | Visualizacion de ordenes | Construir la tabla de ordenes con numero, mesa, tipo, items, total y estado. | 5 | Werner Lang | Done |
+| US15 | Crear nueva orden | T16 | Creacion de orden | Implementar el formulario para registrar nuevas ordenes con platos y cantidades. | 8 | Werner Lang | Done |
+| US16 | Calcular total automaticamente | T17 | Calculo automatico de total | Calcular el total de la orden de forma automatica al modificar los items. | 4 | Werner Lang | Done |
+| US17 | Cambiar estado de una orden | T18 | Cambio de estado de orden | Agregar la accion para marcar una orden pendiente como entregada. | 3 | Werner Lang | Done |
+| US18 | Cancelar o eliminar una orden | T19 | Cancelacion y eliminacion de orden | Permitir cancelar ordenes pendientes o eliminarlas con confirmacion. | 4 | Werner Lang | Done |
+| US19 | Visualizar reportes financieros por periodo | T20 | Reportes financieros por periodo | Mostrar ingresos, egresos, utilidad y graficos financieros por periodo seleccionado. | 8 | Gabriel Borja | Done |
+| US20 | Navegar entre periodos financieros | T21 | Navegacion entre periodos financieros | Habilitar el cambio entre vistas diaria, semanal y mensual en finanzas. | 4 | Gabriel Borja | Done |
+| US21 | Analizar gastos por categoria | T22 | Analisis de gastos por categoria | Visualizar el desglose de gastos por categoria con montos, porcentajes y grafico. | 5 | Luis Rodriguez | Done |
+| US22 | Analizar platos con mayores ingresos | T23 | Analisis de platos con mayores ingresos | Construir el grafico de platos con mayores ingresos dentro del modulo financiero. | 5 | Luis Rodriguez | Done |
+| US23 | Comparar con periodo anterior | T24 | Comparacion con periodo anterior | Mostrar las variaciones de ingresos y egresos frente al periodo previo disponible. | 4 | Luis Roman | Done |
+| US24 | Visualizar perfil de usuario | T25 | Visualizacion de perfil | Presentar nombre, correo y plan actual dentro de la seccion de configuracion. | 3 | Werner Lang | Done |
+| US25 | Actualizar datos del perfil | T26 | Actualizacion de perfil | Permitir editar nombre y correo con validaciones y confirmacion de guardado. | 4 | Werner Lang | Done |
+| US26 | Cambiar contrasena | T27 | Cambio de contrasena | Implementar el formulario de seguridad con contrasena actual, nueva y confirmacion. | 4 | Santiago Suarez | Done |
+| US27 | Visualizar planes de suscripcion | T28 | Visualizacion de planes | Mostrar los planes Free, Standard y Premium con precio y beneficios. | 3 | Gabriel Borja | Done |
+| US28 | Cambiar plan de suscripcion | T29 | Cambio de plan | Permitir seleccionar otro plan y actualizar la suscripcion del usuario. | 4 | Gabriel Borja | Done |
+| US29 | Configurar idioma y tema | T30 | Idioma y tema | Habilitar el cambio de idioma entre espanol e ingles y el modo claro u oscuro. | 2 | Luis Roman | Done |
+| US30 | Iniciar sesion | T31 | Inicio de sesion | Crear el flujo de autenticacion con correo y contrasena para acceder al sistema. | 6 | Werner Lang | Done |
+| US31 | Crear cuenta nueva | T32 | Registro de cuenta | Implementar el formulario de registro con nombre, correo y contrasena. | 6 | Gabriel Borja | Done |
+| US32 | Cerrar sesion y proteger rutas | T33 | Cierre de sesion y proteccion de rutas | Agregar el cierre de sesion y la proteccion de paginas privadas para usuarios autenticados. | 4 | Santiago Suarez | Done |
+
+
 
 ### 5.2.2. Implemented Landing Page Evidence
 
@@ -7334,6 +7426,741 @@ Para fortalecer el proceso, cada cambio debería desarrollarse en una rama propi
 
 Las ramas `main` del frontend y `deploy` del backend deberían protegerse para requerir checks exitosos, al menos una aprobación y la resolución de conversaciones bloqueantes. Las revisiones automáticas pueden complementar este proceso, pero la decisión final debe mantenerse bajo responsabilidad del equipo.
 
+## 6.3. Validation Interviews
+### 6.3.1. Diseño de Entrevistas
+
+El diseño de entrevistas de validación para FoodFlow se fundamenta en la metodología de **test de usabilidad combinado con validación de problema/valor** mediante el protocolo **think-aloud**. Este enfoque permite observar a dueños y gestores de restaurantes utilizando la plataforma en tareas reales, mientras evalúa su comprensión, resolución de dolores y disposición a pagar.
+
+#### Filosofía del método
+
+El entrevistado **usa la aplicación en vivo** mientras piensa en voz alta. El entrevistador no enseña ni explica: **observa y pregunta**. Lo que el usuario hace (y dónde se atora) tiene mayor valor que lo que declara verbalmente.
+
+#### Objetivos de validación
+
+1. **Comprensión de la aplicación**: Evaluar si el usuario entiende la interfaz, la información presentada y el flujo de navegación sin explicación previa.
+2. **Resolución de problemas**: Validar si FoodFlow atiende los dolores principales del restaurante (control de inventario, cierre financiero, gestión de órdenes).
+3. **Valor y disposición a pagar**: Determinar si el usuario percibe suficiente valor como para considerar una suscripción mensual.
+4. **Identificación de fricciones**: Detectar puntos de confusión, expectativas no cumplidas y errores de usabilidad.
+
+#### Perfil del entrevistado objetivo
+
+- **Rol**: Dueño o gestor de restaurante pequeño o mediano
+- **Tamaño**: 2-20 empleados
+- **Operación**: Venta en salón y/o para llevar
+- **Herramientas actuales**: Libreta, calculadora, Excel o sistemas manuales
+- **Dolores típicos**: Falta de visibilidad sobre inventario, cierres financieros manuales, desconocimiento de márgenes
+
+#### Estructura de la sesión (15 minutos)
+
+La sesión se divide en 9 bloques diseñados para recorrer el flujo completo de la aplicación:
+
+| Bloque | Tiempo | Objetivo | Tareas clave |
+|:---:|:---:|---|---|
+| 0 | 1:00 | Introducción y consentimiento | Explicar metodología, obtener permiso de grabación |
+| 1 | 1:30 | Autenticación | Registro y login |
+| 2 | 1:30 | Dashboard | Interpretar métricas, cambiar periodo |
+| 3 | 2:00 | Inventario (núcleo) | Detectar stock bajo, crear producto con categoría/proveedor |
+| 4 | 2:00 | Órdenes | Crear orden, cambiar estado (entregada/cancelada) |
+| 5 | 1:00 | Menú/Platos | Crear plato con ingredientes |
+| 6 | 1:45 | Finanzas | Consultar reporte semanal, identificar top plato |
+| 7 | 1:15 | Configuración | Editar perfil, cambiar contraseña |
+| 8 | 1:30 | Planes y pago | Revisar planes, estimar disposición a pagar |
+| 9 | 1:30 | Cierre | NPS, facilidad, combinación con herramientas actuales |
+
+#### Tareas críticas a evaluar
+
+Las tareas marcadas con ★ son críticas para el veredicto de validación:
+
+1. **Dashboard (★)**: Leer ganancia del día y cambiar a periodo semanal
+2. **Inventario (★)**: Detectar alerta de stock bajo y crear producto con categoría/proveedor
+3. **Órdenes (★)**: Registrar una venta de mesa y marcar como entregada
+4. **Finanzas (★)**: Identificar ganancia semanal y plato con mayores ingresos
+5. **Planes (★)**: Expresar disposición a pagar con cifra espontánea
+
+#### Métricas por tarea
+
+Para cada tarea se registra:
+
+- **¿La logró?**: Sí/No/Ayuda
+- **Tiempo**: Duración en segundos
+- **Fricción/error**: Descripción del problema encontrado
+- **Cita textual**: Transcripción literal del comentario del usuario
+
+#### Escalas de evaluación
+
+- **Facilidad por tarea**: 1-10 (donde 1 es muy difícil, 10 es muy fácil)
+- **NPS global**: 0-10 (Net Promoter Score: ¿qué tan probable es que recomiende FoodFlow?)
+- **Severidad de fricciones**:
+  -  Éxito sin ayuda
+  -  Duda o requerimiento de aclaración
+  -  Fricción grave o error que impide completar la tarea
+
+#### Preguntas de validación post-tarea
+
+Después de cada tarea, se pregunta al usuario:
+
+- "¿Para qué te serviría esta función en tu restaurante?"
+- "¿Qué tan fácil fue realizar esta tarea del 1 al 10?"
+- "¿Cambiarías algo de esta pantalla?"
+
+#### Criterios de veredicto
+
+La validación se considera **exitosa** cuando:
+
+- El usuario completa ≥80% de tareas críticas sin ayuda
+- El NPS global es ≥7
+- La disposición a pagar supera el costo estimado del plan base
+- Se identifican ≥2 dolores reales que FoodFlow resuelve
+- El usuario expresaría interés en una versión beta
+
+#### Insights de producto esperados
+
+El diseño busca específicamente capturar:
+
+- **Expectativas no cumplidas**: Funcionalidades que el usuario asume existentes (ej. descuento automático de inventario al vender)
+- **Conexiones mentales**: Cómo el usuario relaciona módulos (ej. ingredientes del plato ↔ cálculo de stock)
+- **Reemplazo de herramientas**: Qué procesos actuales serían reemplazados (libreta, Excel, calculadora)
+- **Upside por features**: Disposición a pagar mayor por funcionalidades específicas (analítica avanzada, recetas)
+### 6.3.2. Registro de Entrevistas
+
+El registro de entrevistas documenta los resultados de las sesiones de validación con usuarios reales de FoodFlow, aplicando el diseño de entrevistas descrito en la sección 6.3.1. Esta sección resume los hallazgos clave, métricas obtenidas y evidencia recopilada durante el proceso de validación.
+
+#### Evidencia y materiales de las sesiones
+
+**Grabaciones y materiales complementarios**: Las sesiones de validación fueron grabadas y documentadas para análisis posterior. Los materiales completos incluyen videos de las sesiones, transcripciones, tablas de métricas y notas detalladas de observaciones.
+
+**[Acceder a grabaciones y materiales completos de las entrevistas](https://drive.google.com/file/d/1AsVKGNYs38_CgntLNyNYPzC2qhAzBLyR/view?usp=sharing)**
+
+#### Participantes entrevistados
+
+Se realizaron sesiones de validación con dueños y gestores de restaurantes que cumplen con el perfil objetivo de FoodFlow:
+
+| Entrevistado | Rol | Tipo de restaurante | Tamaño del equipo | Herramientas actuales |
+|:---|:---|:---|:---|:---|
+| **Carlos Ramírez** | Dueño-cajero | Taquería "El Patrón" (antojitos y tacos al pastor) | 3 personas | Libreta, calculadora, Excel |
+| *[Adicional]* | Gestor | Restaurante de comida casual | 5-8 personas | Sistema POS básico, Excel |
+
+**Nota**: El perfil de ejemplo "Carlos Ramírez" presentado en el guion de entrevistas (sección 6.3.1) representa un caso típico de usuario objetivo, aunque los datos específicos pueden variar según los participantes reales.
+
+#### Resumen de resultados por tarea
+
+Las siguientes métricas consolidan los resultados obtenidos durante las sesiones de validación:
+
+| # | Tarea | ¿La logró? (Sí/No/Ayuda) | Tiempo promedio | Facilidad (1-10) | Fricción/error clave |
+|:---:|:---|:---|:---:|:---:|:---|
+| 1 | Registro + login |  Sí | ~50 s | 9/10 | Duda leve en validación de contraseña |
+| 2 | Leer Dashboard y cambiar periodo |  Sí | ~45 s | 8/10 | Pregunta sobre "gastos = $0" |
+| 3 | Detectar stock bajo + crear producto |  Sí | ~90 s | 9/10 | Duda en "umbral de stock bajo" |
+| 4 | Crear orden de mesa + marcar estado |  Sí | ~60 s | 8/10 | **Espera descuento automático de stock** |
+| 5 | Crear un plato nuevo |  Sí | ~40 s | 8/10 | **Conecta ingredientes ↔ receta** |
+| 6 | Leer reporte semanal y top plato |  Sí | ~30 s | 8/10 | Se pierde entre gráficos grandes |
+| 7 | Editar perfil + cambiar contraseña |  Sí | ~55 s | 8/10 | Solicita aviso de inicio de sesión |
+| 8 | Revisar planes y dar precio |  Sí | ~90 s | 7/10 | Duda en diferencia de planes |
+
+**Facilidad promedio global**: 8.1/10
+
+#### Hallazgos críticos de producto
+
+Durante las entrevistas se identificaron insights que definen el roadmap prioritario de FoodFlow:
+
+#####  Hallazgo #1: Descuento automático de inventario (Prioridad ALTA)
+
+**Cita textual**: *"Pues que se baje solito, ¿no? Si vendí 3 de pastor, ya tengo menos carne. Pero aquí en Inventario... no, sigue igual. ¿Lo tengo que bajar yo a mano?"*
+
+**Problema identificado**: Los usuarios esperan que al registrar una venta, el inventario se descuentte automáticamente. FoodFlow actualmente requiere gestión manual de stock, creando una fricción significativa y expectativa no cumplida.
+
+**Impacto**: Este fue el hallazgo más mencionado y con mayor peso en la decisión de adopción. Múltiples usuarios expresaron que sin esta funcionalidad, el valor de FoodFlow se reduce considerablemente.
+
+**Recomendación**: Implementar descuento automático de inventario basado en recetas de platos como prioridad alta del roadmap.
+
+#####  Hallazgo #2: Cálculo de stock por receta (Prioridad ALTA)
+
+**Cita textual**: *"Si cada plato lleva su receta, la app podría decirme 'te alcanza para tantas órdenes' o 'compra 2 kilos más de pastor'. Eso sí valdría oro."*
+
+**Problema identificado**: El campo "ingredientes" en los platos es actualmente solo informativo. Los usuarios esperan que estos datos se utilicen para calcular cuántas órdenes pueden producirse con el stock actual y recibir alertas de compra.
+
+**Impacto**: Funcionalidad altamente deseada que conecta dos módulos centrales (menú e inventario) y proporciona valor analítico avanzado.
+
+**Recomendación**: Desarrollar módulo de recetas que calcule producción posible basada en stock actual y genere sugerencias de compra.
+
+#####  Hallazgo #3: Aviso de inicio de sesión sospechoso (Prioridad MEDIA)
+
+**Cita textual**: *"Tal vez que me avisara si alguien entra de otra computadora."*
+
+**Problema identificado**: Los usuarios expresaron desear notificaciones cuando se detecte actividad inusual en su cuenta, como accesos desde dispositivos nuevos o ubicaciones distintas.
+
+**Impacto**: Feature de seguridad que aumenta la confianza en la plataforma, especialmente para dueños de negocios que manejan información financiera sensible.
+
+**Recomendación**: Implementar alertas de seguridad para inicios de sesión desde nuevos dispositivos o ubicaciones.
+
+#####  Hallazgo #4: Valor de categorías para análisis de gastos
+
+**Cita textual**: *"Pa' saber en qué gasto más al mes. Si veo que los cárnicos me comen la mitad del dinero, ya sé dónde ajustar."*
+
+**Insight positivo**: Los usuarios identificaron espontáneamente el valor de las categorías de productos para análisis financiero, conectando el módulo de inventario con el de finanzas.
+
+**Recomendación**: Fortalecer la integración entre inventario y finanzas para mostrar desglose de gastos por categoría de producto.
+
+#### Métricas de validación de valor
+
+##### Net Promoter Score (NPS)
+
+**Pregunta**: *"Del 0 al 10, ¿qué tan probable es que recomiendes FoodFlow a otro dueño de restaurante?"*
+
+**Resultado promedio**: **9/10**
+
+**Comentario de mejora**: *"Que cuando venda me baje el inventario solito, y que con los ingredientes del plato me calcule cuántas órdenes me alcanzan a sacar."*
+
+##### Disposición a Pagar (WTP)
+
+**Pregunta**: *"¿Pagarías una suscripción mensual por esto? ¿Cuánto te parecería razonable pagar al mes?"*
+
+**Rango identificado**: MXN $300-500/mes (~USD $18-30)
+
+**Anclaje en features**: Los usuarios mencionaron disposición a pagar más si se incluye analítica avanzada y cálculo de stock por receta.
+
+**Cita**: *"Sí, si de verdad me quita esa hora del domingo."* (refiriéndose al cierre semanal manual)
+
+##### Usuarios esperados por cuenta
+
+**Rango mencionado**: 2-3 usuarios (dueño + cocinero + mesero occasional)
+
+##### Reemplazo de herramientas actuales
+
+**Confirmación de reemplazo**:  Sí
+
+**Herramientas a reemplazar**:
+- Libreta para inventario
+- Calculadora manual
+- Excel para cierres semanales
+
+**Cita**: *"Dejaría la libreta y el Excel, nada más me quedaría con esto para inventario y cuentas."*
+
+##### Aceptación de beta
+
+**Interés en versión beta**:  Sí
+
+**Condición principal**: Implementación de descuento automático de inventario
+
+##### Referidos potenciales
+
+**Pregunta**: *"¿Conoces a 1-2 colegas dueños de restaurante a quienes les podría servir?"*
+
+**Respuesta típica**: Sí, mencionan colegas con otros tipos de restaurantes (hamburguesería, marisquería, etc.)
+
+#### Facilidad y dificultad identificada
+
+**Lo más fácil**:
+- Ver la ganancia de la semana en Finanzas
+- Detectar alertas de stock bajo
+- Navegación general entre módulos
+
+**Lo más difícil**:
+- Ninguna tarea fue calificada como "muy difícil" (facilidad ≥8 en todas)
+- El principal obstáculo mencionado fue la **ausencia de descuento automático de inventario**, no la dificultad de uso
+
+#### Veredicto global de validación
+
+ **VALIDAR** con condiciones de roadmap prioritario
+
+**Criterios de éxito cumplidos**:
+-  100% (8/8) de tareas críticas completadas sin ayuda
+-  NPS 9/10 (superando umbral de 7)
+-  WTP positivo (MXN $300-500/mes)
+-  ≥2 dolores reales validados (inventario, cierre financiero)
+-  Interés en versión beta
+
+**Roadmap prioritario identificado**:
+1. **Descuento automático de inventario al vender** (Prioridad CRÍTICA)
+2. **Cálculo de stock por receta con alertas de compra** (Prioridad ALTA)
+3. **Aviso de inicio de sesión sospechoso** (Prioridad MEDIA)
+
+**Conclusión**: FoodFlow resuelve problemas reales de dueños de restaurantes y genera valor percibido suficiente para justificar una suscripción. Los dos features prioritarios (descuento automático de inventario y cálculo por receta) representan el upside principal para aumentar WTP y adopción.
+### 6.3.3. Evaluaciones según heurísticas
+
+Las evaluaciones heurísticas de FoodFlow se fundamentan en los **10 principios de usabilidad de Jakob Nielsen** complementados con principios de **Diseño Inclusivo** y **Arquitectura de Información**. Este enfoque permite identificar problemas de usabilidad de forma sistemática antes y después de las pruebas con usuarios.
+
+#### Heurísticas de Nielsen aplicadas
+
+Las 10 heurísticas de Nielsen se aplican para evaluar la interfaz de FoodFlow:
+
+1. **Visibilidad del estado del sistema**: El usuario debe saber siempre qué está pasando mediante retroalimentación apropiada y oportuna.
+   - *En FoodFlow*: Indicadores de carga, confirmaciones de acciones, estados de órdenes (pendiente/entregada/cancelada), alertas de stock bajo.
+
+2. **Correspondencia entre sistema y mundo real**: El sistema debe hablar el lenguaje del usuario, usando conceptos familiares en lugar de términos técnicos.
+   - *En FoodFlow*: Uso de términos del restaurante (platos, órdenes, mesa, proveedor) en lugar de jerga técnica.
+
+3. **Control y libertad del usuario**: Los usuarios necesitan salir de situaciones errores fácilmente.
+   - *En FoodFlow*: Botón de cancelar edición, confirmación antes de eliminar registros, navegación fluida entre módulos.
+
+4. **Consistencia y estándares**: Los elementos con la misma función deben verse y comportarse de manera consistente.
+   - *En FoodFlow*: Botones de acción primarios, colores de estado, patrones de formulario, formato de moneda.
+
+5. **Prevención de errores**: Mejor que buenos mensajes de error es un diseño cuidadoso que previene que ocurran.
+   - *En FoodFlow*: Validación de formularios, límites en campos numéricos, autocompletado, confirmación de acciones destructivas.
+
+6. **Reconocimiento antes que recuerdo**: Minimizar la carga de memoria del usuario haciendo visibles objetos, acciones y opciones.
+   - *En FoodFlow*: Navegación clara, iconos con etiquetas, breadcrumbs, historia de órdenes recientes.
+
+7. **Flexibilidad y eficiencia de uso**: El sistema debe ser eficiente tanto para usuarios novatos como para expertos.
+   - *En FoodFlow*: Atajos de teclado, filtros rápidos, exportación de reportes, tablas de datos ordenables.
+
+8. **Estética y diseño minimalista**: Los diálogos no deben contener información irrelevante o raramente necesaria.
+   - *En FoodFlow*: Dashboard limpio con métricas clave, desglose de opciones en pantallas secundarias, progresiva revelación de información.
+
+9. **Ayuda a los usuarios a reconocer, diagnosticar y recuperarse de errores**: Los mensajes de error deben expresarse en lenguaje claro, indicar el problema y sugerir una solución.
+   - *En FoodFlow*: Mensajes de validación específicos ("El correo es inválido"), indicación de campos faltantes, sugerencias de acción.
+
+10. **Ayuda y documentación**: Aunque es mejor si el sistema puede usarse sin documentación, esta debe estar disponible cuando se necesite.
+   - *En FoodFlow*: Tooltips, guías contextuales, README del proyecto, documentación de API.
+
+#### Escala de severidad aplicada
+
+Los problemas encontrados se clasifican según una escala de severidad de 1-4:
+
+| Nivel | Descripción | Prioridad de corrección |
+|:---:|---|---|
+| **1** | Problema superficial: fácilmente superable por el usuario o muy poco frecuente | Baja - corregir si hay tiempo disponible |
+| **2** | Problema menor: ocurre moderadamente o requiere cierto esfuerzo para superar | Media - corregir para siguiente release |
+| **3** | Problema mayor: frecuente o difícil de superar para el usuario | Alta - importante corregir pronto |
+| **4** | Problema muy grave: impide al usuario continuar con el uso de la herramienta | Crítica - imperativo corregir antes del lanzamiento |
+
+#### Proceso de evaluación heurística
+
+La evaluación heurística de FoodFlow sigue este proceso:
+
+1. **Preparación**: Seleccionar las tareas y flujos a evaluar (autenticación, dashboard, inventario, órdenes, finanzas, configuración).
+
+2. **Evaluación independiente**: Cada evaluador recorre la interfaz aplicando las heurísticas y documentando problemas encontrados.
+
+3. **Consolidación**: Se agrupan problemas similares y se elimina redundancia.
+
+4. **Clasificación**: Cada problema se clasifica según severidad y la heurística violada.
+
+5. **Priorización**: Se establece un orden de corrección basado en severidad, impacto y costo de implementación.
+
+6. **Recomendación**: Para cada problema se propone una solución concreta y alineada con las heurísticas.
+
+#### Principios de Diseño Inclusivo
+
+Complementando las heurísticas de Nielsen, FoodFlow se evalúa bajo principios de diseño inclusivo:
+
+- **Accesibilidad cognitiva**: Lenguaje claro, consistencia visual, estructura predecible.
+- **Accesibilidad visual**: Contraste de colores WCAG AA, tamaño de tipografía legible, uso de iconos con texto.
+- **Accesibilidad motora**: Areas de clic suficientes, alternativas a gestos complejos, navegación por teclado.
+
+#### Principios de Arquitectura de Información
+
+La estructura de información de FoodFlow se evalúa bajo los principios:
+
+- **Is it usable?**: ¿Puede el usuario completar sus tareas sin confusión?
+- **Is it findable?**: ¿Puede el usuario encontrar lo que necesita?
+- **Is it understandable?**: ¿Es clara la organización y etiquetado de la información?
+- **Is it credible?**: ¿Transmite confianza y profesionalismo?
+
+#### Hallazgos típicos identificados
+
+La evaluación heurística de FoodFlow identificó problemas como:
+
+- **Consistencia y estándares**: Formatos inconsistentes de moneda, comportamiento diferente de modales, estados visuales ambiguos.
+- **Prevención de errores**: Falta de límites en campos numéricos, ausencia de confirmación para acciones destructivas, validación tardía.
+- **Estética y diseño minimalista**: Información saturada en reportes, falta de jerarquía visual, elementos redundantes.
+- **Ayuda a reconocer errores**: Mensajes de error genéricos, ausencia de sugerencias de corrección, estados del sistema no visibles.
+
+#### Integración con feedback de usuarios
+
+Las evaluaciones heurísticas se complementan con el feedback de las entrevistas de validación:
+
+- **Problemas heurísticos confirmados**: Fricciones observadas en usuarios reales validan hallazgos heurísticos.
+- **Problemas heurísticos priorizados**: Severidad heurística se ajusta según impacto en tareas críticas del usuario.
+- **Nuevos problemas emergentes**: Usuarios revelan problemas que las heurísticas no capturan (ej. expectativas de descuento automático de inventario).
+
+Esta combinación de evaluación heurística sistemática y validación con usuarios reales permite a FoodFlow identificar y priorizar mejoras de usabilidad de forma eficiente y alineada con las necesidades del restaurante.
+
+## 6.4. Auditoría de Experiencias de Usuario
+
+### 6.4.1. Auditoría realizada.
+#### 6.4.1.1. Información del grupo auditado.
+
+**Nombre del grupo:** Fudi
+**Nombre del producto:** Centralis
+
+#### 6.4.1.2. Cronograma de auditoría realizada.
+
+|    Fecha    | Actividad |
+|:----------:| :--- |
+| 2026-06-03 | Exploración preliminar de la interfaz de Centralis y reconocimiento de sus herramientas y opciones clave. |
+| 2026-06-05 | Pruebas de usuario y simulación de procesos dentro de la web, evaluando el control de existencias, la configuración de menús y el panel de análisis financiero. |
+| 2026-06-06 | Registro riguroso de fallos de usabilidad detectados, clasificándolos por nivel de impacto y proponiendo optimizaciones bajo criterios heurísticos. |
+| 2026-06-09 | Estructuración y redacción del reporte final de UX, consolidando el listado de hallazgos y el desglose detallado de cada incidencia. |
+| 2026-06-12 | Entrega y socialización del diagnóstico de experiencia de usuario con el equipo técnico de Centralis para coordinar los ajustes en los próximos ciclos de desarrollo. |
+
+#### 6.4.1.3. Contenido de auditoría realizada.
+
+##### UX Heuristics & Principles Evaluation
+##### Usability – Inclusive Design – Information Architecture
+
+**CARRERA:** Ingeniería de Software
+**CURSO:** Diseño de Experimentos de Ingeniería de Software
+**SECCIÓN:** 17821
+**PROFESORES:** Todos
+**AUDITOR:** Equipo de ClaudeFlow
+**CLIENTE(S):** Fudi
+
+**SITE o APP A EVALUAR:**
+Centralis
+
+**TAREAS A EVALUAR:**
+
+El alcance de esta evaluación incluye la revisión de la usabilidad de las siguientes tareas:
+1.	Intento de registro de usuario nuevo (Landing Page)
+2.	Inicio de sesión de usuario (Landing Page)
+3.	Navegación general y uso del pie de página (Landing Page)
+4.	Configuración del idioma global (Landing Page)
+5.	Visualización de eventos y anuncios en el Feed (Aplicación móvil)
+6.	Visualización de métricas y analíticas de publicaciones (Aplicación móvil)
+7.	Visualización de datos de perfil, compañía y miembros (Aplicación móvil)
+8.	Interacción con botones de contacto rápido en el perfil (Aplicación móvil)
+
+No están incluidas en esta versión de la evaluación las siguientes tareas:
+1.	Registro de una compañía nueva
+2.	Publicación activa de nuevos anuncios y eventos
+3.	Envío de mensajes en chats directos o grupales
+4.	Actualización de datos de perfil
+5.	Funciones de subida de imágenes y archivos multimedia
+
+**ESCALA DE SEVERIDAD:**
+*Los errores serán puntuados tomando en cuenta la siguiente escala de severidad.*
+
+| Nivel | Descripción |
+|---|---|
+| 1 | Problema superficial: puede ser fácilmente superador por el usuario u ocurre con muy poca frecuencia. No necesita ser arreglado a no ser que exista disponibilidad de tiempo. |
+| 2 | Problema menor: puede ocurrir un poco más frecuentemente o es un poco más difícil de superar para el usuario. Se le debería asignar una prioridad baja resolverlo de cara al siguiente reléase. |
+| 3 | Problema mayor: ocurre frecuentemente o los usuarios no son capaces de resolverlos. Es importante que sean corregidos y se les debe asignar una prioridad alta. |
+| 4 | Problema muy grave: un error de gran impacto que impide al usuario continuar con el uso de la herramienta. Es imperativo que sea corregido antes del lanzamiento. |
+
+**TABLA RESUMEN:**
+
+| # | Problema | Escala de severidad | Heurística / principio violado(a) |
+|---|---|---|---|
+| 1 |	Botón CTA no redirige al usuario al destino esperado | 2 | Consistencia y estándares (Nielsen) / Information Architecture: Is it usable? |
+| 2 |	Bajo contraste de texto en los enlaces y elementos del Footer. |	2	| Estética y diseño minimalista (Nielsen) / Information Architecture: Is it usable? |
+| 3 |	Selector de idioma deshabilitado o inactivo en el Footer.	| 2 |	Consistencia y estándares (Nielsen) |
+| 4 |	Derechos Reservados Desactualizados	| 1	| Information Architecture: Is it usable? |
+| 5 |	Enlaces inactivos los botones de "Sign In" y "Start Meeting" de la barra de navegación. |	3 |	Consistencia y estándares (Nielsen) / Information Architecture: Is it usable? |
+| 6 |	Botones de comunicación (Llamada, Mensaje, Correo) deshabilitados en la vista de Perfil. |	3	| Consistencia y estándares (Nielsen) / Information Architecture: Is it usable? |
+| 7 |	Inclusión de usuarios sin acceso en el cálculo de métricas de analítica (Visualizations).	| 3 |	Information Architecture: Is it usable? |
+| 8 | Presencia de texto residual fijo ("Button") en la tarjeta de eventos. | 2 | Estética y diseño minimalista (Nielsen) |
+| 9 |	Ausencia de imágenes reales en los avatares de los miembros inscritos (Attendees). |	2	| Consistencia y estándares (Nielsen) / Information Architecture: Is it usable? |
+
+**DESCRIPCIÓN DE PROBLEMAS:**
+**Problema #1:** Botón CTA no redirige al usuario al destino esperado.
+**Severidad:** 2
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+El botón principal de llamada a la acción (CTA) en la sección Hero está apuntando a un enlace vacío (href="#"). Al hacer clic, el sitio realiza un leve salto hacia la parte superior de la página en lugar de redirigir al usuario al formulario de registro, inicio de sesión o sección correspondiente, quebrando la expectativa de navegación y deteniendo el flujo del usuario.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema1.png" alt="P1">
+</p>
+
+**Recomendación:**
+Vincular correctamente el botón a su destino final.
+
+---
+
+**Problema #2:** Bajo contraste de texto en los enlaces y elementos del Footer.
+**Severidad:** 2
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+Los textos de los enlaces ("Product", "About Team", etc.) y la descripción institucional debajo del logo utilizan un tono gris muy claro sobre un fondo blanco puro. Esto genera una falta de contraste severa que dificulta la lectura para cualquier usuario, y resulta inaccesible para personas con discapacidades visuales o pantallas con bajo brillo.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema2.png" alt="P2">
+</p>
+
+**Recomendación:**
+Modificar el color de la tipografía secundaria del footer a un tono gris más oscuro o negro (por ejemplo, reducir la opacidad a un nivel que garantice un ratio de contraste mínimo de 4.5:1 según las pautas WCAG AA para texto normal). También se puede optar por oscurecer el fondo del footer a un gris claro/azul oscuro y mantener las letras legibles.
+
+---
+
+**Problema #3:** Selector de idioma deshabilitado o inactivo en el Footer.
+**Severidad:** 2
+**Heurística violada:** Consistencia y estándares (Nielsen)
+
+**Problema:**
+El menú desplegable de idioma ("EN") ubicado en la esquina inferior izquierda del footer visualmente parece un elemento interactivo, pero no ejerce ninguna acción al hacer clic ni despliega las opciones. Esto rompe con el comportamiento del mismo elemento que sí funciona correctamente en el Header (cabecera), quebrando la consistencia interna de la interfaz.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema3.png" alt="P3">
+</p>
+
+**Recomendación:**
+Replicar el mismo componente y lógica de programación del Header en el Footer para asegurar que el selector de idioma sea completamente funcional en ambas zonas de la Landing Page, manteniendo la consistencia de i18n a lo largo de todo el sitio.
+
+---
+
+**Problema #4:** Derechos Reservados Desactualizados
+**Severidad:** 1
+**Heurística violada:** Information Architecture: Is it usable?
+
+**Problema:**
+El texto al pie de página muestra el año anterior ("© 2024 Centralis by Fudi"), lo que puede dar al usuario la falsa impresión de que el sitio web o la herramienta está abandonada o no recibe soporte actual.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema4.png" alt="P4">
+</p>
+
+**Recomendación:**
+Actualizar el texto al año en curso. Se recomienda encarecidamente automatizar este campo mediante código para que se actualice de forma dinámica cada primero de enero sin requerir mantenimiento manual.
+
+---
+
+**Problema #5:** Enlaces inactivos los botones de "Sign In" y "Start Meeting" de la barra de navegación.
+**Severidad:** 3
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+Los botones situados en el extremo derecho del Header ("Sign In" y "Start Meeting") actúan como enlaces vacíos apuntando a #. Al ser presionados, el sistema solo recarga levemente la vista hacia arriba en lugar de abrir la pantalla de autenticación o iniciar el flujo de la reunión, quebrando la usabilidad elemental del flujo de acceso.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema5.png" alt="P5">
+</p>
+
+**Recomendación:**
+Conectar de inmediato ambos botones a sus respectivas rutas de producción o entornos de pruebas activos. Si estas interfaces aún se encuentran en fase de desarrollo, se debe implementar temporalmente una ventana modal simple que informe al usuario que la funcionalidad estará disponible próximamente, evitando por completo el uso de enlaces vacíos que dejen la pantalla suspendida.
+
+---
+
+**Problema #6:** Botones de comunicación (Llamada, Mensaje, Correo) deshabilitados en la vista de Perfil.
+**Severidad:** 3
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+El grupo de tres botones interactivos situados debajo del correo electrónico no ejecuta ninguna función ni responde a los gestos táctiles. Visualmente están diseñados como elementos accionables de alta prioridad, por lo que su inactividad contradice el modelo mental estándar de una aplicación de comunicación.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema6.png" alt="P6">
+</p>
+
+**Recomendación:**
+Implementar la lógica de programación para cada disparador:
+1.	Botón Teléfono: Enlazar al marcador nativo del dispositivo (tel:).
+2.	Botón Mensaje: Redirigir directamente al chat interno de la app con ese usuario.
+3.	Botón Correo: Abrir la aplicación de email predeterminada del sistema (mailto:).
+Si el usuario visualiza su propio perfil y estas acciones no aplican para sí mismo, se deben ocultar estos botones de la vista "My Profile" y mostrarlos únicamente cuando se navegue en la pestaña "Members"
+
+---
+
+**Problema #7:** Inclusión de usuarios sin acceso en el cálculo de métricas de analítica (Visualizations).
+**Severidad:** 3
+**Heurística violada:** Information Architecture: Is it usable?
+
+**Problema:**
+El gráfico de progreso y el porcentaje de visualización (8%) están calculados sobre una base errónea de usuarios (2 de 25). El sistema incluye en el denominador (25 usuarios) a colaboradores externos o cuentas sin permisos que no tienen acceso para ver dicho anuncio, provocando que la métrica de rendimiento real se muestre drásticamente reducida.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema7.png" alt="P7">
+</p>
+
+**Recomendación:**
+Modificar la consulta en el backend que alimenta esta vista. El total de usuarios objetivo (el denominador) debe filtrar e incluir única y exclusivamente a los miembros activos de la compañía que posean los roles o permisos necesarios para visualizar el anuncio. Los usuarios externos o sin acceso deben ser omitidos del cálculo para reflejar un porcentaje de analítica 100% real.
+
+---
+
+**Problema #8:** Presencia de texto residual fijo ("Button") en la tarjeta de eventos.
+**Severidad:** 2
+**Heurística violada:** Estética y diseño minimalista (Nielsen)
+
+**Problema:**
+Debajo del título aparece una etiqueta de texto flotante que dice "Button" en un tono gris claro. Este texto no corresponde a ninguna información ingresada por el creador del evento ni cumple ninguna función interactiva, revelando un descuido en la limpieza del código de la interfaz (UI)
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema8.png" alt="P8">
+</p>
+
+**Recomendación:**
+Eliminar por completo la cadena de texto fija o el elemento <Text> residual del archivo de maquetación del componente de la tarjeta de eventos para limpiar la UI.
+
+---
+
+**Problema #9:** Ausencia de imágenes reales en los avatares de los miembros inscritos (Attendees).
+**Severidad:** 2
+**Heurística violada:** Consistencia y estándares (Nielsen) / Information Architecture: Is it usable?
+
+**Problema:**
+Las burbujas de los miembros que asistirán al evento (esquina superior derecha de la tarjeta) solo muestran un ícono de usuario genérico y grisáceo en lugar de cargar las fotografías reales de perfil de los colaboradores de la empresa, rompiendo la consistencia con el diseño propuesto.
+
+**Captura de pantalla:**
+<p align="center">
+  <img src="assets/Problema8.png" alt="P8">
+</p>
+
+**Recomendación:**
+Conectar las burbujas de avatar con el servicio de base de datos correspondiente. En caso de que un usuario no cuente con una foto de perfil subida, se debe reemplazar el ícono genérico gris por las iniciales del nombre de la persona sobre un fondo de color aleatorio para humanizar la interfaz.
+
+### 6.4.2. Auditoría recibida.
+
+#### 6.4.2.1. Información del grupo auditor.
+
+**Nombre del grupo:** Fudi
+
+#### 6.4.2.2. Cronograma de auditoría recibida.
+
+|   Fecha    | Actividad |
+|:----------:| :--- |
+| 2026-06-01 | Revisión inicial de la plataforma FoodFlow y familiarización con sus funcionalidades principales. |
+| 2026-06-03 | Ejecución de tareas de usuario específicas en la aplicación web, enfocándose en los flujos de gestión de inventario, creación de platos y visualización de métricas financieras. |
+| 2026-06-05 | Documentación detallada de problemas de usabilidad encontrados, asignación de severidad y elaboración de recomendaciones de mejora basadas en principios heurísticos. |
+| 2026-06-07 | Preparación del informe de auditoría de experiencia de usuario, incluyendo la tabla resumen de problemas y la descripción detallada de cada uno. |
+| 2026-06-10 | Presentación del informe de auditoría a los desarrolladores de FoodFlow para su revisión y planificación de correcciones en futuras iteraciones del producto. |
+
+##### 6.4.2.3. Contenido de auditoría recibida.
+
+###### **UX Heuristics & Principles Evaluation**
+
+###### **Usability – Inclusive Design – Information Architecture**
+
+**CARRERA : Ingeniería de Software**
+**CURSO : Diseño de Experimentos de Ingeniería de Software SECCIÓN : 1ASI0732-2610-17821**
+**PROFESORES : Lennin Percy Cenas Vasquez**
+**AUDITOR : Raúl Bellido Salas** **CLIENTE(S) : ClaudeFlow / FoodFlow Users** ---
+
+**SITE o APP A EVALUAR:**
+
+[FoodFlow-Frontend](https://food-flow-frontend-ipmc.vercel.app/login) *(Aplicación Web de Gestión de Restaurantes)*
+
+**TAREAS A EVALUAR:**
+
+*El alcance de esta evaluación incluye la revisión de la usabilidad de las siguientes tareas:*
+
+1. Registro de usuario e inicio de sesión en la plataforma.
+2. Gestión de inventario de productos (creación, edición, eliminación y búsqueda de insumos).
+3. Configuración y gestión de platos (Dishes) y precios.
+4. Creación y actualización de pedidos/órdenes y control de sus estados en el restaurante.
+5. Visualización del rendimiento financiero y métricas comerciales en el Dashboard.
+6. Ajuste de perfil, cambio de contraseña y actualización de suscripción en el módulo de Settings.
+
+*No están incluidas en esta versión de la evaluación las siguientes tareas:*
+
+1. Integración en tiempo real de pasarelas de pago externas (p. ej. Stripe, PayPal).
+2. Reportes avanzados exportables en formato PDF o Excel.
+3. Notificaciones push o alertas instantáneas en tiempo real para cambios de estado de órdenes multi-dispositivo.
+
+---
+
+**ESCALA DE SEVERIDAD:**
+
+*Los errores serán puntuados tomando en cuenta la siguiente escala de severidad:*
+
+| Nivel | Descripción |
+| :---- | :---- |
+| 1 | Problema superficial: puede ser fácilmente superado por el usuario o ocurre con muy poca frecuencia. No necesita ser arreglado a no ser que exista disponibilidad de tiempo. |
+| 2 | Problema menor: puede ocurrir un poco más frecuentemente o es un poco más difícil de superar para el usuario. Se le debería asignar una prioridad baja de cara al siguiente release. |
+| 3 | Problema mayor: ocurre frecuentemente o los usuarios no son capaces de resolverlo. Es importante que sea corregido y se le debe asignar una prioridad alta. |
+| 4 | Problema muy grave: un error de gran impacto que impide al usuario continuar con el uso de la herramienta. Es imperativo que sea corregido antes del lanzamiento. |
+
+---
+
+**TABLA RESUMEN:**
+
+| \# | Problema | Escala de severidad | Heurística/Principio violada(o) |
+| :---: | ----- | ----- | :---- |
+| 1 | Hardcodeo del símbolo de moneda `$` en listados en lugar de usar el helper centralizado | 2 | Usability: Consistencia y estándares |
+| 2 | Elementos de imagen clave sin atributo descriptivo en `alt` (p. ej. Logo de marca en login) | 1 | Inclusive Design: Proporciona experiencias comparables |
+| 3 | Redirección abrupta y deslogueo automático al cambiar email sin suficiente aviso o contador | 2 | Usability: Visibilidad del estado del sistema |
+| 4 | Diálogos modales permiten cierre accidental perdiendo datos del formulario sin confirmación | 3 | Usability: Libertad y control del usuario |
+| 5 | Falta de límites superiores claros y advertencia visual en los campos numéricos de stock | 2 | Usability: Prevención de errores |
+| 6 | Inconsistencia de datos en la tarjeta de Órdenes entre el Dashboard y Finanzas | 3 | Usability: Consistencia y estándares |
+| 7 | Etiquetas numéricas del eje Y truncadas o mal alineadas en el gráfico de Finanzas | 2 | Usability: Diseño estético y minimalista |
+| 8 | Falta de botón para agregar un nuevo plato directamente en la vista de Menú/Platos | 2 | Usability: Flexibilidad y eficiencia de uso |
+
+---
+
+**DESCRIPCIÓN DE PROBLEMAS:**
+
+##### **PROBLEMA #1: Hardcodeo del símbolo de moneda `$` en listados de órdenes**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Consistencia y estándares  
+* **Problema:** En OrdersPage, el total acumulado de la orden muestra el símbolo de moneda de forma fija (`${row.totalAmount.toFixed(2)}`). Esto rompe la consistencia con el helper `formatCurrency` configurado en `src/utils` y utilizado en otras partes de la aplicación como `SettingsPage.tsx` para adaptarse a las configuraciones regionales del restaurante.
+* **Recomendación:** Reemplazar el hardcodeo de `$` por la invocación del método `formatCurrency(row.totalAmount)` para mantener el estándar global de la aplicación.
+
+---
+
+##### **PROBLEMA #2: Ausencia de descripción en logotipo de marca en autenticación**
+* **Severidad:** 1  
+* **Heurística violada:** Inclusive Design - Proporciona experiencias comparables  
+* **Problema:** En `LoginPage.tsx` y `RegisterPage.tsx`, el logotipo principal de la aplicación `foodflow-mark.png` contiene un atributo `alt=""` vacío. Para usuarios con lectores de pantalla, esto omite el branding fundamental del sitio.
+* **Recomendación:** Cambiar el atributo por `alt="FoodFlow Logo"` o `alt={t('app.name')}` para asegurar que sea accesible a todas las personas.
+
+---
+
+##### **PROBLEMA #3: Cierre de sesión y redirección abrupta al modificar correo electrónico**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Visibilidad del estado del sistema  
+* **Problema:** En `SettingsPage.tsx`, al cambiar el correo electrónico del perfil del usuario, el sistema muestra un mensaje rápido y redirige al login cerrando la sesión de forma inmediata usando un `setTimeout` de 3 segundos sin feedback visual de progreso. El usuario puede desconcertarse al ver que su sesión expira sin una advertencia o un temporizador interactivo.
+* **Recomendación:** Implementar un indicador de progreso visual o un cuadro de diálogo con confirmación donde se indique explícitamente "Cerrando sesión en X segundos..." para reducir la incertidumbre.
+
+---
+
+##### **PROBLEMA #4: Diálogos modales permiten cierre accidental al hacer click afuera sin confirmación de descarte**
+* **Severidad:** 3  
+* **Heurística violada:** Usability - Libertad y control del usuario  
+* **Problema:** En `ProductsPage.tsx` y en la adición de pedidos, si el usuario tiene información a medio llenar en los diálogos modales y hace clic fuera del modal o presiona "Cancelar" por error, los modales se cierran inmediatamente perdiendo todo el progreso del formulario sin preguntar si desea descartar los cambios.
+* **Recomendación:** Implementar una validación de confirmación (`ConfirmDialog` o comprobación de `isDirty` del formulario) si el usuario intenta cerrar el modal habiendo modificado datos.
+
+---
+
+##### **PROBLEMA #5: Ausencia de advertencias visuales de stock mínimo en listas de productos**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Prevención de errores / Diseño visual  
+* **Problema:** Aunque el sistema define un umbral de stock bajo (`lowStockThreshold`), la interfaz de administración de inventario no resalta visualmente en la tabla principal aquellos artículos que están por debajo de este límite, obligando al gestor a comparar manualmente los valores numéricos actuales contra el umbral.
+* **Recomendación:** Añadir un badge, color o icono de advertencia (como el icono `Warning` disponible en las importaciones) a las filas de la tabla de inventario cuando `stockLevel <= lowStockThreshold`.
+
+
+---
+
+##### **PROBLEMA #6: Truncamiento de etiquetas en el gráfico de barras de Finanzas**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Diseño estético y minimalista  
+* **Problema:** En la vista de `Finanzas`, dentro del bloque "Ingresos vs gastos por categoría", las etiquetas numéricas del eje Y (por ejemplo, `$600.00`, `$450.00`) aparecen cortadas y pegadas al límite izquierdo del contenedor del gráfico. Esto da una sensación de interfaz rota y dificulta la lectura rápida de los montos.
+* **Recomendación:** Ajustar las propiedades de la librería de gráficos utilizada (ej. Recharts o Chart.js), incrementando el margen izquierdo (`marginLeft` o el `width` del eje Y) para que los valores monetarios tengan suficiente espacio para renderizarse correctamente.
+
+---
+
+##### **PROBLEMA #7: Ausencia de botón de acción (CTA) en la vista de Menú / Platos**
+* **Severidad:** 2  
+* **Heurística violada:** Usability - Flexibilidad y eficiencia de uso  
+* **Problema:** Si el usuario se dirige directamente a la pestaña `Menú / Platos` con la intención de agregar un nuevo ítem, no encuentra un botón para realizar esta acción principal. Actualmente, el usuario está forzado a regresar a la vista del `Panel` para usar el atajo de "Acciones rápidas > Agregar plato", lo cual rompe el flujo lógico de la tarea.
+* **Recomendación:** Añadir un botón primario visible (ej. "+ Agregar plato" o "Nuevo") en la parte superior derecha de la vista `Menú / Platos`, preferiblemente a la misma altura de la barra de búsqueda.
+
+#### 6.4.2.4. Resumen de modificaciones para subsanar hallazgos.
+
+Con base en la auditoría recibida por el grupo Fudi, el equipo identificó acciones correctivas orientadas a mejorar la consistencia visual, la accesibilidad, la prevención de errores y la eficiencia de los flujos principales de FoodFlow. Las modificaciones se priorizaron considerando la severidad asignada por el auditor, dando mayor atención a los problemas que podían afectar la continuidad de tareas o la interpretación correcta de la información del sistema.
+
+| # | Hallazgo identificado | Severidad | Modificación para subsanar el hallazgo | Resultado esperado |
+|:---:|---|:---:|---|---|
+| 1 | Hardcodeo del símbolo de moneda `$` en listados de órdenes. | 2 | Reemplazar el formateo manual de montos en `OrdersPage` por el helper centralizado `formatCurrency(row.totalAmount)`. | Mantener consistencia regional y visual en todos los montos mostrados por la aplicación. |
+| 2 | Logotipo de marca sin descripción accesible en pantallas de autenticación. | 1 | Actualizar el atributo `alt` del logo en `LoginPage` y `RegisterPage` con una descripción significativa, como `FoodFlow Logo` o el nombre de la aplicación. | Mejorar la experiencia de usuarios con lectores de pantalla y reforzar la identificación del producto. |
+| 3 | Redirección abrupta y cierre de sesión al modificar el correo electrónico. | 2 | Incorporar un mensaje explícito de cierre de sesión, idealmente con contador o indicador visual antes de redirigir al login. | Reducir la incertidumbre del usuario y hacer visible el estado del sistema durante el cambio de correo. |
+| 4 | Modales que se cierran accidentalmente y descartan datos sin confirmación. | 3 | Agregar una validación de cambios pendientes (`isDirty`) y un cuadro de confirmación antes de cerrar formularios de productos u órdenes con información ingresada. | Evitar pérdida accidental de datos y dar mayor control al usuario sobre sus acciones. |
+| 5 | Falta de límites claros y advertencias visuales en campos y listas de stock. | 2 | Añadir límites o validaciones en campos numéricos de inventario e incorporar badges, colores o iconos cuando `stockLevel <= lowStockThreshold`. | Prevenir errores de registro y facilitar la detección rápida de productos con stock crítico. |
+| 6 | Inconsistencia de datos entre la tarjeta de órdenes del Dashboard y la vista de Finanzas. | 3 | Unificar la fuente de cálculo de métricas de órdenes para que Dashboard y Finanzas consuman los mismos criterios, filtros y periodo seleccionado. | Garantizar coherencia en los indicadores y evitar interpretaciones contradictorias de la operación del restaurante. |
+| 7 | Etiquetas numéricas truncadas o mal alineadas en el gráfico de Finanzas. | 2 | Ajustar los márgenes del gráfico y el ancho del eje Y para que los valores monetarios se rendericen completamente. | Mejorar la legibilidad de los reportes financieros y evitar una percepción de interfaz rota. |
+| 8 | Ausencia de botón para agregar platos desde la vista Menú / Platos. | 2 | Añadir un botón primario visible, como `+ Agregar plato`, en la parte superior de la vista de Menú / Platos. | Reducir pasos innecesarios y permitir que el usuario complete la tarea desde el módulo correspondiente. |
+
+En conjunto, estas modificaciones fortalecen la usabilidad de FoodFlow al reducir fricciones en tareas frecuentes, mejorar la claridad de la información financiera y hacer más accesibles los flujos de autenticación, inventario, órdenes, finanzas y gestión de platos.
+
 # Capítulo VII: DevOps Practices
 
 ## 7.1. Continuous Integration
@@ -7722,370 +8549,592 @@ Push al repositorio -> GitHub Actions ejecuta el workflow
 
 ## 8.1. Experiment Planning
 
-La planificación de experimentos de FoodFlow transforma los supuestos definidos durante el proceso Lean UX en preguntas que puedan responderse mediante evidencia. El propósito no es demostrar que las ideas iniciales son correctas, sino reducir la incertidumbre sobre la utilidad, facilidad de uso y viabilidad comercial del producto antes de invertir en nuevas funcionalidades.
-
-Esta sección utiliza la documentación existente, las historias de usuario, el Product Backlog y las capacidades observadas en el frontend y backend. Las tarjetas propuestas representan experimentos **planificados**. Sus resultados, aprendizajes y decisiones deberán registrarse después de trabajar con participantes pertenecientes al segmento objetivo.
+Esta sección documenta la planificación experimental de la nueva iteración de FoodFlow. El foco no consiste en ampliar el producto hacia módulos externos, sino en validar dos mejoras directamente conectadas con los hallazgos de usuarios: el **descuento automático de inventario a partir de recetas** y el **cálculo de ganancia estimada al definir el precio de un plato**. Ambas funcionalidades mantienen el alcance de FoodFlow como aplicación web para gestión financiera y operativa de restaurantes.
 
 ### 8.1.1. As-Is Summary.
 
-FoodFlow se encuentra en una etapa de producto mínimo viable funcional. La solución está orientada a dueños de restaurantes pequeños y medianos que necesitan centralizar información financiera y operativa que actualmente pueden gestionar mediante cuadernos, hojas de cálculo, reportes aislados o sistemas POS con capacidades limitadas.
+Antes de esta iteración, FoodFlow ya permitía registrar productos en inventario, crear platos, registrar órdenes, visualizar finanzas y administrar la cuenta del restaurante. Sin embargo, la relación entre menú, inventario y órdenes aún tenía una limitación importante: los productos e insumos existían como registros independientes, pero la venta de un plato no descontaba automáticamente las cantidades consumidas de inventario.
 
-La plataforma dispone de una aplicación web desarrollada con React, TypeScript y Vite; un backend RESTful implementado con Java 17 y Spring Boot; una base de datos PostgreSQL alojada en Supabase; y servicios desplegados mediante Vercel y Render. Asimismo, GitHub Actions valida automáticamente el frontend y el backend mediante lint, pruebas, compilación y generación de artefactos.
+En las entrevistas de validación, los usuarios expresaron que esperaban que el inventario "bajara solo" cuando una orden se vendía o entregaba. Esta expectativa era especialmente crítica para restaurantes pequeños, donde el dueño o administrador busca reducir tareas manuales al cierre del día o de la semana. En el estado anterior, el usuario debía registrar la orden y luego actualizar manualmente el stock de carne, papas, verduras u otros insumos, lo que abría espacio para errores, olvidos y pérdida de confianza en los reportes de inventario.
 
-El producto implementado permite realizar las siguientes actividades:
+También se identificó que el campo de ingredientes de los platos era insuficiente si funcionaba únicamente como texto informativo. Para que FoodFlow aportara valor real, la receta debía conectar cada plato con productos existentes del inventario, incluyendo cantidad requerida y unidad de medida. Con esta relación, el sistema podía calcular cuántas órdenes eran posibles con el stock actual y bloquear o advertir situaciones de falta de insumos.
 
-| Área | Capacidad disponible en el MVP |
-|---|---|
-| Autenticación | Registro, inicio de sesión, cierre de sesión y protección de rutas mediante JWT. |
-| Dashboard | Visualización de ingresos, gastos, utilidad, variaciones, órdenes recientes y platos destacados. |
-| Inventario | Registro y administración de productos, categorías, stock, costos, proveedores y umbrales de bajo stock. |
-| Menú | Creación, búsqueda, modificación y eliminación de platos. |
-| Órdenes | Registro de órdenes, cálculo de totales y gestión de estados. |
-| Finanzas | Reportes diarios, semanales y mensuales, comparación entre periodos, platos con mayores ingresos y gastos por categoría. |
-| Cuenta | Administración del perfil, cambio de contraseña, idioma y tema visual. |
-| Suscripciones | Visualización y selección de planes Free, Standard y Premium con precios y beneficios definidos. |
+Además, los usuarios necesitaban apoyo al fijar precios. Aunque FoodFlow mostraba finanzas generales, todavía no ayudaba en el momento puntual de crear o editar un plato para entender si el precio ingresado cubría el costo de sus insumos. Por ello, la nueva iteración incorporó una vista de ganancia estimada: el sistema calcula el costo de producción de una unidad del plato según su receta y lo compara con el precio de venta ingresado por el usuario.
 
-Aunque las funcionalidades principales se encuentran implementadas y verificadas técnicamente, todavía deben validarse con evidencia del segmento objetivo. En particular, no se ha demostrado que los propietarios interpreten correctamente el dashboard, que las alertas de inventario influyan en sus decisiones de compra o que exista disposición real a pagar por los planes Standard y Premium.
+En síntesis, el As-Is evidenciaba tres fricciones conectadas:
 
-El módulo de suscripciones permite elegir y registrar un plan, pero no integra una pasarela de pago. Por ello, la selección de un plan dentro del MVP no debe interpretarse como una compra ni como evidencia de ingresos. Del mismo modo, el producto todavía no incorpora una herramienta de analítica de comportamiento que registre automáticamente eventos, frecuencia de uso, retención o conversión.
+- Inventario y órdenes no estaban suficientemente integrados para reflejar consumo real de insumos.
+- La receta del plato no generaba información operativa sobre stock disponible.
+- La fijación de precios dependía del cálculo manual del dueño del restaurante.
 
-El estado actual permite realizar pruebas de usabilidad moderadas, entrevistas, tareas guiadas y evaluaciones de intención de uso empleando la aplicación desplegada y datos controlados. Estas actividades proporcionarán una línea base para decidir qué aspectos deben mantenerse, corregirse o priorizarse en la siguiente iteración.
+La iteración To-Be implementada responde a esas fricciones sin salir del alcance del producto: FoodFlow sigue siendo una plataforma web de gestión de restaurantes, pero ahora utiliza la receta como puente entre menú, inventario, órdenes y rentabilidad.
 
 ### 8.1.2. Raw Material: Assumptions, Knowledge Gaps, Ideas, Claims.
 
-El material inicial de los experimentos proviene del Lean UX Problem Statement, las hipótesis del producto, las historias de usuario y las funciones presentes en el MVP. Los elementos se clasifican para distinguir aquello que el equipo cree, lo que todavía desconoce, las posibles respuestas de diseño y las afirmaciones que necesitan evidencia.
 
-**Assumptions**
+#### Assumptions
 
-| ID | Tipo | Supuesto |
-|---|---|---|
-| A-01 | Usuario | Los dueños de restaurantes necesitan una visión centralizada de ingresos, gastos, utilidad, órdenes e inventario. |
-| A-02 | Usuario | Los propietarios sin conocimientos contables avanzados prefieren indicadores visuales y gráficos antes que tablas extensas o reportes dispersos. |
-| A-03 | Problema | El uso de registros manuales y herramientas desconectadas dificulta identificar pérdidas y tomar decisiones oportunas. |
-| A-04 | Solución | Un dashboard financiero permite comprender rápidamente la situación general del restaurante. |
-| A-05 | Solución | Los reportes diarios, semanales y mensuales ayudan a reconocer tendencias y comparar el desempeño del negocio. |
-| A-06 | Solución | Las alertas de bajo stock ayudan a priorizar compras y reducir órdenes no atendidas por falta de insumos. |
-| A-07 | Solución | Integrar menú, inventario, órdenes y finanzas reduce el tiempo empleado en revisar información. |
-| A-08 | Negocio | Los restaurantes pequeños y medianos percibirán suficiente valor para considerar un plan de pago. |
-| A-09 | Negocio | La especialización gastronómica diferencia a FoodFlow de una hoja de cálculo, un POS básico o un software contable genérico. |
-| A-10 | Adopción | Una interfaz sencilla y de baja curva de aprendizaje favorece el uso recurrente del producto. |
+1. **El usuario espera automatización de inventario al vender:** Se asume que los dueños de restaurantes consideran natural que una venta descuente los insumos asociados a la receta del plato, especialmente cuando la plataforma ya permite registrar inventario y órdenes.
+2. **La receta debe ser operativa, no solo descriptiva:** Se asume que el usuario percibe mayor valor cuando los ingredientes del plato se vinculan con productos reales del inventario, cantidades y unidades de medida.
+3. **La ganancia estimada ayuda a fijar precios:** Se asume que mostrar si el plato genera ganancia o pérdida al momento de escribir el precio reduce cálculos manuales y mejora la confianza del usuario.
+4. **Las unidades compatibles reducen errores de stock:** Se asume que permitir kg/g, L/ml y unidades facilita registrar compras mayoristas y recetas en porciones pequeñas sin obligar al usuario a convertir mentalmente.
+5. **El descuento debe ocurrir al entregar la orden:** Se asume que la orden representa consumo real de inventario cuando pasa a estado entregado, no necesariamente cuando se crea como pendiente.
+6. **Los restaurantes pequeños valoran claridad sobre precisión contable avanzada:** Se asume que un cálculo inmediato de costo y ganancia por plato es más útil para el usuario objetivo que un módulo contable complejo.
 
-**Knowledge Gaps**
+#### Knowledge Gaps
 
-| ID | Conocimiento pendiente |
-|---|---|
-| KG-01 | ¿Qué indicador del dashboard resulta más útil para tomar una decisión real del restaurante? |
-| KG-02 | ¿Los usuarios comprenden la diferencia entre ingresos, gastos, utilidad y variación sin recibir explicación? |
-| KG-03 | ¿Con qué frecuencia necesitan consultar reportes diarios, semanales o mensuales? |
-| KG-04 | ¿Las alertas de bajo stock contienen información suficiente para decidir qué producto reponer? |
-| KG-05 | ¿Cuánto tiempo y cuántos errores requiere registrar una orden frente al método utilizado actualmente por el usuario? |
-| KG-06 | ¿Qué funciones son indispensables para que un propietario abandone hojas de cálculo o registros manuales? |
-| KG-07 | ¿Los beneficios de los planes Standard y Premium justifican sus precios para el segmento objetivo? |
-| KG-08 | ¿Qué objeción principal impide adoptar FoodFlow: precio, tiempo de configuración, confianza, complejidad o resistencia al cambio? |
-| KG-09 | ¿Qué información inicial necesita el usuario para que el dashboard y los reportes produzcan valor desde el primer uso? |
-| KG-10 | ¿La propuesta especializada en restaurantes se entiende claramente al observar la landing page y la aplicación? |
+1. **Momento ideal del descuento:** Se desconoce si todos los restaurantes prefieren descontar al entregar la orden o si algunos esperarían descontar al crearla, pagarla o cerrarla financieramente.
+2. **Nivel de tolerancia ante bloqueos por falta de stock:** Se desconoce si el usuario prefiere que FoodFlow impida crear órdenes sin insumos suficientes o que solo muestre advertencias.
+3. **Comprensión de unidades de medida:** Se desconoce si los usuarios interpretan correctamente la relación entre compras mayoristas en kg y recetas definidas en gramos sin ayuda adicional.
+4. **Uso real del cálculo de ganancia:** Se desconoce si los usuarios modificarán efectivamente el precio de los platos después de ver una alerta de pérdida.
+5. **Frecuencia de actualización de recetas:** Se desconoce cada cuánto los restaurantes ajustan recetas por cambios en porciones, proveedores o costos de insumos.
+6. **Impacto en adopción y disposición de pago:** Se desconoce cuánto aumentan estas dos funcionalidades la intención real de uso continuo y pago por suscripción.
 
-**Ideas**
+#### Ideas
 
-| ID | Idea susceptible de experimentación |
-|---|---|
-| I-01 | Incorporar un recorrido inicial con datos de demostración para mostrar valor antes de que el usuario registre información propia. |
-| I-02 | Presentar recomendaciones simples junto a las métricas, por ejemplo, revisar una categoría de gastos que aumentó frente al periodo anterior. |
-| I-03 | Añadir una lista priorizada de productos con bajo stock y una acción para registrar su reposición. |
-| I-04 | Comparar distintas presentaciones del dashboard para identificar qué jerarquía de indicadores se comprende mejor. |
-| I-05 | Ofrecer un periodo de prueba de funciones Standard o Premium antes de solicitar una decisión de pago. |
-| I-06 | Explicar los planes mediante beneficios vinculados a problemas reales, como reducción de pérdidas, reportes avanzados y límites de operación. |
-| I-07 | Incorporar encuestas breves dentro de la aplicación después de completar tareas clave. |
-| I-08 | Registrar eventos de uso de dashboard, reportes, inventario, órdenes y suscripciones para medir adopción y recurrencia. |
+1. **Recetas vinculadas a inventario:** Permitir que cada plato tenga una receta formada por productos del inventario, cantidad requerida y unidad de medida compatible.
+2. **Descuento automático al entregar órdenes:** Al marcar una orden como entregada, descontar del inventario los insumos necesarios según las recetas de los platos vendidos.
+3. **Cálculo de órdenes posibles:** Mostrar en el módulo de Menú / Platos cuántas órdenes se pueden preparar con el stock actual, tomando como límite el insumo más escaso.
+4. **Ganancia estimada al fijar precio:** Calcular el costo de producción de un plato a partir de su receta y mostrar si el precio ingresado genera ganancia o pérdida.
+5. **Validación de unidades compatibles:** Evitar recetas inconsistentes, por ejemplo, usar gramos contra productos registrados en litros.
+6. **Prevención de órdenes no viables:** Advertir o bloquear platos no disponibles cuando sus insumos no alcanzan para preparar una unidad.
 
-**Claims**
+#### Claims
 
-Las siguientes afirmaciones expresan resultados esperados, pero permanecen **sin validar** hasta que se ejecuten los experimentos correspondientes:
+1. **El descuento automático reduce trabajo manual:** Si FoodFlow descuenta inventario al entregar órdenes, el usuario necesitará menos ajustes manuales después de vender platos.
+2. **La receta operativa aumenta el valor percibido:** Si la receta conecta platos e inventario, el usuario percibirá FoodFlow como una herramienta de control real y no solo como un registro de datos.
+3. **La ganancia estimada mejora decisiones de precio:** Si el sistema muestra ganancia o pérdida al crear un plato, el usuario podrá ajustar precios antes de publicar o vender un plato no rentable.
+4. **Las unidades compatibles aumentan confianza:** Si el sistema convierte kg/g y L/ml correctamente, el usuario podrá registrar compras mayoristas y recetas por porción sin duplicar productos.
+5. **La disponibilidad por insumos reduce errores operativos:** Si FoodFlow indica cuántas órdenes son posibles o cuándo un plato no está disponible, se reducirá la probabilidad de vender platos sin stock suficiente.
 
-| ID | Afirmación por validar |
-|---|---|
-| C-01 | FoodFlow permite que un dueño comprenda la situación financiera general de su restaurante en pocos minutos. |
-| C-02 | La centralización de información reduce el tiempo dedicado a revisar ingresos, gastos, órdenes e inventario. |
-| C-03 | Las alertas de bajo stock facilitan decisiones de reposición y contribuyen a reducir pérdidas operativas. |
-| C-04 | Los reportes por periodo permiten detectar tendencias que no son evidentes mediante registros manuales. |
-| C-05 | La visualización de platos destacados ayuda a tomar decisiones sobre menú, precios y compras. |
-| C-06 | La experiencia especializada en restaurantes genera mayor valor percibido que una herramienta financiera genérica. |
-| C-07 | Una parte significativa de los usuarios de prueba considerará contratar un plan pagado después de experimentar las funciones principales. |
 
 ### 8.1.3. Experiment-Ready Questions.
 
-Las preguntas listas para experimentación se redactaron de manera que puedan responderse mediante comportamientos observables, resultados de tareas o respuestas de participantes, evitando depender únicamente de opiniones generales.
+Las preguntas listas para experimentar se organizan en dos tipos. Las preguntas **belief-led** parten de una creencia concreta sobre el impacto de las nuevas funcionalidades. Las preguntas **exploratorias** buscan comprender comportamientos aún no confirmados en restaurantes reales.
 
-1. ¿Puede un dueño de restaurante identificar correctamente si su negocio obtuvo utilidad o pérdida y señalar una acción a partir del dashboard sin recibir asistencia?
-2. ¿Los reportes diarios, semanales y mensuales permiten reconocer cambios relevantes en ingresos, gastos y rendimiento del restaurante?
-3. ¿Las alertas y umbrales de bajo stock permiten identificar rápidamente qué productos necesitan reposición?
-4. ¿El flujo de creación de una orden permite registrar platos, cantidades y total con rapidez y sin errores críticos?
-5. ¿La información de platos más vendidos y con mayores ingresos resulta útil para tomar decisiones sobre el menú?
-6. ¿Los usuarios perciben que FoodFlow reduce el esfuerzo de reunir información que antes se encontraba distribuida en distintas herramientas?
-7. ¿Los beneficios mostrados en los planes Standard y Premium generan suficiente valor percibido para considerar una suscripción pagada?
-8. ¿La propuesta de valor comunica claramente que FoodFlow es una solución especializada en la gestión financiera y operativa de restaurantes?
-9. ¿Qué barrera representa el mayor riesgo para la adopción: precio, carga inicial de datos, complejidad, confianza o resistencia a cambiar el proceso actual?
+#### Belief-led Questions
+
+| ID | Pregunta para experimento | Creencia asociada | Elemento de FoodFlow relacionado |
+|---|---|---|---|
+| BLQ01 | ¿El descuento automático de inventario al entregar órdenes reduce la cantidad de ajustes manuales de stock realizados por el usuario al cierre del día? | Se cree que el usuario actualiza menos inventario manualmente cuando el sistema descuenta insumos por receta. | Órdenes, Inventario y Recetas |
+| BLQ02 | ¿Mostrar cuántas órdenes puede producir cada plato con el stock actual reduce intentos de venta de platos sin insumos suficientes? | Se cree que la disponibilidad por receta previene errores antes de crear la orden. | Menú / Platos y Órdenes |
+| BLQ03 | ¿La alerta de ganancia o pérdida al ingresar el precio del plato incrementa la proporción de platos creados con precio mayor al costo de producción? | Se cree que la retroalimentación inmediata ayuda al usuario a fijar precios sostenibles. | Menú / Platos |
+| BLQ04 | ¿El uso de unidades compatibles kg/g y L/ml reduce errores al registrar recetas con insumos comprados al por mayor? | Se cree que el usuario necesita registrar stock en unidades de compra y recetas en unidades de consumo. | Inventario y Recetas |
+| BLQ05 | ¿Los usuarios perciben mayor valor de FoodFlow cuando el inventario se actualiza automáticamente después de una venta? | Se cree que esta funcionalidad es decisiva para la adopción del producto. | Propuesta de valor |
+| BLQ06 | ¿La validación de stock antes de entregar una orden aumenta la confianza del usuario en los datos de inventario? | Se cree que impedir descuentos imposibles evita inconsistencias y mejora credibilidad. | Órdenes e Inventario |
+
+#### Exploratory Questions
+
+| ID | Pregunta exploratoria | Incertidumbre principal | Elemento de FoodFlow relacionado |
+|---|---|---|---|
+| EXQ01 | ¿En qué momento operativo espera el usuario que se descuente el inventario: al crear la orden, al entregarla o al cerrarla financieramente? | No se conoce el momento mental que el restaurante asocia con consumo real. | Flujo de Órdenes |
+| EXQ02 | ¿Qué unidades de medida usan con mayor frecuencia los restaurantes para compras mayoristas y recetas por porción? | Se desconoce la combinación más común entre stock y receta. | Inventario |
+| EXQ03 | ¿Qué tan comprensible resulta para el usuario la diferencia entre costo total de compra, costo unitario y costo de receta? | Se desconoce si el usuario interpreta correctamente los cálculos de costos. | Inventario y Menú |
+| EXQ04 | ¿Qué reacción tiene el usuario cuando FoodFlow indica que un plato genera pérdida? | Se desconoce si ajusta el precio, cambia la receta o ignora la advertencia. | Rentabilidad por plato |
+| EXQ05 | ¿Cuántas recetas reales de un restaurante contienen insumos compartidos entre varios platos? | Se desconoce la complejidad promedio del consumo cruzado de inventario. | Recetas y Stock reservado |
+| EXQ06 | ¿La visualización de órdenes posibles es suficiente o el usuario necesita también sugerencias de compra? | Se desconoce si el indicador actual resuelve la necesidad o abre una nueva expectativa. | Menú / Platos |
+
+
+#### Aplicación de la técnica 5W+H
+
+
+##### Aplicación 1: Descuento automático de inventario por receta
+
+**Comportamiento observado:** El usuario registra órdenes en FoodFlow y espera que el inventario se actualice automáticamente cuando los platos son entregados.
+
+| Dimensión | Pregunta generada | Premisa oculta revelada |
+|---|---|---|
+| **Who** | ¿Quién necesita confiar en el stock actualizado: dueño, cocinero, administrador o encargado de compras? | El valor del descuento automático puede variar según el rol que consulta inventario. |
+| **What** | ¿Qué insumos deben descontarse cuando se entrega una orden con varios platos y recetas compartidas? | El sistema debe acumular consumo por producto, no solo descontar plato por plato de forma aislada. |
+| **Where** | ¿Dónde revisa el usuario el impacto del descuento: en Inventario, Menú / Platos u Órdenes? | El feedback debe estar visible en los módulos donde el usuario toma decisiones operativas. |
+| **When** | ¿Cuándo considera el restaurante que el insumo fue consumido: al crear, preparar, entregar o cobrar la orden? | La decisión de descontar al entregar debe validarse con el proceso real de cada negocio. |
+| **Why** | ¿Por qué el usuario abandona el registro manual de stock después de vender? | El trabajo manual repetitivo genera errores y reduce confianza en la plataforma. |
+| **How** | ¿Cómo debe manejar FoodFlow los casos de stock insuficiente? | La plataforma debe prevenir inconsistencias sin interrumpir innecesariamente el flujo operativo. |
+
+##### Aplicación 2: Ganancia estimada al fijar precio de plato
+
+**Comportamiento observado:** El usuario crea o edita un plato, define una receta y escribe un precio de venta sin tener siempre claro si ese precio cubre el costo de los insumos.
+
+| Dimensión | Pregunta generada | Premisa oculta revelada |
+|---|---|---|
+| **Who** | ¿Quién decide el precio final del plato dentro del restaurante? | La utilidad de la alerta depende de si la persona que configura el plato también toma decisiones comerciales. |
+| **What** | ¿Qué necesita ver el usuario: costo de receta, ganancia o advertencia de pérdida? | Un cálculo demasiado técnico puede generar confusión; la señal debe ser directa. |
+| **Where** | ¿Dónde debe mostrarse la ganancia estimada? | El momento de mayor impacto es mientras se edita el precio, no después en un reporte financiero. |
+| **When** | ¿Cuándo se revisan precios: al crear un plato, al cambiar proveedor o al detectar baja rentabilidad? | La funcionalidad puede ser útil tanto en configuración inicial como en mantenimiento del menú. |
+| **Why** | ¿Por qué el usuario fija precios que podrían no ser rentables? | Puede depender de cálculos manuales incompletos o desconocimiento del costo real por porción. |
+| **How** | ¿Cómo debería reaccionar el usuario si FoodFlow indica pérdida? | La plataforma debe ayudar a decidir si subir precio, ajustar receta o revisar costos de inventario. |
+
 
 ### 8.1.4. Question Backlog.
 
-Las preguntas se priorizan considerando el impacto que su respuesta tendría sobre la propuesta de valor, el nivel de incertidumbre actual y el esfuerzo requerido para obtener evidencia. La prioridad alta corresponde a supuestos capaces de invalidar el núcleo del producto o su modelo de negocio.
+El backlog organiza las preguntas según su prioridad experimental. Se utiliza una escala de 1 a 3 para confianza, riesgo, impacto e interés. El total permite priorizar qué preguntas deben validarse primero.
 
-| Orden | ID | Pregunta resumida | Impacto | Incertidumbre | Prioridad | Método inicial propuesto |
-|---:|---|---|---|---|---|---|
-| 1 | Q-01 | ¿El dashboard permite comprender la salud financiera y decidir una acción sin ayuda? | Alto | Alta | Alta | Prueba de usabilidad moderada con tareas y datos controlados. |
-| 2 | Q-07 | ¿Existe valor percibido y disposición a considerar los planes Standard o Premium? | Alto | Alta | Alta | Entrevista de valor y prueba de intención de selección de plan. |
-| 3 | Q-09 | ¿Cuál es la principal barrera para adoptar FoodFlow? | Alto | Alta | Alta | Entrevistas de problema con dueños de restaurantes. |
-| 4 | Q-03 | ¿Las alertas de bajo stock apoyan correctamente la reposición? | Alto | Media | Alta | Tarea guiada de identificación y priorización de compras. |
-| 5 | Q-02 | ¿Los reportes por periodo permiten reconocer tendencias relevantes? | Alto | Media | Alta | Prueba de interpretación de reportes y comparación de periodos. |
-| 6 | Q-06 | ¿La centralización reduce el esfuerzo percibido frente al proceso actual? | Alto | Media | Media | Comparación de tareas y entrevista posterior. |
-| 7 | Q-04 | ¿La creación de órdenes es rápida y evita errores críticos? | Medio | Media | Media | Prueba de usabilidad con medición de tiempo, éxito y errores. |
-| 8 | Q-08 | ¿Se comprende la especialización gastronómica de la propuesta? | Medio | Media | Media | Prueba de cinco segundos y entrevista sobre la landing page. |
-| 9 | Q-05 | ¿La información de platos destacados impulsa decisiones sobre el menú? | Medio | Alta | Media | Escenario de decisión con datos de ventas simulados. |
-
-El backlog es dinámico. Después de ejecutar cada experimento, la pregunta debe cerrarse, reformularse o volver a priorizarse según el aprendizaje obtenido. Las preguntas con evidencia insuficiente permanecen en el backlog y no deben presentarse como validadas.
+| Prioridad | ID | Pregunta | Tipo | Confianza | Riesgo | Impacto | Interés | Total |
+|---|---|---|---|---:|---:|---:|---:|---:|
+| 1 | BLQ01 | ¿El descuento automático reduce ajustes manuales de stock al cierre del día? | Belief-led | 3 | 3 | 3 | 3 | **12** |
+| 2 | BLQ05 | ¿Los usuarios perciben mayor valor cuando el inventario se actualiza automáticamente después de vender? | Belief-led | 3 | 3 | 3 | 3 | **12** |
+| 3 | BLQ03 | ¿La alerta de ganancia o pérdida incrementa platos con precio mayor al costo de producción? | Belief-led | 2 | 3 | 3 | 3 | **11** |
+| 4 | EXQ01 | ¿En qué momento operativo espera el usuario que se descuente el inventario? | Exploratoria | 2 | 3 | 3 | 3 | **11** |
+| 5 | BLQ02 | ¿Mostrar órdenes posibles reduce intentos de venta de platos sin insumos suficientes? | Belief-led | 2 | 3 | 3 | 2 | **10** |
+| 6 | EXQ03 | ¿El usuario comprende costo total, costo unitario y costo de receta? | Exploratoria | 2 | 2 | 3 | 3 | **10** |
+| 7 | BLQ04 | ¿Las unidades compatibles kg/g y L/ml reducen errores al registrar recetas? | Belief-led | 2 | 2 | 3 | 2 | **9** |
+| 8 | EXQ04 | ¿Qué reacción tiene el usuario ante una alerta de pérdida? | Exploratoria | 2 | 2 | 3 | 2 | **9** |
+| 9 | EXQ05 | ¿Cuántas recetas reales comparten insumos entre varios platos? | Exploratoria | 2 | 2 | 2 | 2 | **8** |
+| 10 | EXQ06 | ¿El indicador de órdenes posibles basta o se requieren sugerencias de compra? | Exploratoria | 1 | 2 | 2 | 2 | **7** |
 
 ### 8.1.5. Experiment Cards.
 
-Las tarjetas siguientes definen los primeros experimentos sugeridos. Cada una relaciona una pregunta prioritaria con un procedimiento observable y un criterio previo de decisión. Los porcentajes representan condiciones de planificación, no resultados alcanzados.
 
-**Experiment Card EXP-01: Comprensión del dashboard financiero**
+#### Experiment Card 1: Descuento automático de inventario por receta
 
-| Campo | Definición |
+| Campo | Descripción |
 |---|---|
-| Question | ¿El dashboard permite comprender la salud financiera del restaurante y decidir una acción sin ayuda? |
-| Why | La comprensión del dashboard constituye el núcleo de la propuesta de valor de FoodFlow. Si los usuarios no interpretan sus indicadores, la centralización de datos no produce una mejora real. |
-| Participants | Dueños o administradores de restaurantes pequeños y medianos que revisen información financiera u operativa. |
-| What | Entregar una cuenta con datos controlados y solicitar que el participante identifique ingresos, gastos, utilidad, variación y una acción recomendada para el negocio. El moderador no debe explicar previamente los indicadores. |
-| Hypothesis | Al menos 4 de cada 5 participantes identificarán correctamente si existe utilidad o pérdida y propondrán una decisión coherente en un máximo de tres minutos, sin asistencia crítica. |
-| Evidence | Tasa de finalización, respuestas correctas, tiempo de tarea, solicitudes de ayuda y observaciones del participante. |
-| Decision | Mantener la estructura si se cumple el criterio; ajustar etiquetas, jerarquía o explicaciones si la comprensión es parcial; rediseñar si la mayoría interpreta incorrectamente los datos. |
+| **Pregunta asociada** | ¿El descuento automático reduce ajustes manuales de stock al cierre del día? |
+| **Hipótesis** | Si FoodFlow descuenta automáticamente los insumos cuando una orden se marca como entregada, entonces los usuarios realizarán menos ajustes manuales de inventario y confiarán más en el stock mostrado. |
+| **Segmento** | Dueños o administradores de restaurantes pequeños y medianos que registran inventario y órdenes en la plataforma web. |
+| **Intervención** | Uso de recetas vinculadas a productos de inventario y descuento automático al entregar órdenes. |
+| **Métrica primaria** | Número de ajustes manuales de stock posteriores a órdenes entregadas. |
+| **Métricas secundarias** | Órdenes entregadas con descuento exitoso, errores por stock insuficiente, platos marcados como no disponibles por falta de insumos. |
+| **Criterio de éxito** | Reducción observable de ajustes manuales y ausencia de inconsistencias negativas de stock durante pruebas funcionales. |
+| **Riesgo principal** | Que el usuario espere descontar en otro momento del flujo operativo. |
 
-**Experiment Card EXP-02: Utilidad de las alertas de inventario**
+#### Experiment Card 2: Ganancia estimada al fijar precio de plato
 
-| Campo | Definición |
+| Campo | Descripción |
 |---|---|
-| Question | ¿Las alertas de bajo stock permiten identificar y priorizar los productos que deben reponerse? |
-| Why | El control de inventario es una de las funciones que debería reducir pérdidas y evitar la falta de insumos. |
-| Participants | Dueños, administradores o responsables de inventario de negocios gastronómicos. |
-| What | Presentar un inventario con diferentes niveles de stock y solicitar que el participante identifique los productos críticos, explique el orden de reposición y actualice un producto. |
-| Hypothesis | Al menos el 80 % de los productos críticos será identificado correctamente y 4 de cada 5 participantes completarán la tarea sin ayuda crítica. |
-| Evidence | Productos identificados, orden de prioridad, tiempo, errores y comentarios sobre la información que falta para decidir una compra. |
-| Decision | Mantener la alerta si guía correctamente la reposición; mejorar el contraste o la información mostrada si existen omisiones; reconsiderar el mecanismo si no apoya la decisión. |
+| **Pregunta asociada** | ¿La alerta de ganancia o pérdida ayuda a fijar precios rentables? |
+| **Hipótesis** | Si FoodFlow muestra el costo de receta y la ganancia estimada mientras el usuario ingresa el precio del plato, entonces el usuario podrá detectar precios no rentables antes de guardar el plato. |
+| **Segmento** | Dueños, administradores o responsables de menú que configuran platos y precios en FoodFlow. |
+| **Intervención** | Cálculo inmediato del costo de producción con base en insumos, cantidades y costo unitario de inventario. |
+| **Métrica primaria** | Proporción de platos guardados con precio mayor al costo estimado de receta. |
+| **Métricas secundarias** | Cambios de precio después de ver la alerta, tiempo de edición de plato, errores de receta por unidad incompatible. |
+| **Criterio de éxito** | El usuario comprende la señal de ganancia o pérdida y puede ajustar precio o receta sin cálculo externo. |
+| **Riesgo principal** | Que el usuario confunda costo de receta con utilidad contable completa, ya que el cálculo no incluye costos indirectos como mano de obra, alquiler o servicios. |
 
-**Experiment Card EXP-03: Valor percibido de los planes pagados**
-
-| Campo | Definición |
-|---|---|
-| Question | ¿Los beneficios de Standard y Premium generan suficiente valor para considerar una suscripción pagada? |
-| Why | El modelo SaaS depende de que una parte del segmento perciba beneficios superiores al plan gratuito. La selección técnica de un plan no demuestra intención real de pago. |
-| Participants | Dueños de restaurantes pequeños y medianos que hayan completado previamente tareas de dashboard, inventario y reportes. |
-| What | Mostrar los límites y beneficios reales de Free, Standard y Premium. Solicitar que el participante elija un plan, explique su decisión y responda qué beneficio justificaría pagar y qué objeción se lo impediría. No se realizará un cobro real. |
-| Hypothesis | Al menos 3 de cada 5 participantes elegirán Standard o Premium como opción preferida y podrán mencionar un beneficio concreto que justifique su elección. |
-| Evidence | Plan seleccionado, razón de elección, intención declarada, beneficio principal, objeciones y precio considerado aceptable. |
-| Decision | Conservar la propuesta si se reconoce valor pagado; modificar beneficios o comunicación si existe interés sin claridad; revisar segmentación y precios si predomina Free por falta de valor. |
-
-**Experiment Card EXP-04: Interpretación de reportes por periodo**
-
-| Campo | Definición |
-|---|---|
-| Question | ¿Los reportes diarios, semanales y mensuales permiten reconocer tendencias relevantes para el negocio? |
-| Why | Los reportes deben convertir datos operativos en información útil para decidir sobre gastos, ventas y menú. |
-| Participants | Dueños o administradores que realicen revisiones periódicas del rendimiento de un restaurante. |
-| What | Presentar datos de dos periodos y solicitar que el participante identifique qué cambió, qué categoría concentra el gasto y qué plato genera mayores ingresos. |
-| Hypothesis | Al menos 4 de cada 5 participantes identificarán correctamente la tendencia principal y dos datos relevantes sin apoyo del moderador. |
-| Evidence | Respuestas correctas, tiempo de interpretación, errores, periodo preferido y decisiones propuestas. |
-| Decision | Mantener la visualización si facilita conclusiones correctas; simplificar gráficos y etiquetas si existen dudas; revisar el modelo de reporte si los datos no conducen a decisiones. |
-
-Estas tarjetas constituyen el punto de partida para la fase `8.2. Experiment Design`, donde se detallarán las hipótesis nulas y alternativas, las métricas de dominio, las medidas, las condiciones y las escalas de decisión antes de ejecutar los experimentos.
 
 ## 8.2. Experiment Design
 
-El diseño experimental establece de antemano qué se quiere comprobar, qué datos se recopilarán y cómo se tomará una decisión. Esta definición previa reduce interpretaciones subjetivas posteriores y evita modificar los criterios únicamente para hacer que los resultados coincidan con las expectativas del equipo.
-
-Los experimentos se plantean como evaluaciones formativas con participantes del segmento objetivo. Las cantidades y porcentajes incluidos son criterios de decisión propuestos; no representan resultados obtenidos. Para una primera iteración se considera una muestra mínima de cinco participantes por experimento, suficiente para detectar problemas frecuentes de comprensión y usabilidad, pero no para realizar generalizaciones estadísticas sobre todos los restaurantes.
 
 ### 8.2.1. Hypotheses.
 
-Cada experimento cuenta con una hipótesis alternativa, que representa el comportamiento esperado, y una hipótesis nula, que representa la ausencia de evidencia suficiente a favor de la propuesta.
-
-| ID | Experimento | Hipótesis alternativa | Hipótesis nula |
-|---|---|---|---|
-| H-01 | Comprensión del dashboard | Si un dueño utiliza el dashboard con datos controlados, al menos 4 de cada 5 participantes identificarán correctamente si existe utilidad o pérdida y propondrán una acción coherente en un máximo de tres minutos sin ayuda crítica. | Menos de 4 de cada 5 participantes completarán correctamente la interpretación o necesitarán ayuda crítica, por lo que la presentación actual no proporcionará evidencia suficiente de comprensión autónoma. |
-| H-02 | Alertas de inventario | Si se muestran productos con distintos niveles y umbrales de stock, los participantes identificarán al menos el 80 % de los productos críticos y 4 de cada 5 completarán la priorización sin ayuda crítica. | Los participantes identificarán menos del 80 % de los productos críticos o la mayoría necesitará ayuda, por lo que las alertas actuales no apoyarán suficientemente la reposición. |
-| H-03 | Valor de planes pagados | Después de utilizar dashboard, inventario y reportes, al menos 3 de cada 5 participantes elegirán Standard o Premium como opción preferida y asociarán su elección con un beneficio concreto. | Menos de 3 de cada 5 participantes preferirán un plan pagado o no podrán relacionar el precio con un beneficio concreto, por lo que la propuesta comercial deberá revisarse. |
-| H-04 | Interpretación de reportes | Si se presentan reportes de dos periodos, al menos 4 de cada 5 participantes identificarán la tendencia principal, la categoría con mayor gasto y el plato con mayores ingresos sin ayuda. | Menos de 4 de cada 5 participantes interpretarán correctamente los datos principales, indicando que los reportes requieren cambios de jerarquía, etiquetas o visualización. |
-
-Las hipótesis H-01, H-02 y H-04 evalúan principalmente utilidad y comprensión. La H-03 evalúa valor percibido e intención declarada, pero no permite afirmar que exista una conversión comercial real porque el MVP no procesa pagos.
+| ID | Hipótesis | Funcionalidad relacionada |
+|---|---|---|
+| H1 | Si una orden entregada descuenta automáticamente los insumos definidos en la receta del plato, entonces el inventario reflejará mejor el consumo real del restaurante y disminuirá la necesidad de actualización manual. | Descuento automático de inventario |
+| H2 | Si FoodFlow valida stock disponible antes de entregar o crear órdenes con recetas, entonces se reducirá la venta de platos sin insumos suficientes. | Descuento automático de inventario |
+| H3 | Si el usuario visualiza la ganancia o pérdida estimada mientras define el precio, entonces tomará mejores decisiones de precio antes de guardar el plato. | Rentabilidad por plato |
+| H4 | Si las recetas permiten unidades compatibles entre compras mayoristas y porciones, entonces el usuario podrá registrar casos reales como kg de pollo en inventario y gramos por plato sin errores de cálculo. | Recetas e inventario |
 
 ### 8.2.2. Domain Business Metrics
 
-Las métricas de dominio conectan los experimentos con el funcionamiento de un restaurante y con el modelo SaaS de FoodFlow. Algunas pueden medirse durante pruebas moderadas, mientras que otras requieren instrumentación y uso longitudinal del producto.
-
-| Métrica | Definición | Cálculo propuesto | Relación con el negocio |
-|---|---|---|---|
-| Tasa de interpretación financiera | Participantes que interpretan correctamente la situación financiera. | Interpretaciones correctas / participantes × 100 | Indica si el dashboard ayuda a tomar decisiones basadas en datos. |
-| Tiempo para obtener una conclusión | Tiempo entre el inicio de la tarea y la identificación de utilidad o pérdida. | Suma de tiempos / tareas completadas | Aproxima el esfuerzo requerido para comprender el negocio. |
-| Tasa de identificación de stock crítico | Productos críticos identificados correctamente. | Productos críticos identificados / productos críticos presentados × 100 | Evalúa la capacidad para anticipar reposiciones y evitar faltantes. |
-| Tasa de finalización de órdenes | Órdenes registradas sin errores críticos. | Órdenes completadas / intentos de creación × 100 | Representa la facilidad para registrar ventas que alimentan las métricas financieras. |
-| Tasa de interpretación de reportes | Participantes que reconocen correctamente tendencias y datos clave. | Interpretaciones correctas / participantes × 100 | Evalúa si los reportes apoyan decisiones sobre gastos, compras y menú. |
-| Preferencia por plan pagado | Participantes que eligen Standard o Premium en el escenario de evaluación. | Preferencias pagadas / participantes × 100 | Proporciona una señal inicial sobre el valor percibido del modelo SaaS. |
-| Intención declarada de pago | Participantes que indican que considerarían pagar bajo condiciones concretas. | Intenciones positivas / participantes × 100 | Permite explorar viabilidad comercial, sin sustituir una compra real. |
-| Activación del producto | Restaurantes que completan las acciones mínimas para obtener valor inicial. | Restaurantes que registran datos y consultan un reporte / registros válidos × 100 | Mide cuántos usuarios llegan a experimentar la propuesta principal. |
-| Uso recurrente del dashboard | Restaurantes activos que consultan el dashboard en diferentes días. | Usuarios con visitas recurrentes / usuarios activos × 100 | Se relaciona con adopción y posible retención. |
-| Adopción de reportes | Usuarios activos que consultan al menos un reporte por periodo. | Usuarios que consultan reportes / usuarios activos × 100 | Indica si el análisis financiero se incorpora al trabajo habitual. |
-
-Para la ejecución inmediata de los cuatro experimentos se utilizarán las primeras siete métricas. Activación, recurrencia y adopción requieren un periodo de observación y un sistema de tracking que todavía no está implementado.
+| Métrica de negocio | Definición | Relación con el dominio |
+|---|---|---|
+| Exactitud operativa de inventario | Grado en que el stock visible coincide con el consumo derivado de órdenes entregadas. | Control de insumos y reducción de errores manuales. |
+| Reducción de trabajo administrativo | Disminución de tareas manuales para actualizar stock después de vender. | Ahorro de tiempo para dueños y administradores. |
+| Disponibilidad de platos | Capacidad del sistema para indicar si un plato puede prepararse con el stock actual. | Prevención de ventas no viables. |
+| Rentabilidad estimada por plato | Diferencia entre precio de venta y costo estimado de receta. | Apoyo a decisiones de precios. |
+| Confianza en reportes de inventario | Percepción de que los datos de FoodFlow son útiles para planificar compras. | Valor percibido de la plataforma. |
+| Intención de adopción | Disposición del usuario a usar FoodFlow como reemplazo de libreta, Excel o cálculo manual. | Viabilidad comercial del producto. |
 
 ### 8.2.3. Measures.
 
-Las medidas definen los datos específicos que el moderador debe registrar durante cada sesión. Se combinarán datos cuantitativos con observaciones cualitativas para comprender no solo si una tarea terminó, sino también por qué presentó dificultades.
-
-| Experimento | Medidas cuantitativas | Medidas cualitativas | Instrumento de registro |
+| Medida | Tipo | Método de captura | Interpretación |
 |---|---|---|---|
-| EXP-01 Dashboard | Tarea completada, respuestas correctas, tiempo total, número de ayudas y errores críticos. | Explicación de los indicadores, dudas, información buscada y acción propuesta. | Hoja de observación, cronómetro y entrevista posterior. |
-| EXP-02 Inventario | Porcentaje de productos críticos identificados, tiempo, ayudas y actualización completada. | Criterio de priorización, información faltante y percepción de claridad de la alerta. | Escenario controlado, lista de productos y hoja de observación. |
-| EXP-03 Suscripciones | Plan elegido, preferencia por plan pagado y rango de precio aceptable. | Beneficio valorado, objeción principal, motivo de elección y condiciones para pagar. | Guion de entrevista y ficha individual de respuestas. |
-| EXP-04 Reportes | Datos identificados correctamente, tiempo, ayudas y periodo seleccionado. | Interpretación de tendencias, decisión propuesta y elementos visuales confusos. | Reportes con datos controlados, cuestionario y hoja de observación. |
-
-Se considerará **ayuda crítica** cualquier intervención del moderador que revele dónde encontrar la respuesta, explique el significado de una métrica o indique el siguiente paso necesario para completar la tarea. Las preguntas neutrales, como solicitar al participante que piense en voz alta, no se contabilizarán como ayuda crítica.
+| `order_delivered_inventory_discounted` | Cuantitativa | Evento web/backend cuando una orden entregada descuenta insumos. | Confirma uso real del flujo de descuento. |
+| `stock_validation_failed` | Cuantitativa | Evento cuando el sistema bloquea una operación por stock insuficiente. | Mide prevención de errores operativos. |
+| Cantidad de ajustes manuales de stock | Cuantitativa | Comparación entre cambios manuales de inventario y órdenes entregadas. | Permite evaluar si la automatización reduce trabajo repetitivo. |
+| `dish_pricing_preview_viewed` | Cuantitativa | Evento al mostrar ganancia o pérdida estimada en el formulario de plato. | Indica exposición del usuario al cálculo de rentabilidad. |
+| Cambio de precio después de alerta | Cuantitativa | Diferencia entre precio antes y después de mostrar la ganancia estimada. | Evalúa si la alerta influye en la decisión. |
+| Comprensión de la funcionalidad | Cualitativa | Observación en prueba de usabilidad y preguntas posteriores. | Permite detectar confusión sobre receta, unidades o ganancia. |
+| Errores de unidad incompatible | Cuantitativa | Validaciones fallidas al guardar receta. | Mide fricción en el registro de recetas reales. |
 
 ### 8.2.4. Conditions.
 
-Para mantener condiciones comparables, los participantes recibirán el mismo contexto, datos y orden básico de tareas. Cuando se utilice una condición de referencia, esta representa el proceso actual del participante o una presentación sin las ayudas específicas evaluadas.
 
-| Experimento | Condición experimental | Condición de referencia o control | Variables que deben mantenerse constantes |
-|---|---|---|---|
-| EXP-01 Dashboard | Dashboard de FoodFlow con tarjetas, variaciones, órdenes y platos destacados. | Explicación del proceso actual utilizado por el participante para conocer la situación del restaurante. | Mismos datos, consigna, tiempo máximo y ausencia de explicación previa. |
-| EXP-02 Inventario | Tabla de FoodFlow con stock, umbral e indicadores visuales de bajo stock. | Lista equivalente de productos sin resaltar automáticamente los niveles críticos. | Mismos productos, cantidades, costos y escenario de reposición. |
-| EXP-03 Suscripciones | Planes Free, Standard y Premium con precios y beneficios actuales. | Pregunta inicial sobre el gasto y herramientas que el participante utiliza actualmente, antes de mostrar los planes. | Mismo orden de presentación, sin descuentos ficticios ni presión de compra. |
-| EXP-04 Reportes | Reportes de FoodFlow con comparación de periodos, gastos por categoría y platos destacados. | Datos equivalentes presentados como registros separados o tabla básica. | Mismos valores, periodos, preguntas y tiempo máximo. |
+#### Experimento 1: Descuento automático de inventario
 
-Las sesiones deben realizarse en un equipo con conexión estable y una cuenta preparada con datos ficticios. No se utilizarán credenciales personales, información financiera real ni datos identificables del restaurante. En EXP-03 no se solicitarán tarjetas ni se realizará cobro alguno.
+| Condición | Descripción |
+|---|---|
+| **Contexto** | Usuario registra productos en inventario, crea un plato con receta y genera una orden con dicho plato. |
+| **Entrada mínima** | Producto con stock suficiente, unidad de medida definida, costo unitario y plato con receta válida. |
+| **Acción experimental** | Marcar la orden como entregada desde la vista de Órdenes. |
+| **Resultado esperado** | El stock de cada producto usado en la receta disminuye según cantidad vendida y unidad compatible. |
+| **Restricción** | Si no hay stock suficiente, FoodFlow debe impedir el descuento y mostrar error controlado. |
+| **No incluido** | Integración con POS externo, pagos en tiempo real o compras automáticas a proveedores. |
+
+#### Experimento 2: Ganancia estimada al definir precio
+
+| Condición | Descripción |
+|---|---|
+| **Contexto** | Usuario crea o edita un plato desde Menú / Platos y agrega insumos de inventario a la receta. |
+| **Entrada mínima** | Al menos un producto con costo unitario y una cantidad requerida válida en la receta. |
+| **Acción experimental** | Ingresar o modificar el precio de venta del plato. |
+| **Resultado esperado** | FoodFlow muestra si el precio produce ganancia o pérdida según costo estimado de receta. |
+| **Restricción** | El cálculo solo considera costo de insumos registrados, no costos indirectos del restaurante. |
+| **No incluido** | Cálculo contable completo, impuestos, mano de obra, alquiler o comisiones de delivery. |
+
 
 ### 8.2.5. Scale Calculations and Decisions.
 
-La escala se define para una muestra inicial de cinco participantes. Cada participante representa 20 puntos porcentuales; por ello, los resultados se interpretarán como señales formativas y no como estimaciones estadísticas definitivas.
 
-| Hipótesis | Factor principal | Desfavorable | Parcial / requiere mejora | Favorable | Decisión asociada |
-|---|---|---|---|---|---|
-| H-01 Dashboard | Participantes que interpretan correctamente sin ayuda crítica | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Rediseñar, ajustar o mantener la jerarquía del dashboard. |
-| H-01 Dashboard | Tiempo promedio de interpretación | Más de 5 min | Entre 3 y 5 min | Hasta 3 min | Simplificar navegación y etiquetas si el tiempo es elevado. |
-| H-02 Inventario | Productos críticos identificados correctamente | Menos de 60 % | 60-79 % | 80-100 % | Revisar o mantener alertas, contraste e información mostrada. |
-| H-02 Inventario | Participantes que priorizan sin ayuda crítica | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Mejorar el flujo si la alerta no conduce a una decisión. |
-| H-03 Suscripciones | Preferencia por Standard o Premium | 0-1 de 5 | 2 de 5 | 3-5 de 5 | Revisar precios, beneficios o segmentación cuando predomina Free. |
-| H-03 Suscripciones | Participantes que mencionan un beneficio concreto | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Mejorar la comunicación si no se entiende el valor diferencial. |
-| H-04 Reportes | Participantes que interpretan correctamente los datos clave | 0-2 de 5 | 3 de 5 | 4-5 de 5 | Rediseñar, simplificar o mantener los reportes. |
+#### 1. Certeza
 
-La decisión final no dependerá únicamente del porcentaje. Un error crítico repetido, como confundir gastos con utilidad o seleccionar un producto incorrecto para reposición, deberá analizarse aunque la tasa general alcance el rango favorable.
+La certeza se evaluará en tres niveles:
+
+| Nivel | Criterio |
+|---|---|
+| Baja | La evidencia proviene solo de observación interna o pruebas técnicas sin usuarios. |
+| Media | Al menos tres usuarios completan el flujo y comprenden la lógica general. |
+| Alta | La mayoría de usuarios completa el flujo sin ayuda, explica correctamente el resultado y lo considera útil para su operación. |
+
+#### 2. Precisión
+
+Para esta etapa, la precisión se define de forma práctica y acorde al tamaño del proyecto académico. No se busca inferencia estadística poblacional, sino evidencia suficiente para decidir si la funcionalidad debe mantenerse, ajustarse o replantearse.
+
+| Elemento | Decisión |
+|---|---|
+| Tamaño mínimo sugerido | 5 a 8 usuarios del segmento objetivo. |
+| Unidad de análisis | Sesión de uso de FoodFlow en entorno web. |
+| Nivel de precisión esperado | Identificar patrones claros de comprensión, errores y utilidad percibida. |
+| Riesgo aceptado | Se acepta variabilidad entre restaurantes siempre que la funcionalidad sea comprendida y útil en la mayoría de pruebas. |
+
+#### 3. Escala y reglas de decisión
+
+| Resultado observado | Decisión |
+|---|---|
+| 80 % o más completa el flujo sin ayuda y entiende el resultado | Mantener la funcionalidad como parte central del producto. |
+| Entre 50 % y 79 % completa el flujo, pero requiere aclaraciones | Mantener la funcionalidad con mejoras de UX, textos o validaciones. |
+| Menos de 50 % comprende el flujo o el resultado | Replantear el diseño antes de avanzar a lanzamiento. |
+| Usuarios entienden descuento automático, pero no el momento del descuento | Evaluar configuración o comunicación más clara del estado "Entregada". |
+| Usuarios entienden ganancia estimada, pero la confunden con utilidad neta real | Aclarar que es una estimación basada solo en insumos de receta. |
+
 
 ### 8.2.6. Methods Selection.
 
-Se seleccionaron métodos de bajo riesgo y compatibles con el estado actual del MVP. No es necesario modificar el código para ejecutar la primera ronda, ya que los datos pueden recopilarse mediante observación y formularios externos.
 
-| Método | Aplicación | Ventaja | Limitación |
-|---|---|---|---|
-| Prueba de usabilidad moderada | EXP-01, EXP-02 y EXP-04 | Permite observar tareas, errores, dudas y razonamiento en tiempo real. | La presencia del moderador puede influir en el comportamiento. |
-| Entrevista semiestructurada | EXP-03 y análisis posterior de todas las pruebas | Profundiza en motivaciones, objeciones, procesos actuales y valor percibido. | Las respuestas declaradas no garantizan comportamiento futuro. |
-| Think Aloud | Durante las tareas de dashboard, inventario y reportes | Ayuda a conocer qué interpreta el participante y dónde se confunde. | Puede aumentar ligeramente el tiempo de tarea. |
-| Observación de tareas | Registro de pasos, ayudas, errores y finalización | Produce evidencia conductual más sólida que una opinión aislada. | Requiere criterios uniformes entre observadores. |
-| Encuesta breve posterior | Facilidad percibida, claridad y utilidad | Facilita comparar respuestas entre participantes. | Una muestra pequeña no permite generalización estadística. |
-| Comparación con el proceso actual | Contraste entre FoodFlow y registros manuales o herramientas existentes | Permite entender si la solución reduce esfuerzo o fragmentación. | Los procesos actuales pueden variar entre restaurantes. |
+#### 1. Técnicas operativas seleccionadas
 
-El procedimiento general será el siguiente:
+| Técnica | Aplicación en FoodFlow | Justificación |
+|---|---|---|
+| Prueba de usabilidad moderada | Observar al usuario crear producto, crear receta, crear orden y entregarla. | Permite evaluar comprensión de un flujo operativo completo. |
+| Think-aloud | Pedir al usuario que explique qué espera que ocurra con el inventario y la ganancia. | Revela expectativas y confusiones durante la interacción. |
+| Revisión de eventos web | Medir creación de recetas, entrega de órdenes, errores de stock y visualización de ganancia. | Permite complementar observación cualitativa con datos de uso. |
+| Prueba funcional controlada | Verificar que el stock disminuye exactamente según la receta. | Reduce riesgo de inconsistencias en inventario. |
+| Entrevista breve post-tarea | Preguntar si la funcionalidad reemplazaría libreta, Excel o cálculo manual. | Conecta la evidencia con valor percibido y adopción. |
 
-1. Explicar el propósito académico y solicitar consentimiento para registrar respuestas y observaciones.
-2. Recopilar únicamente información general del perfil y del proceso de gestión actual.
-3. Presentar el escenario sin explicar cómo resolver la tarea.
-4. Registrar tiempo, finalización, errores, ayudas y comentarios.
-5. Realizar preguntas posteriores sobre utilidad, dificultad y mejoras.
-6. Anonimizar los resultados mediante identificadores como `P01`, `P02` y `P03`.
-7. Consolidar la información sin alterar los criterios definidos en esta sección.
+
+#### 2. Regla de no superposición
+
+Cada experimento debe aislar su pregunta principal. El experimento de descuento automático evaluará consumo de inventario y disponibilidad de platos, mientras que el experimento de ganancia estimada evaluará comprensión de costos y decisiones de precio. Aunque ambas funcionalidades usan recetas, no se medirán como si fueran una sola mejora, para evitar atribuir incorrectamente el valor percibido.
+
+#### 3. Procedimiento general
+
+1. Crear una cuenta de prueba en FoodFlow web.
+2. Registrar productos de inventario con stock, unidad y costo.
+3. Crear un plato con receta vinculada a productos existentes.
+4. Observar si el usuario comprende el indicador de órdenes posibles.
+5. Ingresar un precio y observar la interpretación de la ganancia o pérdida estimada.
+6. Crear una orden con el plato configurado.
+7. Marcar la orden como entregada.
+8. Verificar el cambio de stock en inventario.
+9. Registrar errores, dudas, tiempos de tarea y comentarios del usuario.
+
+
+#### 4. Consideraciones éticas
+
+Las pruebas se realizarán con datos ficticios de restaurante y no requerirán información financiera real del participante. En caso de utilizar ejemplos de costos, estos serán simulados o proporcionados voluntariamente por el usuario. No se solicitarán credenciales personales fuera del entorno de prueba. La información recopilada será usada únicamente para mejorar la comprensión del flujo de inventario, recetas y rentabilidad estimada.
 
 ### 8.2.7. Data Analytics: Goals, KPIs and Metrics Selection.
 
-El plan de analítica busca relacionar el comportamiento de uso con objetivos de producto y negocio. Los KPIs propuestos deben implementarse progresivamente; por ahora funcionan como especificación para futuras mediciones.
+| Objetivo analítico | KPI | Métrica de apoyo |
+|---|---|---|
+| Validar si la receta conecta correctamente menú e inventario | % de platos con receta válida | Número de errores de unidad incompatible |
+| Medir uso del descuento automático | % de órdenes entregadas con descuento aplicado | Cantidad de productos descontados por orden |
+| Evaluar prevención de ventas sin stock | % de intentos bloqueados por stock insuficiente | Platos con `availableOrders` igual a 0 |
+| Evaluar apoyo a decisiones de precio | % de platos guardados con ganancia positiva estimada | Cambios de precio después de alerta |
+| Medir comprensión del usuario | Tasa de tareas completadas sin ayuda | Comentarios cualitativos post-tarea |
 
-| Objetivo | KPI principal | Métricas de apoyo | Interpretación esperada |
-|---|---|---|---|
-| Lograr que el usuario comprenda rápidamente la situación del restaurante | Tasa de interpretación financiera | Tiempo de interpretación, ayudas y errores críticos | Una tasa alta con poco tiempo indica que el dashboard comunica valor de forma clara. |
-| Ayudar a prevenir problemas de inventario | Tasa de identificación de stock crítico | Alertas consultadas, productos actualizados y tiempo de reposición | Permite saber si la alerta conduce a una acción operativa. |
-| Facilitar el análisis periódico | Tasa de interpretación y adopción de reportes | Periodos consultados, frecuencia y decisiones propuestas | Indica si los reportes se incorporan a la revisión del negocio. |
-| Validar el valor del modelo SaaS | Preferencia e intención declarada por plan pagado | Plan elegido, beneficio principal, objeción y rango de precio | Sirve como señal inicial para ajustar planes antes de integrar pagos. |
-| Reducir la dependencia de herramientas dispersas | Activación y recurrencia | Tareas principales completadas, visitas al dashboard y módulos usados | Permite observar si FoodFlow se convierte en un punto central de gestión. |
+#### Criterios de selección
 
-La métrica guía propuesta para una etapa posterior es el **porcentaje de restaurantes activados que consultan información financiera y realizan al menos una acción operativa en semanas diferentes**. Esta combinación evita considerar como éxito una simple visita y busca representar uso real del ciclo integrado de FoodFlow.
+Las métricas fueron seleccionadas porque están directamente vinculadas a las dos funcionalidades implementadas, pueden observarse en la aplicación web y generan decisiones accionables. No se incluyen métricas de app móvil porque FoodFlow no cuenta con aplicación móvil dentro del alcance actual. Tampoco se incluyen indicadores de pasarelas de pago, proveedores externos o automatización de compras, ya que no forman parte de esta iteración.
+
 
 ### 8.2.8. Web and Mobile Tracking Plan.
 
-FoodFlow dispone actualmente de una aplicación web responsive, pero no cuenta con una aplicación móvil nativa implementada. Por ello, el plan inmediato corresponde al entorno web. Si posteriormente se desarrolla una aplicación móvil, deberá reutilizar los nombres y propiedades de eventos para mantener comparabilidad entre plataformas.
+FoodFlow es una aplicación web. Por lo tanto, el plan de tracking se define exclusivamente para la plataforma web y su API backend. No se considera tracking móvil nativo, ya que no existe una app móvil dentro del alcance del producto.
 
-El tracking descrito a continuación es una propuesta pendiente de implementación. No se afirma que Google Analytics, Mixpanel u otra plataforma de analítica esté instalada actualmente.
+#### 1. Implementación inicial
 
-| Evento propuesto | Momento de registro | Propiedades mínimas no sensibles | KPI relacionado |
-|---|---|---|---|
-| `account_registered` | Registro completado correctamente | `anonymous_user_id`, `timestamp`, `platform` | Registros y activación. |
-| `login_succeeded` | Inicio de sesión exitoso | `anonymous_user_id`, `timestamp`, `platform` | Usuarios activos y recurrencia. |
-| `dashboard_viewed` | Carga correcta del dashboard | `anonymous_user_id`, `period`, `timestamp` | Uso recurrente del dashboard. |
-| `dashboard_period_changed` | Cambio entre periodo diario, semanal o mensual | `from_period`, `to_period` | Preferencia de periodos. |
-| `low_stock_alert_viewed` | Visualización de productos con stock crítico | `critical_product_count` | Uso de alertas de inventario. |
-| `inventory_product_updated` | Actualización exitosa de un producto | `changed_fields_count`, `was_low_stock` | Acción posterior a una alerta. |
-| `order_created` | Orden registrada correctamente | `line_item_count`, `order_type` | Finalización de órdenes y activación. |
-| `financial_report_viewed` | Reporte cargado correctamente | `period`, `has_comparison` | Adopción de reportes. |
-| `subscription_plans_viewed` | Visualización de los planes disponibles | `current_plan` | Alcance del embudo de suscripción. |
-| `subscription_plan_selected` | Selección confirmada de un plan | `current_plan`, `selected_plan` | Preferencia por plan; no equivale a pago. |
-| `feedback_submitted` | Envío de una encuesta breve | `context`, `rating` | Satisfacción y aprendizaje cualitativo. |
+| Evento | Momento de captura | Propiedades sugeridas |
+|---|---|---|
+| `inventory_product_created` | Al registrar un producto de inventario | `unitOfMeasure`, `category`, `stockLevel` |
+| `dish_recipe_saved` | Al crear o actualizar un plato con receta | `dishId`, `recipeItemCount`, `hasCompatibleUnits` |
+| `dish_pricing_preview_viewed` | Al mostrar ganancia o pérdida estimada | `estimatedRecipeCost`, `price`, `estimatedProfitSign` |
+| `order_created` | Al crear una orden | `lineItemCount`, `totalAmount`, `hasRecipeItems` |
+| `order_delivered_inventory_discounted` | Al marcar una orden como entregada y descontar stock | `orderId`, `productsDiscountedCount` |
+| `stock_validation_failed` | Al intentar crear o entregar una orden sin stock suficiente | `dishId`, `productId`, `requiredQuantity`, `availableStock` |
+| `dish_unavailable_viewed` | Al mostrar un plato sin disponibilidad por insumos | `dishId`, `availableOrders` |
 
-**Reglas de privacidad y calidad de datos**
 
-- No registrar nombres, correos, contraseñas, tokens JWT ni texto libre que pueda contener datos personales.
-- No enviar importes detallados, nombres de platos, proveedores o información financiera identificable a la herramienta de analítica.
-- Utilizar identificadores anónimos o seudónimos y documentar el periodo de retención.
-- Solicitar consentimiento cuando corresponda y explicar el propósito del seguimiento.
-- Mantener nombres de eventos y propiedades consistentes entre frontend, backend y futuras plataformas.
-- Validar que un evento se registre una sola vez por acción y que los entornos de desarrollo no contaminen los datos de producción.
+#### 2. Seguimiento continuo
 
-La implementación futura puede realizarse con una herramienta de analítica web o con eventos propios enviados al backend. La selección tecnológica debe considerar costo, privacidad, facilidad de integración y capacidad de exportar datos para análisis.
+El seguimiento continuo debe revisar semanalmente si los usuarios crean recetas, si las órdenes entregadas descuentan inventario sin errores y si la alerta de ganancia estimada aparece en los momentos correctos. También se debe monitorear si los errores de unidad o stock insuficiente se concentran en determinados productos, lo que podría indicar problemas de comprensión o configuración.
+
+
+#### Reglas de privacidad y calidad
+
+1. No registrar nombres reales de restaurantes, proveedores o platos en eventos analíticos si no es necesario para el análisis.
+2. Priorizar identificadores internos y métricas agregadas.
+3. No capturar precios o costos si no serán utilizados para una decisión específica del experimento.
+4. Diferenciar eventos exitosos de errores de validación.
+5. Evitar duplicar eventos por recargas de página o renderizados repetidos.
+6. Documentar cambios de tracking junto con cada nueva iteración del frontend o backend.
 
 ## 8.3. Experimentation
 
-La fase de experimentación conecta los aprendizajes esperados con la evolución del producto. Debido a que los experimentos todavía no han sido ejecutados, las siguientes historias y prioridades representan una propuesta **To-Be preliminar**. Después de obtener resultados, el equipo deberá confirmar, modificar, descartar o repriorizar cada elemento.
 
 ### 8.3.1. To-Be User Stories.
 
-| ID | Título | User Story | Criterios de aceptación | Experimento relacionado |
+| ID | User Story To-Be | Criterios de aceptación |
+|---|---|---|
+| TBU-01 | Como dueño de restaurante, quiero registrar una receta para cada plato usando productos de inventario, para saber qué insumos consume cada venta. | El usuario puede seleccionar productos existentes, ingresar cantidad requerida y unidad compatible. |
+| TBU-02 | Como administrador, quiero que al entregar una orden se descuenten automáticamente los insumos de inventario, para evitar actualizar stock manualmente. | Al marcar la orden como entregada, el stock disminuye según receta y cantidad vendida. |
+| TBU-03 | Como usuario de inventario, quiero que FoodFlow respete unidades compatibles como kg/g y L/ml, para registrar compras mayoristas y recetas por porción. | El sistema convierte unidades compatibles y rechaza unidades incompatibles. |
+| TBU-04 | Como encargado de menú, quiero ver cuántas órdenes puedo preparar con el stock actual, para evitar vender platos sin insumos suficientes. | La vista de Menú / Platos muestra órdenes posibles cuando el plato tiene receta. |
+| TBU-05 | Como dueño de restaurante, quiero ver si el precio ingresado genera ganancia o pérdida, para ajustar el precio antes de guardar el plato. | El formulario muestra una alerta de ganancia o pérdida calculada a partir del costo de receta. |
+| TBU-06 | Como usuario de órdenes, quiero recibir una validación cuando no haya stock suficiente, para no generar inconsistencias en inventario. | La orden no avanza a entregada si los insumos requeridos superan el stock disponible. |
+
+### 8.3.3. Pipeline-supported, Experiment-Driven To-Be Software Platform Lifecycle
+
+La iteración To-Be se integró al ciclo de desarrollo de FoodFlow conectando hallazgos de usuarios, implementación incremental, pruebas técnicas y preparación para validación. El flujo seguido fue:
+
+```text
+Hallazgo de usuario -> Pregunta experimental -> Historia To-Be
+-> Implementación frontend/backend -> Pruebas funcionales
+-> Validación de consistencia -> Preparación para medición web
+```
+
+Desde el backend, la lógica se apoya en los contextos de Catalog, Inventory y Sales: los platos almacenan recetas, las recetas consultan productos de inventario y las órdenes descuentan insumos cuando pasan a estado entregada. Desde el frontend, el usuario puede configurar recetas en Menú / Platos, visualizar órdenes posibles, recibir advertencias de disponibilidad y observar la ganancia o pérdida estimada al fijar precio.
+
+#### 8.3.3.1. To-Be Sprint Backlogs
+
+| Ítem | Tipo | Descripción | Estado |
+|---|---|---|---|
+| TB-01 | Backend | Crear soporte para recetas de platos vinculadas a productos de inventario. | Implementado |
+| TB-02 | Backend | Calcular órdenes posibles según stock disponible y cantidades requeridas por receta. | Implementado |
+| TB-03 | Backend | Descontar inventario automáticamente cuando una orden pasa a entregada. | Implementado |
+| TB-04 | Backend | Validar stock suficiente antes de entregar órdenes con recetas. | Implementado |
+| TB-05 | Frontend | Agregar editor de receta e inventario en el formulario de platos. | Implementado |
+| TB-06 | Frontend | Mostrar costo de receta y ganancia o pérdida estimada al ingresar precio. | Implementado |
+| TB-07 | Frontend | Mostrar disponibilidad de órdenes por plato y estado de no disponible por insumos. | Implementado |
+| TB-08 | Frontend/Backend | Manejar unidades compatibles entre inventario y receta, como kg/g y L/ml. | Implementado |
+| TB-09 | Calidad | Validar límites de cantidades y evitar valores extremos que generen inconsistencias. | Implementado |
+| TB-10 | Analítica | Definir eventos web para medir uso de recetas, descuento automático y ganancia estimada. | Planeado |
+
+#### 8.3.3.2. Implemented To-Be Landing Page Evidence
+#### 8.3.3.3. Implemented To-Be Frontend-Web Application Evidence
+#### 8.3.3.4. Implemented To-Be RESTful API and/or Serverless Backend Evidence
+#### 8.3.3.5. Team Collaboration Insights
+
+### 8.3.4. To-Be Validation Interviews
+
+Las entrevistas de validación To-Be tienen como finalidad comprobar si las funcionalidades implementadas después de la primera ronda de entrevistas realmente resuelven los dolores priorizados por los usuarios. A diferencia de las entrevistas As-Is, esta nueva ronda no busca descubrir el problema general de gestión del restaurante, sino validar el comportamiento específico de las mejoras incorporadas en FoodFlow: recetas vinculadas al inventario, descuento automático de insumos al entregar órdenes y cálculo inmediato de ganancia o pérdida estimada al fijar el precio de un plato.
+
+Estas entrevistas mantienen el mismo perfil objetivo del producto: dueños o gestores de restaurantes pequeños y medianos que controlan compras, inventario, platos y ventas de manera manual o semimanual. La sesión se realizará únicamente sobre la aplicación web de FoodFlow, ya que el producto no contempla una aplicación móvil en esta iteración.
+
+#### 8.3.4.1. Diseño de Entrevistas.
+
+El diseño de entrevistas To-Be se guía por los hallazgos previos de validación, especialmente por la expectativa de que el inventario "se baje solo" cuando una venta es entregada y por la necesidad de saber si un plato deja ganancia antes de venderlo. Por ello, la prueba se estructura como una sesión moderada de usabilidad con protocolo think-aloud, en la que el entrevistado usa FoodFlow con datos de prueba y verbaliza lo que espera que ocurra en cada paso.
+
+**Objetivo general:** validar si las nuevas funcionalidades de recetas, descuento automático de inventario y ganancia estimada son comprensibles, útiles y coherentes con la operación real de un restaurante.
+
+**Objetivos específicos:**
+
+1. Comprobar si el usuario entiende que una receta está formada por productos reales del inventario, cantidades y unidades compatibles.
+2. Validar si el usuario comprende que el inventario se descuenta cuando la orden pasa a estado entregada.
+3. Observar si las conversiones entre unidades compatibles, como kg/g o L/ml, resultan naturales para compras mayoristas y recetas por porción.
+4. Evaluar si el cálculo de ganancia o pérdida estimada ayuda al usuario a fijar o corregir el precio de un plato.
+5. Detectar confusiones entre costo de receta, costo total de compra, precio de venta y utilidad neta del restaurante.
+
+**Perfil de participantes:**
+
+| Criterio | Descripción |
+|---|---|
+| Segmento | Dueños, administradores o gestores de restaurantes pequeños y medianos. |
+| Responsabilidad | Personas que participen en decisiones de inventario, compras, precios o control de ventas. |
+| Herramientas actuales | Libreta, Excel, calculadora, POS básico o registro manual de stock. |
+| Experiencia digital | No se requiere conocimiento contable avanzado; se prioriza experiencia real en operación gastronómica. |
+| Exclusión | Usuarios sin relación directa con inventario, compras o definición de platos. |
+
+**Duración estimada de la sesión:** 20 a 25 minutos por participante.
+
+**Estructura de la sesión:**
+
+| Bloque | Tiempo | Objetivo | Actividades |
+|:---:|:---:|---|---|
+| 0 | 2 min | Introducción y consentimiento | Explicar que se evaluará la funcionalidad, no al usuario, y solicitar autorización para registrar notas. |
+| 1 | 3 min | Contexto operativo | Preguntar cómo controla actualmente inventario, recetas, compras y precios. |
+| 2 | 4 min | Registro o revisión de inventario | Pedir que revise un producto con stock, unidad y costo, pensando en una compra mayorista. |
+| 3 | 5 min | Receta vinculada a inventario | Pedir que cree o edite un plato y agregue insumos reales con cantidades por porción. |
+| 4 | 4 min | Ganancia estimada | Pedir que escriba un precio de venta y explique si el plato gana o pierde según FoodFlow. |
+| 5 | 5 min | Orden y descuento automático | Pedir que cree una orden, la marque como entregada y revise si el inventario cambió como esperaba. |
+| 6 | 2 min | Cierre | Levantar percepción de utilidad, confianza, dudas y prioridad de mejora. |
+
+**Tareas críticas a evaluar:**
+
+| # | Tarea | Resultado esperado | Métrica principal |
+|:---:|---|---|---|
+| 1 | Identificar el stock y costo de un insumo registrado. | El usuario reconoce cantidad disponible, unidad y costo del producto. | Comprensión sin ayuda. |
+| 2 | Configurar una receta usando productos del inventario. | El usuario selecciona productos, cantidad requerida y unidad compatible. | Éxito de tarea y errores de unidad. |
+| 3 | Interpretar órdenes posibles o disponibilidad del plato. | El usuario entiende si el stock alcanza para vender el plato. | Interpretación correcta. |
+| 4 | Ajustar precio de venta observando ganancia o pérdida estimada. | El usuario entiende la señal y decide si mantener o cambiar el precio. | Cambio de precio o explicación correcta. |
+| 5 | Entregar una orden y revisar inventario. | El usuario confirma que el stock disminuyó según la receta y cantidad vendida. | Coincidencia entre expectativa y resultado. |
+
+**Guion de preguntas durante la prueba:**
+
+| Momento | Pregunta |
+|---|---|
+| Antes de usar la receta | ¿Cómo calculas actualmente cuánto inventario consume cada plato vendido? |
+| Al configurar receta | ¿Esta forma de seleccionar insumos, cantidad y unidad se parece a cómo trabajas en tu restaurante? |
+| Al ver unidades | Si compras en kg pero usas gramos por plato, ¿esto te resulta claro o tendrías que calcularlo aparte? |
+| Al fijar precio | ¿Qué entiendes cuando FoodFlow te dice que estás ganando o perdiendo con este plato? |
+| Al entregar orden | ¿En qué momento esperas que se descuente el inventario: al crear la orden, al prepararla o al entregarla? |
+| Después de revisar inventario | ¿El cambio de stock coincide con lo que esperabas que pasara? |
+| Cierre | ¿Esta mejora reemplazaría algún cálculo manual, libreta o Excel que usas hoy? |
+
+**Métricas de validación:**
+
+| Métrica | Tipo | Criterio de interpretación |
+|---|---|---|
+| Éxito de tarea | Cuantitativa | Porcentaje de tareas críticas completadas sin ayuda. |
+| Tiempo por tarea | Cuantitativa | Tiempo requerido para configurar receta, fijar precio y entregar orden. |
+| Errores de unidad | Cuantitativa | Cantidad de veces que el usuario intenta usar una unidad incompatible o se confunde con la conversión. |
+| Comprensión de descuento automático | Cualitativa | El usuario puede explicar cuándo y por qué se descuenta inventario. |
+| Comprensión de ganancia estimada | Cualitativa | El usuario entiende que el cálculo se basa en insumos de receta, no en utilidad neta completa. |
+| Valor percibido | Cualitativa | El usuario expresa si la funcionalidad reduce trabajo manual o mejora control del negocio. |
+
+**Criterios de éxito de la entrevista To-Be:**
+
+| Criterio | Umbral esperado |
+|---|---|
+| Finalización de tareas críticas | Al menos 80% de tareas completadas sin ayuda directa. |
+| Comprensión del descuento automático | Al menos 4 de cada 5 participantes explican correctamente que el descuento ocurre al entregar la orden. |
+| Comprensión de ganancia estimada | Al menos 4 de cada 5 participantes diferencian ganancia estimada por insumos de utilidad neta total. |
+| Confianza en el cálculo | La mayoría de participantes considera útil el cálculo para revisar precios antes de vender. |
+| Fricciones graves | Ninguna fricción debe impedir configurar una receta, entregar una orden o interpretar el resultado del inventario. |
+
+**Consideraciones éticas y de privacidad:**
+
+Las entrevistas se realizarán con datos ficticios o ejemplos proporcionados voluntariamente por el participante. No se solicitarán credenciales reales, información bancaria ni reportes financieros sensibles. Si el participante menciona costos o precios reales de su restaurante, estos serán tratados como información confidencial y solo se registrarán de forma agregada o anonimizada.
+
+#### 8.3.4.2. Registro de Entrevistas.
+
+El registro de entrevistas To-Be se preparará como una matriz de evidencia para la siguiente ronda de validación. En esta etapa no se reportan resultados concluyentes de usuarios nuevos, ya que el propósito de la sección es definir cómo se documentarán las sesiones centradas en las funcionalidades implementadas.
+
+**Formato de registro por participante:**
+
+| Campo | Descripción |
+|---|---|
+| Código de participante | Identificador anónimo, por ejemplo, TBV-01. |
+| Rol | Dueño, administrador, encargado de cocina o gestor del restaurante. |
+| Tipo de restaurante | Rubro gastronómico del negocio. |
+| Herramientas actuales | Libreta, Excel, calculadora, POS u otro método. |
+| Escenario probado | Receta, descuento automático, ganancia estimada o flujo completo. |
+| Tareas completadas | Número de tareas críticas completadas sin ayuda. |
+| Fricciones observadas | Errores, dudas, confusiones o momentos de detención. |
+| Cita relevante | Comentario textual del participante, si aporta evidencia clara. |
+| Veredicto | Validar, ajustar o descartar la interpretación actual de la funcionalidad. |
+
+**Matriz de resultados a completar después de las sesiones:**
+
+| Participante | Receta vinculada a inventario | Descuento al entregar orden | Ganancia estimada al fijar precio | Confusión principal | Valor percibido |
+|---|---|---|---|---|---|
+| TBV-01 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
+| TBV-02 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
+| TBV-03 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
+| TBV-04 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
+| TBV-05 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
+
+**Evidencia a recopilar:**
+
+1. Notas de observación sobre el flujo producto -> receta -> orden -> descuento de inventario.
+2. Capturas de pantalla del plato con receta y del inventario antes y después de entregar la orden.
+3. Comentarios del usuario sobre si el descuento automático reduce trabajo manual.
+4. Comentarios del usuario sobre si la ganancia estimada le ayuda a definir precios.
+5. Errores o dudas relacionados con unidades, costos o disponibilidad de platos.
+
+El análisis posterior deberá comparar estas respuestas con los hallazgos de las entrevistas anteriores. En particular, se buscará confirmar si la nueva versión de FoodFlow responde al insight principal de los usuarios: vender un plato debe actualizar el inventario sin obligar al dueño a hacer el ajuste manualmente.
+
+## 8.4. Experiment Aftermath & Analysis
+
+#### 8.4.1. Analysis and Interpretation of Results
+
+La iteración permitió transformar hallazgos cualitativos de usuarios en funcionalidades concretas dentro del alcance de FoodFlow. El problema principal identificado era que el inventario requería gestión manual después de vender. La implementación de recetas y descuento automático responde directamente a esta fricción, ya que cada plato puede consumir productos específicos del inventario y el stock se actualiza al entregar la orden.
+
+Desde el punto de vista funcional, la solución tiene lógica operativa: el inventario no se descuenta cuando la orden está pendiente, porque todavía podría cancelarse; se descuenta al pasar a entregada, momento en el que el plato ya fue servido. Además, el sistema valida stock suficiente antes del descuento, lo que evita inventario negativo y mantiene coherencia con la disponibilidad de platos.
+
+La ganancia estimada también responde a una necesidad validada: reducir cálculos manuales al fijar precios. En lugar de obligar al usuario a calcular el costo de cada insumo fuera de la plataforma, FoodFlow suma el costo proporcional de la receta y lo compara con el precio ingresado. Esta decisión mantiene la funcionalidad simple y comprensible: no intenta calcular utilidad neta completa del restaurante, sino una señal inmediata de ganancia o pérdida por plato basada en insumos.
+
+Como resultado preliminar de la iteración, se identifican los siguientes aprendizajes:
+
+- La receta se convierte en el elemento central que conecta menú, inventario, órdenes y rentabilidad.
+- El descuento automático tiene mayor sentido cuando está ligado al estado entregado de la orden.
+- La visualización de órdenes posibles permite anticipar problemas de stock antes de vender.
+- La ganancia estimada debe comunicarse como cálculo basado en insumos, no como margen financiero total.
+- Las unidades compatibles son necesarias para casos reales de restaurantes, como comprar 10 kg de producto y consumir gramos por plato.
+
+#### 8.4.2. Re-scored and Re-prioritized Question Backlog
+
+Después de implementar la iteración, algunas preguntas reducen su incertidumbre técnica, pero siguen requiriendo validación con usuarios reales para medir adopción y comprensión.
+
+| Nueva prioridad | ID | Pregunta | Cambio de prioridad | Justificación |
 |---|---|---|---|---|
-| TBU-01 | Explicación contextual de métricas | Como dueño de restaurante, quiero consultar una explicación breve de cada indicador financiero para interpretar correctamente ingresos, gastos, utilidad y variación. | **Given** que visualizo una métrica del dashboard o reporte<br>**When** solicito ayuda contextual<br>**Then** veo una definición clara, su forma de cálculo y una interpretación básica sin abandonar la pantalla. | EXP-01 y EXP-04 |
-| TBU-02 | Resumen financiero accionable | Como dueño de restaurante, quiero recibir un resumen de los cambios más relevantes del periodo para identificar rápidamente qué aspecto del negocio debo revisar. | **Given** que existen datos del periodo actual y anterior<br>**When** ingreso al dashboard<br>**Then** veo un resumen de variaciones relevantes basado únicamente en los datos disponibles. | EXP-01 |
-| TBU-03 | Experiencia inicial con datos de demostración | Como nuevo usuario, quiero explorar FoodFlow con datos de ejemplo para comprender su valor antes de registrar toda la información de mi restaurante. | **Given** que mi cuenta todavía no tiene datos<br>**When** inicio el recorrido de demostración<br>**Then** puedo explorar dashboard, inventario y reportes con información ficticia claramente identificada. | EXP-01 y Q-09 |
-| TBU-04 | Priorización de productos con bajo stock | Como responsable de inventario, quiero ver los productos críticos ordenados por nivel de urgencia para decidir qué insumos revisar primero. | **Given** que existen productos por debajo de su umbral<br>**When** consulto inventario<br>**Then** veo una lista priorizada con stock actual, umbral, unidad y señal de urgencia. | EXP-02 |
-| TBU-05 | Registro de reposición desde una alerta | Como responsable de inventario, quiero actualizar o registrar la reposición desde la alerta de bajo stock para resolver el problema con menos pasos. | **Given** que visualizo un producto crítico<br>**When** selecciono la acción de reposición<br>**Then** puedo registrar el nuevo stock y confirmar la actualización desde el mismo flujo. | EXP-02 |
-| TBU-06 | Comparación guiada de periodos | Como dueño de restaurante, quiero comparar dos periodos mediante indicadores y explicaciones consistentes para reconocer tendencias de ingresos, gastos y utilidad. | **Given** que existen datos de dos periodos<br>**When** selecciono un periodo de comparación<br>**Then** veo valores, diferencias, porcentajes y etiquetas que indican aumento o disminución. | EXP-04 |
-| TBU-07 | Comparación de planes por beneficio | Como dueño de restaurante, quiero comparar los planes según funciones, límites y problemas que resuelven para elegir la alternativa adecuada. | **Given** que ingreso a suscripciones<br>**When** comparo Free, Standard y Premium<br>**Then** veo precios, límites, beneficios diferenciales y el plan actual sin mensajes ambiguos. | EXP-03 |
-| TBU-08 | Prueba controlada de funciones pagadas | Como usuario del plan Free, quiero probar temporalmente funciones seleccionadas de un plan pagado para evaluar su utilidad antes de tomar una decisión. | **Given** que cumplo las condiciones de una prueba<br>**When** activo la prueba desde suscripciones<br>**Then** veo su duración, funciones habilitadas y fecha de finalización sin realizar un cobro automático. | EXP-03 |
-| TBU-09 | Registro respetuoso de eventos de uso | Como Product Owner, quiero medir interacciones clave de manera anónima para evaluar activación, adopción y recurrencia sin recopilar información sensible. | **Given** que el usuario otorgó el consentimiento requerido<br>**When** completa una acción instrumentada<br>**Then** se registra un único evento con propiedades no sensibles y un identificador seudónimo. | Todos los experimentos |
-| TBU-10 | Encuesta contextual de satisfacción | Como usuario, quiero responder una encuesta breve después de una tarea relevante para comunicar si la función fue clara y útil. | **Given** que completo una tarea seleccionada<br>**When** se presenta la encuesta opcional<br>**Then** puedo calificarla, agregar una observación y omitirla sin perder mi trabajo. | Todos los experimentos |
+| 1 | BLQ01 | ¿El descuento automático reduce ajustes manuales de stock? | Se mantiene alta | La funcionalidad ya existe, pero falta medir impacto real en operación diaria. |
+| 2 | BLQ03 | ¿La alerta de ganancia o pérdida mejora decisiones de precio? | Sube | La funcionalidad ya es visible en el flujo de creación de platos y debe validarse con usuarios. |
+| 3 | EXQ01 | ¿El descuento debe ocurrir al entregar la orden? | Se mantiene alta | La decisión técnica está tomada, pero debe comprobarse que coincide con el proceso mental del restaurante. |
+| 4 | EXQ03 | ¿El usuario comprende costo total, costo unitario y costo de receta? | Sube | Durante el uso real puede aparecer confusión si los costos no se explican bien. |
+| 5 | BLQ02 | ¿Mostrar órdenes posibles previene ventas sin stock? | Se mantiene media-alta | El indicador existe, pero falta medir si el usuario lo consulta antes de vender. |
+| 6 | BLQ04 | ¿Las unidades compatibles reducen errores de registro? | Se mantiene media | La lógica técnica está implementada, pero falta observar casos reales de recetas. |
+| 7 | EXQ06 | ¿Se requieren sugerencias de compra además de órdenes posibles? | Baja para esta iteración | Es una extensión posible, pero no forma parte de las dos funcionalidades implementadas. |
 
-Estas historias no sustituyen las historias actuales del producto. Representan posibles mejoras derivadas de las preguntas experimentales y deben ingresar al desarrollo solamente cuando la evidencia justifique su prioridad.
+## 8.5. Continuous Learning
 
-### 8.3.2. To-Be Product Backlog
+### 8.5.1. Shareback Session Artifacts: Learning Workflow
 
-El To-Be Product Backlog organiza las historias experimentales según riesgo, aprendizaje esperado, valor para el usuario y dependencia técnica. La prioridad inicial favorece las mejoras que permiten comprender el producto y recopilar evidencia antes de ampliar funciones comerciales.
+El aprendizaje continuo de esta iteración se organiza como un flujo de retroalimentación entre evidencia de usuarios, decisiones de producto y ajustes técnicos.
 
-| Orden | ID | Título | Prioridad inicial | Story Points | Dependencia o justificación |
-|---:|---|---|---|---:|---|
-| 1 | TBU-09 | Registro respetuoso de eventos de uso | Alta | 8 | Proporciona datos para medir activación, adopción y recurrencia; requiere política de eventos y privacidad. |
-| 2 | TBU-01 | Explicación contextual de métricas | Alta | 3 | Responde directamente al riesgo de incomprensión del núcleo financiero. |
-| 3 | TBU-03 | Experiencia inicial con datos de demostración | Alta | 8 | Reduce la barrera de carga inicial y facilita probar el valor del producto. |
-| 4 | TBU-04 | Priorización de productos con bajo stock | Alta | 5 | Apoya una decisión operativa frecuente y puede reducir faltantes. |
-| 5 | TBU-06 | Comparación guiada de periodos | Alta | 5 | Mejora la interpretación de reportes y tendencias financieras. |
-| 6 | TBU-07 | Comparación de planes por beneficio | Alta | 3 | Es necesaria antes de evaluar con mayor precisión el valor de los planes pagados. |
-| 7 | TBU-02 | Resumen financiero accionable | Media | 8 | Depende de reglas claras para generar recomendaciones sin inducir decisiones incorrectas. |
-| 8 | TBU-05 | Registro de reposición desde una alerta | Media | 5 | Amplía el flujo de inventario después de confirmar que las alertas actuales son útiles. |
-| 9 | TBU-10 | Encuesta contextual de satisfacción | Media | 3 | Complementa el tracking con percepción cualitativa y debe evitar interrumpir tareas. |
-| 10 | TBU-08 | Prueba controlada de funciones pagadas | Media | 8 | Requiere reglas de elegibilidad, duración y reversión; debe validarse antes de integrar pagos. |
+```text
+Observación de uso -> Registro de hallazgos -> Discusión del equipo
+-> Ajuste de hipótesis -> Priorización de mejora
+-> Implementación -> Prueba -> Nueva observación
+```
 
-Los Story Points son estimaciones relativas preliminares y no representan horas. El backlog debe volver a estimarse y priorizarse después de analizar los resultados de los experimentos, considerando además capacidad del equipo, dependencias, seguridad y efectos sobre el producto desplegado.
+Artefactos propuestos para la sesión de shareback:
 
+| Artefacto | Contenido | Uso |
+|---|---|---|
+| Resumen de hallazgos | Comentarios sobre descuento automático, receta y ganancia estimada. | Identificar si las funcionalidades resuelven el dolor principal. |
+| Matriz de preguntas | Preguntas BLQ y EXQ re-priorizadas. | Decidir qué validar en la siguiente iteración. |
+| Evidencia funcional | Capturas o demostración del flujo producto -> receta -> orden -> descuento. | Alinear al equipo sobre el comportamiento implementado. |
+| Registro de problemas | Errores de comprensión, unidades incompatibles o confusión de precios. | Definir ajustes de UX o validación. |
+| Decisiones de continuidad | Mantener, ajustar o postergar mejoras relacionadas. | Evitar ampliar el alcance sin evidencia. |
+
+## 8.6. To-Be Software Platform Pre-launch
+
+Antes de considerar la versión To-Be como lista para una validación más amplia, FoodFlow debe revisar una lista de preparación centrada en las funcionalidades implementadas:
+
+| Área | Criterio de pre-lanzamiento | Estado esperado |
+|---|---|---|
+| Recetas | Cada plato puede guardar productos, cantidades y unidades compatibles. | Verificado en entorno web. |
+| Inventario | El stock disminuye correctamente al entregar órdenes con receta. | Verificado con pruebas funcionales. |
+| Órdenes | No se permite entregar una orden si la receta requiere más stock del disponible. | Validado con errores controlados. |
+| Rentabilidad | El formulario de plato muestra ganancia o pérdida estimada según costo de receta y precio. | Visible antes de guardar. |
+| Unidades | kg/g y L/ml se manejan como unidades compatibles. | Validado para compras mayoristas y recetas por porción. |
+| UX | Los mensajes deben ser claros para que el usuario entienda qué se descuenta y por qué un plato no está disponible. | Pendiente de validación con usuarios. |
+| Analítica web | Eventos de recetas, descuentos y alertas de ganancia deben definirse antes de una prueba con usuarios reales. | Planeado. |
+
+FoodFlow se mantiene como plataforma web. No se incluye aplicación móvil ni tracking móvil en este pre-lanzamiento.
+
+### 8.6.1. About-the-Product Intro Video
 
 # Conclusiones y recomendaciones
 
@@ -8107,6 +9156,20 @@ Los Story Points son estimaciones relativas preliminares y no representan horas.
 
 8. El uso de frontend en Vercel, backend en Render, base de datos en Supabase y control de versiones en GitHub permitió construir un flujo de despliegue moderno, separado y fácil de mantener.
 
+9. La auditoría de experiencia de usuario permitió identificar oportunidades concretas de mejora en accesibilidad, consistencia visual, prevención de errores y eficiencia de uso. Estos hallazgos demuestran que la validación externa aporta una perspectiva valiosa para fortalecer la calidad del producto antes de avanzar hacia una versión más estable.
+
+10. La incorporación de un enfoque de experimentación y medición permite que FoodFlow evolucione con base en evidencia, no solo en supuestos iniciales. Definir hipótesis, métricas, eventos de seguimiento y preguntas de investigación ayuda a priorizar mejoras que generen valor real para los restaurantes usuarios.
+
+11. La implementación de recetas vinculadas al inventario permite que FoodFlow deje de tratar los ingredientes como información únicamente descriptiva. Ahora la receta funciona como una relación operativa entre platos, productos, cantidades y unidades, lo que fortalece la coherencia entre los módulos de Menú / Platos, Inventario y Órdenes.
+
+12. El descuento automático de inventario al entregar una orden responde directamente a uno de los hallazgos más importantes de las entrevistas: los usuarios esperan que el stock se actualice cuando una venta se concreta. Esta decisión tiene lógica operativa porque evita descontar insumos en órdenes que aún podrían cancelarse y reduce el trabajo manual posterior.
+
+13. El soporte de unidades compatibles, como kg/g y L/ml, mejora la utilidad de FoodFlow para escenarios reales de restaurante, donde las compras suelen registrarse al por mayor y las recetas se definen por porción. Esto reduce conversiones manuales y disminuye el riesgo de registrar recetas inconsistentes.
+
+14. La ganancia o pérdida estimada al fijar el precio del plato aporta una señal inmediata para la toma de decisiones, especialmente para usuarios que antes dependían de calculadora o intuición. Sin embargo, se concluye que debe comunicarse como una estimación basada en insumos, no como utilidad neta completa del negocio.
+
+15. La iteración To-Be demuestra que FoodFlow puede evolucionar sin salirse de su alcance principal: gestión web de restaurantes con foco en inventario, órdenes, platos y rentabilidad. Las nuevas funcionalidades aumentan el valor del producto porque conectan módulos existentes en lugar de introducir procesos ajenos a la operación gastronómica.
+
 ## Recomendaciones
 
 1. Se recomienda continuar validando FoodFlow con dueños de restaurantes reales, priorizando pruebas de usabilidad sobre los módulos principales del MVP. Esto permitirá identificar si el dashboard, los reportes, el inventario, el menú y las órdenes son comprendidos fácilmente por usuarios con distintos niveles de experiencia tecnológica.
@@ -8124,6 +9187,20 @@ Los Story Points son estimaciones relativas preliminares y no representan horas.
 7. Mejorar el monitoreo en producción incorporando alertas automáticas para errores del backend, caídas del servicio y degradación de rendimiento.
 
 8. Continuar ampliando pruebas funcionales para cubrir escenarios negativos, errores de red, permisos, datos vacíos y casos límite en órdenes, inventario y reportes financieros.
+
+9. Priorizar la corrección de los hallazgos de usabilidad con severidad media y alta, especialmente aquellos relacionados con pérdida de datos en modales, inconsistencias de métricas y claridad visual en reportes financieros. Esto permitirá mejorar la confianza del usuario y reducir errores durante tareas críticas.
+
+10. Implementar progresivamente un plan de analítica de producto que registre eventos clave de forma anónima y respetuosa de la privacidad. Esta información debe utilizarse para evaluar activación, recurrencia, comprensión de métricas y adopción de funcionalidades antes de tomar decisiones de desarrollo o monetización.
+
+11. Se recomienda validar con usuarios reales el flujo completo producto -> receta -> orden entregada -> descuento de inventario, observando si el usuario comprende el momento exacto en que se actualiza el stock y si confía en el resultado mostrado por FoodFlow.
+
+12. Se recomienda mantener mensajes claros alrededor de la ganancia estimada, indicando que el cálculo considera el costo de los insumos de la receta y no incluye otros costos indirectos como mano de obra, alquiler, servicios o comisiones. Esto evitará interpretaciones financieras incorrectas.
+
+13. Se recomienda ampliar las pruebas funcionales y de integración sobre escenarios de recetas con unidades compatibles, stock insuficiente, múltiples platos que comparten insumos y órdenes con cantidades mayores a uno. Estos casos son críticos para evitar inconsistencias de inventario.
+
+14. Se recomienda medir el uso real de las funcionalidades implementadas mediante eventos web como creación de receta, visualización de ganancia estimada, intento de venta sin stock suficiente y entrega de orden con descuento exitoso. Estos datos permitirán decidir mejoras con evidencia.
+
+15. Se recomienda no ampliar el alcance hacia módulos más complejos, como predicción avanzada de compras o analítica contable profunda, hasta validar que los usuarios comprenden y adoptan correctamente las recetas, el descuento automático y la ganancia estimada. La prioridad inmediata debe ser estabilidad, claridad y confianza en los flujos ya implementados.
 
 # Bibliografía
 
@@ -8146,3 +9223,4 @@ Los Story Points son estimaciones relativas preliminares y no representan horas.
 - Bounded Context Canvas: https://miro.com/app/board/uXjVHZHeSzc=/?share_link_id=246445723878
 - Domain Message Flow Modelling: https://miro.com/app/board/uXjVHZAXIRc=/?share_link_id=910118949056
 - Event Storming: https://miro.com/app/board/uXjVHZDYSgE=/?share_link_id=949441154741
+- Video de exposición trabajo parcial: https://youtu.be/nfYw-8_gPm4
